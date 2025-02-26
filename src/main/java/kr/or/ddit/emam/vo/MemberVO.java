@@ -155,6 +155,7 @@ public class MemberVO {
     private String mem_phone;
     private String mem_bir;
     private String mem_gen;
+    private String mem_joindate;
 
     public String getMem_id() {
         return mem_id;
@@ -219,5 +220,9 @@ public class MemberVO {
     public void setMem_gen(String mem_gen) {
         this.mem_gen = mem_gen;
     }
+
+    public String getMem_joindate() { return mem_joindate; }
+
+    public void setMem_joindate(String mem_joindate) { this.mem_joindate = mem_joindate; }
 }
 

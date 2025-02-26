@@ -18,6 +18,7 @@
     <typeAliases>
         <!-- ... -->
         <typeAlias type="kr.or.ddit.emam.vo.MemberVO" alias="memberVo"/>
+        <typeAlias type="kr.or.ddit.emam.vo.AdminVO" alias="adminVo"/>
     </typeAliases>
 
     <environments default="dev">    <!-- 데이터베이스 연결 환경 설정 -->
@@ -36,6 +37,7 @@
     <mappers> <!-- dtd자동설정했음 -->
         <!-- ... -->
         <mapper resource="kr/or/ddit/emam/mapper/member-mapper.xml"/>
+        <mapper resource="kr/or/ddit/emam/mapper/admin-mapper.xml"/>
     </mappers>
 
 </configuration>
