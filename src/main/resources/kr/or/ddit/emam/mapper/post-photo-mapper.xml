@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="postphoto">
+    <insert id="insertphoto" parameterType="PostPhotoVO">
+        <selectKey keyProperty="post_photo" resultType="long" order="BEFORE">
+            select post_photo_num_seq.nextval from dual
+        </selectKey>
+        insert into POST_PHOTOTB
+        (
+            POST_PHOTO
+        ) values (
+            #{post_photo}
+        )
+    </insert>
+
+    <insert id="insertphopodetail">
+        insert into POST_PHOTO_DETAIL
+        (
+            POST_PHOTO,
+            POST_PHOTO_SN,
+            PHOTO_STRE_COURS,
+            PHOTO_FILE_NM,
+            ORG_PHOTO_NM,
+            PHOTO_EXTSN
+        )values (
+            #{post_photo},
+            (select nvl(max(POST_PHOTO_SN),0)+1 from POST_PHOTO_DETAIL where POST_PHOTO = #{post_photo}),
+            #{photo_stre_cours},
+            #{photo_flie_nm},
+            #{org_photo_nm},
+            #{photo_extsn}
+        )
+    </insert>
+
+    <resultMap id="postPhotoMap" type="PostPhotoVO">
+        <id property="post_photo" column="POST_PHOTO" />
+        <collection property="postPhotoDetailList" resultMap="postPhotoDetailMap" />
+    </resultMap>
+
+    <resultMap id="postPhotoDetailMap" type="PostPhotoDetailVO">
+        <id property="post_photo" column="POST_PHOTO"/>
+        <id property="post_photo_sn" column="POST_PHOTO_SN"/>
+        <result property="photo_stre_cours" column="PHOTO_STRE_COURS"></result>
+        <result property="photo_flie_nm" column="PHOTO_FILE_NM"></result>
+        <result property="org_photo_nm" column="ORG_PHOTO_NM"></result>
+        <result property="photo_extsn" column="PHOTO_EXTSN"></result>
+    </resultMap>
+
+    <select id="getPostPhoto" resultMap="postPhotoMap">
+        select * from POST_PHOTOTB a, POST_PHOTO_DETAIL b
+        where a.POST_PHOTOTB = b.POST_PHOTO_DETAIL
+        and a.POST_PHOTOTB = #{POST_PHOTO}
+    </select>
+    
+    <select id="getPostPhotoDetail" resultMap="postPhotoDetailMap">
+        select * from POST_PHOTO_DETAIL
+        where POST_PHOTO = #{POST_PHOTO}
+        and POST_PHOTO_SN = #{post_photo_sn}
+    </select>
+
+</mapper>
