@@ -7,13 +7,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.or.ddit.emam.member.service.IMemberService;
 import kr.or.ddit.emam.member.service.MemberServiceImpl;
-import kr.or.ddit.emam.util.StreamData;
 import kr.or.ddit.emam.vo.MemberVO;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-
-import com.google.gson.Gson;
 
 @WebServlet("/member/memberInsert.do")
 public class MemberInsert extends HttpServlet {
@@ -61,7 +58,7 @@ public class MemberInsert extends HttpServlet {
         //---------------------------------------------------------------
 
 
-        //service겍체 얻기
+        //service 객체 얻기
         IMemberService  service = MemberServiceImpl.getInstance();
 
         //service메소드 호출 - 결과값 받기
@@ -81,7 +78,7 @@ public class MemberInsert extends HttpServlet {
                     """	 	
                          {
                             "flag"  : "앗~~ 가입실패"
-                         } 
+                         }
                     """	;
         }
         PrintWriter out = response.getWriter();

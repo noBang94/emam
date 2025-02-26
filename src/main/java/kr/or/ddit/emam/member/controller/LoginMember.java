@@ -41,26 +41,41 @@ public class LoginMember extends HttpServlet {
 
         HttpSession session = request.getSession();
 
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        Gson gson = new Gson();
+        String jsonResponse;
+
         //로그인 성공 실패 비교 하여  HttpSession에 저장
         if(loginMemVo != null) {
             //로그인 성공
             session.setAttribute("loginMember", loginMemVo);
-            response.sendRedirect(request.getContextPath() + "/board/boardList.do ");
+            jsonResponse = gson.toJson(new LoginResponse("success", "로그인 성공"));
         } else {
-            response.sendRedirect(request.getContextPath() + "/");
+            jsonResponse = gson.toJson(new LoginResponse("fail", "로그인 실패"));
         }
+        response.getWriter().write(jsonResponse);
 
     }
+    // JSON 응답을 위한 내부 클래스
+    private static class LoginResponse {
+        private String result;
+        private String message;
+
+        public LoginResponse(String result, String message) {
+            this.result = result;
+            this.message = message;
+        }
+
+        public String getResult() {
+            return result;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+    }
+
 }
-
-
-
-
-
-
-
-
-
-
-
 

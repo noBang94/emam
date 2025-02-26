@@ -7,7 +7,7 @@
 <mapper  namespace="member">
 
     <!--아이디 중복검사  -->
-    <select id="getMemberIdCount" resultType="int" parameterType="string">
+    <select id="getMemberIdCount" resultType="int" parameterType="String">
         select count(*)  from member  where  mem_id=#{mem_id}
     </select>
 
@@ -22,7 +22,7 @@
             MEM_ID, MEM_PW, MEM_NICKNAME, MEM_NAME, MEM_ADDR,
             MEM_PHONE, MEM_BIR, MEM_GEN, MEM_JOINDATE)
         values(
-                  #{mem_id}, #{mem_pw}, #{mem_name}, #{mem_name}, #{mem_addr},
+                  #{mem_id}, #{mem_pw}, #{mem_nickname}, #{mem_name}, #{mem_addr},
                   #{mem_phone}, #{mem_bir}, #{mem_gen}, SYSDATE
               )
     </insert>
@@ -31,6 +31,24 @@
     <select id="getLoginMember" resultType="memberVo" parameterType="memberVo">
         select * from member
         where MEM_ID=#{mem_id} and MEM_PW=#{mem_pw}
+    </select>
+
+    <!-- 비밀번호 찾기 -->
+    <select id="getMemberByEmail" resultType="memberVo" parameterType="String">
+        select * from member
+        where MEM_ID=#{mem_id}
+    </select>
+    <update id="updatePassword" parameterType="memberVo">
+        update member
+        set MEM_PW=#{mem_pw}
+        where MEM_ID=#{mem_id}
+    </update>
+
+    <!--닉네임 중복검사-->
+    <select id="getMemberNicknameCount" resultType="boolean" parameterType="String">
+        select case when count(*) > 0 then true else false end
+        from member
+        where MEM_NICKNAME=#{mem_nickname}
     </select>
 
 </mapper>

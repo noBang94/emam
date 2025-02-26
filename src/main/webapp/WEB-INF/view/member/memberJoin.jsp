@@ -15,6 +15,9 @@
   <style>
     h2 { margin-left: 20%; }
     #result { border: 1px dotted gray; padding: 10px; margin: 5px; }
+    .unvis{display: none;}
+    .unvis.view{display: inline;}
+
   </style>
 
   <script>
@@ -61,18 +64,108 @@
         }).open();
       });
 
+      // 아이디 중복확인 버튼 클릭 이벤트
       $('#idcheck').on('click', function(){
         idvalue = $('#mem_id').val();
+        if($(".form-control").val().trim() === "") {
+          alert("이메일을 입력해주세요.");
+          return;
+        }
+
+        let email_regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i; // 이메일 형식 검증
+        if(!email_regex.test($(".form-control").val().trim())){
+          alert("이메일 형식이 아닙니다.")
+          return;
+        }
         fetch('<%=request.getContextPath() %>/member/memberIdCheck.do?id=' + idvalue)
                 .then(res => {
-                  if(res.ok) return res.json();
+                  if (res.ok) return res.json();
                   else throw new Error(res.statusText)
                 })
                 .then(result => {
                   $('#idspan').html(result.flag).css('color', 'red');
+                  if (result.flag === "사용 가능한 아이디입니다.이메일 인증을 완료해주세요.") {
+                    $('#emailAuthBtnContainer').show(); // 사용 가능하면 활성화
+                    $(".unvis").addClass("view")
+                    $('#idspan').html(result.flag).css('color', 'green');
+                  }
                 })
                 .catch(err => console.log(err));
       });
+
+      // 이메일 인증 버튼 클릭 이벤트
+      $('#emailAuthBtn').on('click', function() {
+        const email = $('#mem_id').val();
+        if (!email) {
+          alert('이메일을 입력해주세요.');
+          return;
+        }
+
+        // 이메일 인증 요청
+        fetch('<%=request.getContextPath() %>/member/emailAuth.do?email=' + email)
+                .then(res => {
+                  if (res.ok) return res.json();
+                  else throw new Error(res.statusText);
+                })
+                .then(result => {
+                  if (result.success) {
+                    alert('인증 메일이 발송되었습니다. 이메일을 확인하고 인증 번호를 입력해주세요.');
+                    $('#authCodeInput').show(); // 인증 번호 입력 필드 표시
+                  } else {
+                    alert('인증 메일 발송에 실패했습니다. 잠시 후 다시 시도해주세요.');
+                  }
+                })
+                .catch(err => console.log(err));
+      });
+
+      // 인증 번호 확인 버튼 클릭 이벤트
+      $('#authCodeCheckBtn').on('click', function() {
+        const email = $('#mem_id').val();
+        const authCode = $('#authCode').val();
+
+        if(authCode.trim() === "") {
+          alert("인증번호를 입력해주세요.");
+          return;
+        }
+
+        fetch('<%=request.getContextPath() %>/member/emailAuthCodeCheck.do?email=' + email + '&authCode=' + authCode)
+                .then(res => {
+                  if (res.ok) return res.json();
+                  else throw new Error(res.statusText);
+                })
+                .then(result => {
+                  if (result.success) {
+                    alert('이메일 인증이 완료되었습니다.');
+                    $('#emailAuthBtn').prop('disabled', true); // 인증 버튼 비활성화
+                    $('#authCodeCheckBtn').prop('disabled', true); // 인증 번호 확인 버튼 비활성화
+                    $('#authCode').prop('disabled', true); // 인증 번호 입력 필드 비활성화
+                  } else {
+                    alert('이메일 인증에 실패했습니다. 다시 입력해주세요.');
+                  }
+                })
+                .catch(err => console.log(err));
+      });
+
+      // 닉네임 중복 확인 버튼 클릭 이벤트
+      $('#nicknameCheckBtn').on('click', function() {
+        const nickname = $('#mem_nickname').val();
+
+        if (nickname.trim() === "") {
+          alert("닉네임을 입력해주세요.");
+          return;
+        }
+
+        fetch('<%=request.getContextPath() %>/member/nicknameCheck.do?nickname=' + nickname)
+                .then(res => {
+                  if (res.ok) return res.json();
+                  else throw new Error(res.statusText);
+                })
+                .then(result => {
+                  $('#nicknameCheckMsg').html(result.message).css('color', result.available ? 'green' : 'red');
+                })
+                .catch(err => console.log(err));
+      });
+
     });
   </script>
 </head>
@@ -83,12 +176,23 @@
 
 <form class="form-horizontal" onsubmit="return false;">
   <div class="form-group">
-    <label class="control-label col-sm-2" for="mem_id">이메일</label>
+    <label class="control-label col-sm-2" for="mem_id">아이디</label>
     <div class="col-sm-3">
-      <input type="email" name="mem_id" class="form-control" id="mem_id" placeholder="이메일 입력">
+      <input type="email" name="mem_id" class="form-control" id="mem_id" placeholder="이메일 입력 ex) your_email@gmail.com">
     </div>
-    <input id="idcheck" type="button" class="btn btn-success btn-sm" value="중복검사">
-    <span id="idspan"></span>
+    <div id="emailAuthBtnContainer" style="">
+      <input id="idcheck" type="button" class="btn btn-success btn-sm" value="아이디 중복확인">
+      <input id="emailAuthBtn" type="button" class="btn btn-info btn-sm s unvis" value="이메일 인증">
+      <span id="idspan"></span>
+    </div>
+  </div>
+
+  <div class="form-group" id="authCodeInput" style="display: none;">
+    <label class="control-label col-sm-2" for="authCode">인증 번호</label>
+    <div class="col-sm-2">
+      <input type="text" name="authCode" class="form-control" id="authCode" placeholder="인증 번호 입력">
+    </div>
+    <input id="authCodeCheckBtn" type="button" class="btn btn-success btn-sm" value="인증 번호 확인">
   </div>
 
   <div class="form-group">
@@ -102,6 +206,10 @@
     <label class="control-label col-sm-2" for="mem_nickname">닉네임</label>
     <div class="col-sm-2">
       <input type="text" name="mem_nickname" class="form-control" id="mem_nickname" placeholder="닉네임 입력">
+    </div>
+    <div class="col-sm-3">
+      <input id="nicknameCheckBtn" type="button" class="btn btn-success btn-sm" value="중복확인">
+      <span id="nicknameCheckMsg"></span>
     </div>
   </div>
 

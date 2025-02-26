@@ -23,15 +23,57 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             background-color: #f9f9f9;
+            position: relative; /* 관리자 링크 위치 기준 설정 */
         }
         .button-group {
             display: flex;
             gap: 10px;
+            justify-content: center;
         }
         .button-group button {
             flex: 1;
             width: 48%; /* 버튼 너비 조정 */
             display: inline-block; /* 버튼을 인라인 블록 요소로 설정 */
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #loginBtn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        #loginBtn:hover {
+            background-color: #0056b3;
+        }
+
+        #joinBtn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        #joinBtn:hover {
+            background-color: #1e7e34;
+        }
+
+        #findPwdBtn {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        #findPwdBtn:hover {
+            background-color: #138496;
+        }
+
+        .admin-link {
+            position: absolute; /* 절대 위치 설정 */
+            bottom: 10px; /* 하단 여백 설정 */
+            right: 10px; /* 우측 여백 설정 */
+            font-size: 12px; /* 폰트 크기 조정 */
         }
     </style>
 
@@ -52,7 +94,7 @@
                     data: { "mem_id": userId, "mem_pw": userPw }, // 일반 파라미터 형식으로 데이터 전송
                     success: function(data) {
                         if (data.result === "success") {
-                            // 로그인 성공 시 메시지 표시 및 페이지 이동 제거
+                            alert(userId + "님 환영합니다.");
                         } else {
                             $("#loginResult").text("로그인 실패. 아이디 또는 비밀번호를 확인하세요.").css("color", "red");
                         }
@@ -67,6 +109,12 @@
             $("#joinBtn").on("click", function(){
                 window.location.href = "<%=request.getContextPath() %>/member/memberJoin.do";
             });
+
+            $("#findPwdBtn").on("click", function(){
+                // 비밀번호 찾기 페이지로 이동
+                window.location.href = "<%=request.getContextPath() %>/member/findPassword.do";
+            });
+
         });
     </script>
 </head>
@@ -89,10 +137,12 @@
         <div class="button-group">
             <button id="loginBtn" type="button" class="btn btn-primary">로그인</button>
             <button id="joinBtn" type="button" class="btn btn-success">회원가입</button>
+            <button id="findPwdBtn" type="button" class="btn btn-secondary">비밀번호 찾기</button>
         </div>
 
         <p id="loginResult"></p>
     </form>
+    <a href="<%=request.getContextPath() %>/admin/adminLogin.do" class="admin-link">관리자</a>
 </div>
 
 </body>
