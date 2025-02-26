@@ -39,4 +39,18 @@ public class MemberServiceImpl implements IMemberService {
         return dao.getMember(memId);
     }
 
+    @Override
+    public MemberVO getMemberByEmail(String memId) {
+        return dao.getMemberByEmail(memId);
+    }
+
+    @Override
+    public void updatePassword(MemberVO memberVo) {
+        dao.updatePassword(memberVo);
+    }
+
+    @Override
+    public boolean getMemberNicknameCount(String nickname) {
+        return dao.getMemberNicknameCount(nickname);
+    }
 }

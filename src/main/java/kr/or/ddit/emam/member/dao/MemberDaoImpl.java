@@ -17,7 +17,7 @@ public class MemberDaoImpl implements IMemberDao {
 
     @Override
     public MemberVO getLoginMember(MemberVO memberVo) {
-        SqlSession  session = MyBatisUtil.getSqlSession();
+        SqlSession session = MyBatisUtil.getSqlSession();
         MemberVO  memVo = null;
 
         try {
@@ -80,4 +80,48 @@ public class MemberDaoImpl implements IMemberDao {
         return memVo;
     }
 
+    @Override
+    public MemberVO getMemberByEmail(String memId) {
+        SqlSession  session = MyBatisUtil.getSqlSession();
+        MemberVO memVo = null;
+
+        try {
+            memVo = session.selectOne("member.getMemberByEmail", memId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return memVo;
+    }
+
+    @Override
+    public void updatePassword(MemberVO memberVo) {
+        SqlSession  session = MyBatisUtil.getSqlSession();
+
+        try {
+            session.update("member.updatePassword", memberVo);
+            session.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.rollback();
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public boolean getMemberNicknameCount(String nickname) {
+        SqlSession session = MyBatisUtil.getSqlSession();
+        boolean count = false;
+
+        try {
+            count = session.selectOne("member.getMemberNicknameCount", nickname);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+        return count;
+    }
 }
