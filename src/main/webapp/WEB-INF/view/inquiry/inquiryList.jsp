@@ -1,7 +1,7 @@
 <%@ page import="kr.or.ddit.emam.vo.MemberVO" %>
 <%@ page import="kr.or.ddit.emam.vo.InquiryVO" %>
 <%@ page import="java.util.List" %>
-<%@ page import="kr.or.ddit.emam.vo.PageInquiryVO" %>
+<%@ page import="kr.or.ddit.emam.vo.PageVO" %>
 <%@ page import="kr.or.ddit.emam.vo.InquiryproVO" %>
 <%@ page import="kr.or.ddit.emam.inquiry.service.IInquiryService" %>
 <%@ page import="kr.or.ddit.emam.inquiry.service.InquiryServiceImpl" %>
@@ -22,7 +22,7 @@
 
   //컨트롤러에서 자료 받기
   List<InquiryVO> inquiryList = (List<InquiryVO>)request.getAttribute("inquiryList");
-  PageInquiryVO pageInquiryVo = (PageInquiryVO)request.getAttribute("pageInquiryVo");
+  PageVO pageVo = (PageVO)request.getAttribute("pageVo");
   String sword = (String)request.getAttribute("sword");
   sword = sword == null ? "" : sword;
   String myInquiry = request.getParameter("myInquiry");
@@ -76,13 +76,13 @@
 <nav class="navbar1">
   <div class="container">
     <form id="searchForm" action="<%=request.getContextPath()%>/inquiry/inquiryList.do">
-      <input type="hidden" id="page" name="page" value="<%=pageInquiryVo.getCurrentPage()%>">
+      <input type="hidden" id="page" name="page" value="<%=pageVo.getCurrentPage()%>">
       <input type="text" id="sword" name="sword" placeholder="제목 검색 키워드 입력" value="<%=sword%>">
       <input type="button" id="searchBtn" value="검색">
       <p>내 문의만 보기</p>
       <input type="checkbox" id="myInquiry" name="myInquiry" value="<%=loginMember.getMem_id()%>">
     </form>
-    <input type="button" id="writeBtn" value="문의하기" onclick="location.href='<%=request.getContextPath()%>/inquiry/inquiryWrite.do';">
+    <input type="button" id="writeBtn" value="문의하기" onclick="location.href='<%=request.getContextPath()%>/inquiry/inquiryWrite.do'">
   </div>
 </nav>
 
@@ -112,7 +112,7 @@
       <td><%=vo.getInquiry_title()%></td>
       <td>
 <%
-      if(!vo.getInquiry_ispublic()){
+      if(vo.getInquiry_ispublic()==0){
 %>
         🔒︎
 <%
@@ -132,15 +132,15 @@
           <ul class="pagination">
 <%
   //이전
-  if(pageInquiryVo.getStartPage()>1){
+  if(pageVo.getStartPage()>1){
 %>
             <li class="page-item"><a id="prev" class="page-link">이전</a></li>
 <%
   } //if문 종료
 
   //페이지 번호
-  for(int i=pageInquiryVo.getStartPage(); i<=pageInquiryVo.getEndPage(); i++){
-    if(i==pageInquiryVo.getCurrentPage()){ //현재 페이지
+  for(int i=pageVo.getStartPage(); i<=pageVo.getEndPage(); i++){
+    if(i==pageVo.getCurrentPage()){ //현재 페이지
 %>
             <li class="page-item active"><a class="page-link pageno"><%=i%></a></li>
 <%
@@ -152,7 +152,7 @@
   } //for문 종료
 
   //다음
-  if(pageInquiryVo.getEndPage()<pageInquiryVo.getTotalPage()){
+  if(pageVo.getEndPage()<pageVo.getTotalPage()){
 %>
             <li class="page-item"><a id="next" class="page-link">다음</a></li>
 <%

@@ -32,7 +32,7 @@ public class InquiryView extends HttpServlet {
         //문의번호에 맞는 문의 정보 가져오기
         InquiryVO inquiryVo = inquiryService.getInquiry(num);
         if(inquiryVo!=null){
-            MemberVO memberVo = memberService.getMember(inquiryVo.getMemberVo().getMem_id());
+            MemberVO memberVo = memberService.getMember(inquiryVo.getMem_id());
             inquiryVo.setMemberVo(memberVo);
             //문의번호에 맞는 문의처리 정보 가져오기
             //InquiryproVO inquiryproVo = inquiryproService.getInquiry(num);
@@ -41,7 +41,7 @@ public class InquiryView extends HttpServlet {
 		request.setAttribute("inquiryVo", inquiryVo);
 		//request.setAttribute("inquiryproVo", inquiryproVo);
 
-		request.getRequestDispatcher("/WEB-INF/view/board/boardView.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/view/inquiry/inquiryView.jsp").forward(request, response);
 
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

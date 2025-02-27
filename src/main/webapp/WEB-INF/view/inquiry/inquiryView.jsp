@@ -1,5 +1,5 @@
 <%@ page import="kr.or.ddit.emam.vo.MemberVO" %>
-<%@ page import="kr.or.ddit.emam.vo.PageInquiryVO" %>
+<%@ page import="kr.or.ddit.emam.vo.PageVO" %>
 <%@ page import="kr.or.ddit.emam.vo.InquiryVO" %>
 <%@ page import="java.util.List" %>
 <%@ page import="kr.or.ddit.emam.vo.InquiryproVO" %>
@@ -12,6 +12,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>문의 보기</title>
+  <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="<%=request.getContextPath() %>/js/jquery.serializejson.min.js"></script>
 
 <%
   //세션 로그인 값
@@ -19,9 +22,9 @@
 
   //컨트롤러에서 자료 받기
   InquiryVO inquiryVo = (InquiryVO)request.getAttribute("inquiryVo");
-  InquiryproVO inquiryproVo = (InquiryproVO)request.getAttribute("inquiryproVo");
+  //InquiryproVO inquiryproVo = (InquiryproVO)request.getAttribute("inquiryproVo");
 
-  IInquiryService inquiryService = InquiryServiceImpl.getInstance();
+  //IInquiryService inquiryService = InquiryServiceImpl.getInstance();
 
 %>
 
@@ -29,14 +32,14 @@
     $(function (){
 <%
       //만약 선택한 문의글이 내가 작성하지 않은 비공개글이면 알림창을 띄우고, 뒤로가기한다.
-      if(!inquiryVo.getMem_id().equals(loginMemberVo.getMem_id()) && !inquiryVo.getInquiry_ispublic()){
+      if(!inquiryVo.getMem_id().equals(loginMemberVo.getMem_id()) && inquiryVo.getInquiry_ispublic()==0){
 %>
         alert("해당 문의글은 비공개 상태입니다.");
         window.history.go(-1);
 <%
       }
+
 %>
-    });
 
     //삭제하기 버튼 클릭 이벤트
     $("#deleteBtn").on("click", function(){
@@ -58,19 +61,20 @@
           dataType : 'json'
       });
   });
+});
 
   </script>
 </head>
 <body>
 <h3>문의</h3>
 
-<jsp:include page="/"/>
+<%--<jsp:include page="/"/>--%>
 
 <div id="result">
 <%
   if(inquiryVo==null){
 %>
-  <script>history.go(-1);</script>
+<%--  <script>history.go(-1);</script>--%>
 <%
   }else {
 %>
@@ -97,7 +101,7 @@
   //로그인한 회원의 계정과 문의작성자 계정이 같으면 수정, 삭제버튼을 출력
     if(loginMemberVo!=null && inquiryVo.getMem_id().equals(loginMemberVo.getMem_id())){
 %>
-          <input type="button" data-num="<%=inquiryVo.getInquiry_index() %>" id="updateBtn" value="수정" onclick="location.href="<%=request.getContextPath()%>/inquiry/inquiryUpdate.do">
+          <input type="button" data-num="<%=inquiryVo.getInquiry_index() %>" id="updateBtn" value="수정" onclick="location.href='<%=request.getContextPath()%>/inquiry/inquiryUpdate.do'">
           <input type="button" data-num="<%=inquiryVo.getInquiry_index() %>" id="deleteBtn" value="삭제">
 <%
     } //if문 종료

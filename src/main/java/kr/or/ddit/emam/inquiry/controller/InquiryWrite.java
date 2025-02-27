@@ -21,6 +21,7 @@ public class InquiryWrite extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("/WEB-INF/view/inquiry/inquiryWrite.jsp").forward(request, response);
     }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
         response.setCharacterEncoding("utf-8");
@@ -29,9 +30,11 @@ public class InquiryWrite extends HttpServlet {
         //작성 완료 시 데이터 받기
         String reqStr = StreamData.getJsonStream(request);
 
+
         //역직렬화 - InquiryVO객체로 변환
         Gson gson = new Gson();
         InquiryVO inquiryVo = gson.fromJson(reqStr, InquiryVO.class);
+
 
         //service객체 얻기
         IInquiryService service = InquiryServiceImpl.getInstance();
@@ -48,7 +51,6 @@ public class InquiryWrite extends HttpServlet {
         PrintWriter out = response.getWriter();
         out.write(jsonStr);
         response.flushBuffer();
+
     }
-
-
 }
