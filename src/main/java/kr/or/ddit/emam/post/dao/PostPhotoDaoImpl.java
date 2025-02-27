@@ -14,7 +14,9 @@ import java.util.Collection;
 public class PostPhotoDaoImpl implements IPostPhotoDao {
 
     private static IPostPhotoDao postPhotoDao = new PostPhotoDaoImpl();
+
     private PostPhotoDaoImpl(){}
+
     public static IPostPhotoDao getInstance() {
         return postPhotoDao;
     }
