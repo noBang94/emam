@@ -39,10 +39,6 @@ public class InquiryList extends HttpServlet {
         IInquiryService inquiryService = InquiryServiceImpl.getInstance();
         IMemberService memberService = MemberServiceImpl.getInstance();
 
-        //로그인한 계정정보 가져오기... 여기선 굳이 가져올 필요 없나?
-        //HttpSession session = request.getSession();
-        //MemberVO loginMember = (MemberVO) session.getAttribute("loginMember");
-
         //service메소드 호출하기 - 페이지 처리에 필요한 값 계산
         PageVO pageVo = inquiryService.pageInquiry(page, sword, myInquiry);
 
