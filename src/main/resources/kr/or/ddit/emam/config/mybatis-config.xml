@@ -19,15 +19,15 @@
         <!-- ... -->
         <typeAlias type="kr.or.ddit.emam.vo.MemberVO" alias="memberVo"/>
 
-        <typeAlias type="kr.or.ddit.emam.vo.ReportVO" alias="reportVo"/>
+<!--        <typeAlias type="kr.or.ddit.emam.vo.ReportVO" alias="reportVo"/> -->
 
         <typeAlias type="kr.or.ddit.emam.vo.AdminVO" alias="adminVo"/>
 
-        <!-- 노병훈 작업 머지시 확인해야함(s) -->
-        <typeAlias type="kr.or.ddit.emam.vo.PostVO" alias="PostVO"/>
-        <typeAlias type="kr.or.ddit.emam.vo.PostPhotoVO" alias="PostPhotoVO"/>
-        <typeAlias type="kr.or.ddit.emam.vo.PostPhotoDetailVO" alias="PostPhotoDetailVO"/>
-        <!-- 노병훈 작업 머지시 확인해야함(e) -->
+<!--        &lt;!&ndash; 노병훈 작업 머지시 확인해야함(s) &ndash;&gt;-->
+<!--        <typeAlias type="kr.or.ddit.emam.vo.PostVO" alias="PostVO"/>-->
+<!--        <typeAlias type="kr.or.ddit.emam.vo.PostPhotoVO" alias="PostPhotoVO"/>-->
+<!--        <typeAlias type="kr.or.ddit.emam.vo.PostPhotoDetailVO" alias="PostPhotoDetailVO"/>-->
+<!--        &lt;!&ndash; 노병훈 작업 머지시 확인해야함(e) &ndash;&gt;-->
 
     </typeAliases>
 
@@ -51,13 +51,12 @@
         <mapper resource="kr/or/ddit/emam/mapper/admin-mapper.xml"/>
 
 
-        <mapper resource="kr/or/ddit/emam/mapper/report-mapper.xml"/>
+<!--        <mapper resource="kr/or/ddit/emam/mapper/report-mapper.xml"/>   -->
 
-        <!-- 노병훈 작업 머지시 확인해야함(s) -->
-        <mapper resource="kr/or/ddit/emam/mapper/post-mapper.xml"/>
-        <mapper resource="kr/or/ddit/emam/mapper/post-photo-mapper.xml"/>
-        <!-- 노병훈 작업 머지시 확인해야함(e) -->
+<!--        &lt;!&ndash; 노병훈 작업 머지시 확인해야함(s) &ndash;&gt;        -->
+<!--        <mapper resource="kr/or/ddit/emam/mapper/post-mapper.xml"/>         -->
+<!--        <mapper resource="kr/or/ddit/emam/mapper/post-photo-mapper.xml"/>   -->
+<!--        &lt;!&ndash; 노병훈 작업 머지시 확인해야함(e) &ndash;&gt;            -->
 
     </mappers>
-
 </configuration>
