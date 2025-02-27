@@ -49,15 +49,19 @@
     </resultMap>
 
     <select id="getPostPhoto" resultMap="postPhotoMap">
-        select * from POST_PHOTOTB a, POST_PHOTO_DETAIL b
-        where a.POST_PHOTOTB = b.POST_PHOTO_DETAIL
-        and a.POST_PHOTOTB = #{POST_PHOTO}
+        select * from POST a, POST_PHOTO_DETAIL b
+        where a.POST_PHOTO = b.POST_PHOTO
+          and a.POST_photo = #{post_photo};
     </select>
     
-    <select id="getPostPhotoDetail" resultMap="postPhotoDetailMap">
+    <select id="getPostPhotoDetail" parameterType="PostPhotoDetailVO" resultMap="postPhotoDetailMap">
         select * from POST_PHOTO_DETAIL
-        where POST_PHOTO = #{POST_PHOTO}
+        where POST_PHOTO = #{post_photo}
         and POST_PHOTO_SN = #{post_photo_sn}
     </select>
 
+    <select id="getPostPhotoDetailList" parameterType="int" resultMap="postPhotoDetailMap">
+        select * from POST_PHOTO_DETAIL
+        where POST_PHOTO = #{post_post}
+    </select>
 </mapper>

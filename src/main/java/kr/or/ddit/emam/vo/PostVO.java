@@ -1,6 +1,7 @@
 package kr.or.ddit.emam.vo;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class PostVO {
     private int post_index; //게시글 번호
@@ -12,10 +13,26 @@ public class PostVO {
     private int post_replycnt; //댓글 개수
     private int post_ilikecnt; //좋아요 수
     private int post_viewcnt; //조회 수
-
     private MemberVO memVo; //작성자 정보
 
-    private PostVO postVo; //게시글 사진 정보
+    private PostPhotoVO postPhotoVO; //게시글 사진 정보
+    private List<PostPhotoDetailVO> post_photo_detail_list;
+
+    public List<PostPhotoDetailVO> getPost_photo_detail_list() {
+        return post_photo_detail_list;
+    }
+
+    public void setPost_photo_detail_list(List<PostPhotoDetailVO> post_photo_detail_list) {
+        this.post_photo_detail_list = post_photo_detail_list;
+    }
+
+    public PostPhotoVO getPostPhotoVO() {
+        return postPhotoVO;
+    }
+
+    public void setPostPhotoVO(PostPhotoVO postPhotoVO) {
+        this.postPhotoVO = postPhotoVO;
+    }
 
     public PostVO() {}
     
@@ -31,14 +48,6 @@ public class PostVO {
         this.mem_id = mem_id;
         this.post_con = post_con;
         this.post_visible = post_visible;
-    }
-
-    public PostVO getPostVo() {
-        return postVo;
-    }
-
-    public void setPostVo(PostVO postVo) {
-        this.postVo = postVo;
     }
 
     public MemberVO getMemVo() {
