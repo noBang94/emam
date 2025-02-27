@@ -13,7 +13,7 @@ target/
 *.iml
 *.ipr
 src/main/resources/kr/or/ddit/emam/config/db.properties
-
+src/main/resources/kr/or/ddit/emam/config/mybatis-config.xml
 
 ### Eclipse ###
 .apt_generated
