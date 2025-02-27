@@ -31,17 +31,23 @@
 
   <script>
     $(function (){
+      //기존의 체크박스(내 문의 보기) 값 가져오기
+        if(<%=myInquiry != null && myInquiry.equals(loginMember.getMem_id())%>) {
+            $('#myInquiry').attr("checked", true);
+        }
+
       //검색하기 버튼 클릭 이벤트
       $('#searchBtn').on('click', function(){
         $("#page").val(1);
         $("#searchForm").submit();
-      })
+      });
 
       //내 문의 보기 체크박스 클릭 이벤트
       $('#myInquiry').on('click', function (){
         $("#page").val(1);
+
         $("#searchForm").submit();
-      })
+      });
 
       //페이지번호 클릭 이벤트
       $(document).on('click', '.pageno', function(){
@@ -166,7 +172,7 @@
 </div>
 
 <!-- 게시글 View 폼 -->
-<form action="<%=request.getContextPath()%>/inquiry/inquiryView.do" method="post" id="viewForm">
+<form action="<%=request.getContextPath()%>/inquiry/inquiryView.do" method="get" id="viewForm">
   <input type="hidden" name="num" id="viewNum">
 </form>
 

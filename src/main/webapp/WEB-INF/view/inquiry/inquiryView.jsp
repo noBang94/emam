@@ -41,9 +41,19 @@
 
 %>
 
-    //삭제하기 버튼 클릭 이벤트
-    $("#deleteBtn").on("click", function(){
+    //수정하기 버튼 클릭 이벤트
+    $("#updateBtn").on("click", function (){
       const num = $(this).data("num");
+      $("#updateNum").val(num);
+      $("#updateForm").submit();
+    });
+
+    //삭제하기 버튼 클릭 이벤트
+    $("#deleteBtn").on("click", function (){
+      const num = $(this).data("num");
+      if(!confirm('삭제 시 복구가 불가능합니다. \n정말로 삭제하시겠습니까?')){
+        return false;
+      }
       $.ajax({
         url : `<%=request.getContextPath()%>/inquiry/inquiryDelete.do`,
         type : 'get',
@@ -101,7 +111,7 @@
   //로그인한 회원의 계정과 문의작성자 계정이 같으면 수정, 삭제버튼을 출력
     if(loginMemberVo!=null && inquiryVo.getMem_id().equals(loginMemberVo.getMem_id())){
 %>
-          <input type="button" data-num="<%=inquiryVo.getInquiry_index() %>" id="updateBtn" value="수정" onclick="location.href='<%=request.getContextPath()%>/inquiry/inquiryUpdate.do'">
+          <input type="button" data-num="<%=inquiryVo.getInquiry_index() %>" id="updateBtn" value="수정">
           <input type="button" data-num="<%=inquiryVo.getInquiry_index() %>" id="deleteBtn" value="삭제">
 <%
     } //if문 종료
@@ -112,5 +122,9 @@
   </table>
 </div>
 
+  <!-- 게시글 수정 폼 -->
+  <form action="<%=request.getContextPath()%>/inquiry/inquiryUpdate.do" method="get" id="updateForm">
+    <input type="hidden" name="num" id="updateNum">
+  </form>
 </body>
 </html>

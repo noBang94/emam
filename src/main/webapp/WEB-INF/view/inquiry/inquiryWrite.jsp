@@ -16,6 +16,7 @@
 %>
   <script>
     $(function (){
+
       //등록 버튼 클릭 이벤트
       $('#insertBtn').on('click', function (){
         //제목과 본문 내용이 입력되었는지 확인하기
