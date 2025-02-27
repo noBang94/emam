@@ -93,7 +93,6 @@ public class InquiryDaoImpl implements IInquiryDao {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            session.commit();
             session.close();
         }
         return list;
@@ -109,7 +108,6 @@ public class InquiryDaoImpl implements IInquiryDao {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            session.commit();
             session.close();
         }
         return res;

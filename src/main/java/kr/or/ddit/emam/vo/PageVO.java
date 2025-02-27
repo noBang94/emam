@@ -1,14 +1,14 @@
 package kr.or.ddit.emam.vo;
 
-public class PageInquiryVO {
+public class PageVO {
     private int currentPage = 1;
 
-    private int start;
-    private int end;
+    private int start; //표시될 게시글 번호 시작
+    private int end; //표시될 게시글 번호 끝
 
-    private  int startPage;
-    private int endPage;
-    private int totalPage;
+    private  int startPage; //페이지 번호 시작
+    private int endPage; //페이지 번호 끝
+    private int totalPage; //전체 페이지 수
     private int count;
 
     private static int perList = 20; // 한 페이지에 보여줄 게시글 수
@@ -75,7 +75,7 @@ public class PageInquiryVO {
     }
 
     public static void setPerList(int perList) {
-        PageInquiryVO.perList = perList;
+        PageVO.perList = perList;
     }
 
     public static int getPerPage() {
@@ -83,6 +83,6 @@ public class PageInquiryVO {
     }
 
     public static void setPerPage(int perPage) {
-        PageInquiryVO.perPage = perPage;
+        PageVO.perPage = perPage;
     }
 }

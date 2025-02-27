@@ -55,6 +55,8 @@
         <p>로그인 정보가 없습니다.</p>
       <% } %>
   </div>
+  <!-- 테스트용 -->
+  <input type="button" value="문의" onclick="location.href='<%=request.getContextPath()%>/inquiry/inquiryList.do'">
 </div>
 </body>
 </html>

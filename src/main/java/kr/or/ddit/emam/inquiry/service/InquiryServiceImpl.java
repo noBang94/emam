@@ -3,7 +3,7 @@ package kr.or.ddit.emam.inquiry.service;
 import kr.or.ddit.emam.inquiry.dao.IInquiryDao;
 import kr.or.ddit.emam.inquiry.dao.InquiryDaoImpl;
 import kr.or.ddit.emam.vo.InquiryVO;
-import kr.or.ddit.emam.vo.PageInquiryVO;
+import kr.or.ddit.emam.vo.PageVO;
 
 import java.util.HashMap;
 import java.util.List;
@@ -66,7 +66,7 @@ public class InquiryServiceImpl implements IInquiryService {
 
     //페이지별 정보 구하기 (페이지, 제목 검색 키워드, 내 문의 보기 체크 시 현재 로그인한 계정ID)
     @Override
-    public PageInquiryVO pageInquiry(int page, String sword, String myInquiry) {
+    public PageVO pageInquiry(int page, String sword, String myInquiry) {
         //전체 문의글 갯수 구하기
         Map<String, Object> map = new HashMap<>();
         map.put("sword", sword);
@@ -74,30 +74,30 @@ public class InquiryServiceImpl implements IInquiryService {
         int count = this.totalCount(map);
 
         //전체 페이지수 구하기
-        int totalPage = (int)Math.ceil((double)count / PageInquiryVO.getPerList());
+        int totalPage = (int)Math.ceil((double)count / PageVO.getPerList());
         if(page > totalPage ) page= totalPage;
 
         //start, end 구하기
-        int start = (page - 1) * PageInquiryVO.getPerList() + 1;
-        int end = start + PageInquiryVO.getPerList() - 1;
+        int start = (page - 1) * PageVO.getPerList() + 1;
+        int end = start + PageVO.getPerList() - 1;
         if(end > count) end = count;
 
         //시작페이지, 끝페이지 구하기
-        int perPage = PageInquiryVO.getPerPage();
+        int perPage = PageVO.getPerPage();
         int startPage = ((page - 1) / perPage * perPage) + 1;
         int endPage = startPage + perPage- 1;
         if(endPage > totalPage)  endPage = totalPage;
 
-        PageInquiryVO pageInquiryVo = new PageInquiryVO();
-        pageInquiryVo.setCurrentPage(page);
-        pageInquiryVo.setStart(start);
-        pageInquiryVo.setEnd(end);
+        PageVO pageVo = new PageVO();
+        pageVo.setCurrentPage(page);
+        pageVo.setStart(start);
+        pageVo.setEnd(end);
 
-        pageInquiryVo.setStartPage(startPage);
-        pageInquiryVo.setEndPage(endPage);
-        pageInquiryVo.setTotalPage(totalPage);
+        pageVo.setStartPage(startPage);
+        pageVo.setEndPage(endPage);
+        pageVo.setTotalPage(totalPage);
 
-        return pageInquiryVo;
+        return pageVo;
     }
 
 }

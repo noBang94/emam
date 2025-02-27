@@ -7,12 +7,14 @@ public class InquiryVO {
     private String mem_id; //회원ID (문의자)
     private String inquiry_title; //문의제목
     private String inquiry_con; //문의내용
-    private LocalDate inquiry_date; //문의일시
-    private boolean inquiry_ispublic; //문의공개여부
+    private String inquiry_date; //문의일시
+    private int inquiry_ispublic; //문의공개여부
 
     private long inquiry_photo = -1; //문의사진
 
     private MemberVO memberVo; //회원VO (문의자VO)
+
+
 
     public int getInquiry_index() {
         return inquiry_index;
@@ -42,15 +44,15 @@ public class InquiryVO {
         this.inquiry_con = inquiry_con;
     }
 
-    public LocalDate getInquiry_date() { return inquiry_date; }
+    public String getInquiry_date() { return inquiry_date; }
 
-    public void setInquiry_date(LocalDate inquiry_date) { this.inquiry_date = inquiry_date; }
+    public void setInquiry_date(String inquiry_date) { this.inquiry_date = inquiry_date; }
 
-    public boolean getInquiry_ispublic() {
+    public int getInquiry_ispublic() {
         return inquiry_ispublic;
     }
 
-    public void setInquiry_ispublic(boolean inquiry_ispublic) {
+    public void setInquiry_ispublic(int inquiry_ispublic) {
         this.inquiry_ispublic = inquiry_ispublic;
     }
 

@@ -11,7 +11,7 @@ import kr.or.ddit.emam.member.service.IMemberService;
 import kr.or.ddit.emam.member.service.MemberServiceImpl;
 import kr.or.ddit.emam.vo.InquiryVO;
 import kr.or.ddit.emam.vo.MemberVO;
-import kr.or.ddit.emam.vo.PageInquiryVO;
+import kr.or.ddit.emam.vo.PageVO;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -44,12 +44,12 @@ public class InquiryList extends HttpServlet {
         //MemberVO loginMember = (MemberVO) session.getAttribute("loginMember");
 
         //service메소드 호출하기 - 페이지 처리에 필요한 값 계산
-        PageInquiryVO pageInquiryVo = inquiryService.pageInquiry(page, sword, myInquiry);
+        PageVO pageVo = inquiryService.pageInquiry(page, sword, myInquiry);
 
         //service메소드 호출하기 - paramater로 map을 설정
         Map<String, Object> map = new HashMap<>();
-        map.put("start", pageInquiryVo.getStart());
-        map.put("end", pageInquiryVo.getEnd());
+        map.put("start", pageVo.getStart());
+        map.put("end", pageVo.getEnd());
         map.put("sword", sword);
         map.put("myInquiry", myInquiry);
 
@@ -62,7 +62,7 @@ public class InquiryList extends HttpServlet {
 
         //결과값을 request에 저장 - 페이지 처리에 필요한 요소들
         request.setAttribute("inquiryList", inquiryList);
-        request.setAttribute("pageInquiryVo", pageInquiryVo);
+        request.setAttribute("pageVo", pageVo);
         request.setAttribute("sword", sword);
         request.setAttribute("myInquiry", myInquiry);
 

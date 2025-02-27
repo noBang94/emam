@@ -20,6 +20,11 @@
         </where>
     </sql>
 
+    <!-- 문의 보기 -->
+    <select id="getInquiry" parameterType="int" resultType="inquiryVo">
+        select * from inquiry where inquiry_index = #{num}
+    </select>
+
     <!-- 문의 작성 -->
     <insert id="insertInquiry" parameterType="inquiryVo">
         insert into inquiry
