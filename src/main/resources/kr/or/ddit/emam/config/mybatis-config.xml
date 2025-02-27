@@ -23,6 +23,8 @@
 
         <typeAlias type="kr.or.ddit.emam.vo.AdminVO" alias="adminVo"/>
 
+        <typeAlias type="kr.or.ddit.emam.vo.InquiryproVO" alias="inquiryVo"/>
+
 <!--        &lt;!&ndash; 노병훈 작업 머지시 확인해야함(s) &ndash;&gt;-->
         <typeAlias type="kr.or.ddit.emam.vo.PostVO" alias="PostVO"/>
         <typeAlias type="kr.or.ddit.emam.vo.PostPhotoVO" alias="PostPhotoVO"/>
@@ -53,8 +55,10 @@
 
         <mapper resource="kr/or/ddit/emam/mapper/report-mapper.xml"/>
 
+        <mapper resource="kr/or/ddit/emam/mapper/inquiry-mapper.xml"/>
+
 <!--        &lt;!&ndash; 노병훈 작업 머지시 확인해야함(s) &ndash;&gt;        -->
-        <mapper resource="kr/or/ddit/emam/mapper/post-mapper.xml"/>         
+        <mapper resource="kr/or/ddit/emam/mapper/post-mapper.xml"/>
         <mapper resource="kr/or/ddit/emam/mapper/post-photo-mapper.xml"/>
 <!--        &lt;!&ndash; 노병훈 작업 머지시 확인해야함(e) &ndash;&gt;            -->
 
