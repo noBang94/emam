@@ -94,7 +94,7 @@
                     data: { "mem_id": userId, "mem_pw": userPw }, // 일반 파라미터 형식으로 데이터 전송
                     success: function(data) {
                         if (data.result === "success") {
-                            alert(userId + "님 환영합니다.");
+                            window.location.href = "<%=request.getContextPath() %>/welcome/welcome.do";
                         } else {
                             $("#loginResult").text("로그인 실패. 아이디 또는 비밀번호를 확인하세요.").css("color", "red");
                         }
