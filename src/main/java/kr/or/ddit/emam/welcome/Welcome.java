@@ -1,4 +1,4 @@
-package kr.or.ddit.emam.welcom;
+package kr.or.ddit.emam.welcome;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
