@@ -46,4 +46,8 @@ public class PostServiceImpl implements IPostService {
     public int updatePost(PostVO postVo) {
         return dao.updatePost(postVo);
     }
+
+    //39
+    @Override
+    public PostVO getPost(int num) {return  dao.getPost(num);}
 }

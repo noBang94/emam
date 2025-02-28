@@ -15,11 +15,7 @@
 
     MemberVO loginMember = (MemberVO)session.getAttribute("loginMember");
     List<PostVO> postList = (List<PostVO>) request.getAttribute("postList");
-    PostPhotoVO postPhotoVO = (PostPhotoVO) request.getAttribute("postPhotoVO");
-//    postList에서 membervo를 가져온뒤 membervo에서 각 컬럼값을 가져옴
-   for(PostVO pvo : postList){
-       pvo.getMemVo().getMem_name();
-   }
+
 %>
 
 <html>
@@ -187,9 +183,9 @@
             <td><%=p.getPost_con() %></td>
             <td>
                 <%
-                    if(p.getPost_photo_detail_list() !=null){
-
-                        for(PostPhotoDetailVO PhotoDetailVO : p.getPost_photo_detail_list()){
+                    int ppl = p.getPostPhotoDetailList().size();
+                    if(ppl > 0){
+                        for(PostPhotoDetailVO PhotoDetailVO : p.getPostPhotoDetailList()){
                 %>
                     <img class="prof-ph" src="<%=request.getContextPath()%>/post/postview.do?postphoto=<%=PhotoDetailVO.getPost_photo() %>&postphotosn=<%=PhotoDetailVO.getPost_photo_sn() %>">
                 <%      }

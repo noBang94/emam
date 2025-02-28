@@ -9,21 +9,20 @@ import kr.or.ddit.emam.vo.PostPhotoVO;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 public class PostPhotoServiceImpl implements IPostPhotoService {
 
-    private static IPostPhotoService postService = new PostPhotoServiceImpl();
-
+    //DAO객체 사용하기 위함
     private IPostPhotoDao postPhotoDao;
 
-    public static IPostPhotoService getInstance() {
-        return postService;
-    }
-
-    private PostPhotoServiceImpl() {
-        postPhotoDao = PostPhotoDaoImpl.getInstance();
-    }
+    //1) 객체 생성
+    private static PostPhotoServiceImpl postService = new PostPhotoServiceImpl();
+    //2) 생성자
+    private        PostPhotoServiceImpl() {postPhotoDao = PostPhotoDaoImpl.getInstance();}
+    //3)Controller에서 이 객체를 사용하기 위함
+    public  static PostPhotoServiceImpl getInstance() {return postService;}
 
 
     @Override
@@ -93,8 +92,14 @@ public class PostPhotoServiceImpl implements IPostPhotoService {
         return postPhotoDao.getPostPhoto(postPhotoVO);
     }
 
+    //PostPhotoVO{post_photo=13, post_photo_detail=null}
     @Override
     public PostPhotoDetailVO getPostPhotoDetail(PostPhotoDetailVO postPhotoDetailVO) {
         return postPhotoDao.getPostPhotoDetail(postPhotoDetailVO);
+    }
+
+    @Override
+    public List<PostPhotoDetailVO> getPhotoList(int photoIndex) {
+        return postPhotoDao.getPhotoList(photoIndex);
     }
 }

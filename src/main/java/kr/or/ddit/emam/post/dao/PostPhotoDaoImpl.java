@@ -10,6 +10,7 @@ import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.Collection;
+import java.util.List;
 
 public class PostPhotoDaoImpl implements IPostPhotoDao {
 
@@ -86,5 +87,20 @@ public class PostPhotoDaoImpl implements IPostPhotoDao {
         }
         return postPhotoDetailVO;
 
+    }
+
+    @Override
+    public List<PostPhotoDetailVO> getPhotoList(int photoIndex) {
+        SqlSession session = MyBatisUtil.getSqlSession(true);
+        List<PostPhotoDetailVO> PhotoList = null;
+        try {
+            PhotoList = session.selectList("postphoto.getPhotoList",photoIndex);
+        }catch (PersistenceException e) {
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
+        return PhotoList;
     }
 }

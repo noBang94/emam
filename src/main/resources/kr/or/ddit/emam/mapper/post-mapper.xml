@@ -12,13 +12,44 @@
         values (post_num_seq.nextval,#{mem_id},#{post_con},#{post_photo},sysdate,#{post_visible})
     </insert>
 
-    <!--    게시글 전체 조회-->
-    <select id="selectAllPost" resultType="PostVO">
-        select * from post
+    <resultMap id="postMap" type="PostVO">
+        <id property="post_index" column="POST_INDEX" />
+        <result property="mem_id" column="MEM_ID"></result>
+        <result property="post_con" column="POST_CON"></result>
+        <result property="post_photo" column="POST_PHOTO"></result>
+        <result property="post_date" column="POST_DATE"></result>
+        <result property="post_visible" column="POST_VISIBLE"></result>
+        <result property="post_replycnt" column="POST_REPLYCNT"></result>
+        <result property="post_ilikecnt" column="POST_ILIKECNT"></result>
+        <result property="post_viewcnt" column="POST_VIEWCNT"></result>
+        <collection property="postPhotoDetailList" resultMap="postPhotoDetailMap" />
+    </resultMap>
+
+    <resultMap id="postPhotoDetailMap" type="PostPhotoDetailVO">
+        <id property="post_photo" column="POST_PHOTO"/>
+        <id property="post_photo_sn" column="POST_PHOTO_SN"/>
+        <result property="photo_stre_cours" column="PHOTO_STRE_COURS"></result>
+        <result property="photo_flie_nm" column="PHOTO_FILE_NM"></result>
+        <result property="org_photo_nm" column="ORG_PHOTO_NM"></result>
+        <result property="photo_extsn" column="PHOTO_EXTSN"></result>
+    </resultMap>
+
+    <select id="selectAllPost" resultMap="postMap">
+        SELECT *
+        FROM POST a
+        INNER JOIN POST_PHOTO_DETAIL b ON(a.POST_PHOTO = b.POST_PHOTO)
     </select>
 
-    <!--    게시글 조회-->
-    <select id="selectPost" resultType="PostVO" parameterType="int">
+
+    <!--    게시글 전체 조회-->
+<!--    <select id="selectAllPost" resultType="PostVO">-->
+<!--        select * from post-->
+<!--    </select>-->
+
+    <!--    게시글 하나 조회
+    pv =session.selectOne("post.selectOnePost",num);
+    -->
+    <select id="selectOnePost" resultType="PostVO" parameterType="int">
         select * from post where POST_INDEX = #{num}
     </select>
 

@@ -60,4 +60,16 @@ public class PostPhotoDetailVO {
     public void setPhoto_extsn(String photo_extsn) {
         this.photo_extsn = photo_extsn;
     }
+
+    @Override
+    public String toString() {
+        return "PostPhotoDetailVO{" +
+                "post_photo=" + post_photo +
+                ", post_photo_sn=" + post_photo_sn +
+                ", photo_stre_cours='" + photo_stre_cours + '\'' +
+                ", photo_flie_nm='" + photo_flie_nm + '\'' +
+                ", org_photo_nm='" + org_photo_nm + '\'' +
+                ", photo_extsn='" + photo_extsn + '\'' +
+                '}';
+    }
 }

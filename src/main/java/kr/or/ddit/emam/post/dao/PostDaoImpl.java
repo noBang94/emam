@@ -105,4 +105,20 @@ public class PostDaoImpl implements IPostDao {
 
         return cnt;
     }
+
+    //39
+    @Override
+    public PostVO getPost(int num) {
+        SqlSession session = MyBatisUtil.getSqlSession();
+        PostVO pv = null;
+        try{
+            pv =session.selectOne("post.selectOnePost",num);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
+        return pv;
+    }
 }
