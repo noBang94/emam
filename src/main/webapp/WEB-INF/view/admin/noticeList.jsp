@@ -127,6 +127,7 @@
     <tr>
       <th>번호</th>
       <th>제목</th>
+      <th>내용</th>
       <th>작성일</th>
       <th>수정/삭제</th>
     </tr>
@@ -141,6 +142,7 @@
     <tr>
       <td><%= notice.getNotice_index() %></td>
       <td><%= notice.getNotice_title() %></td>
+      <td><%= notice.getNotice_con() %></td>
       <td><%= notice.getNotice_date() %></td>
       <td>
         <a href="<%=request.getContextPath()%>/admin/noticeUpdate.do?noticeIndex=<%= notice.getNotice_index() %>" class="btn btn-primary btn-sm">수정</a>

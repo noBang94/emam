@@ -59,7 +59,7 @@
     </delete>
 
     <!-- 공지사항 수정을 하기 위한 인덱스 불러오기 -->
-    <select id="getNotice" parameterType="int" resultType="NoticeVO">
+    <select id="getNotice" parameterType="int" resultType="NoticeVo">
         select NOTICE_INDEX, NOTICE_TITLE, NOTICE_CON, NOTICE_DATE
         from notice
         where NOTICE_INDEX=#{notice_index}
@@ -83,7 +83,7 @@
     </update>
 
     <!-- 공지사항 전체 리스트 조회 -->
-    <select id="selectAllNotice" resultType="noticeVO">
+    <select id="selectAllNotice" resultType="noticeVo">
         select NOTICE_INDEX, NOTICE_TITLE, NOTICE_CON, NOTICE_DATE
         from notice
         ORDER BY NOTICE_DATE DESC
