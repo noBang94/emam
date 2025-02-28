@@ -1,6 +1,7 @@
 package kr.or.ddit.emam.vo;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 public class InquiryVO {
     private int inquiry_index; //문의번호
@@ -8,15 +9,19 @@ public class InquiryVO {
     private String inquiry_title; //문의제목
     private String inquiry_con; //문의내용
     private String inquiry_date; //문의일시
-    private int inquiry_ispublic; //문의공개여부
-
+    private int inquiry_ispublic;
     private long inquiry_photo = -1; //문의사진
-    private String inquiry_comment; //문의답변
-    private String inquiry_comment_date; //문의답변일시
+    private Date inquiry_comment_date;
+    private String inquiry_comment;
+    private MemberVO memberVo;
 
-    private MemberVO memberVo; //회원VO (문의자VO)
+    public MemberVO getMemberVo() {
+        return memberVo;
+    }
 
-
+    public void setMemberVo(MemberVO memberVo) {
+        this.memberVo = memberVo;
+    }
 
     public int getInquiry_index() {
         return inquiry_index;
@@ -26,9 +31,13 @@ public class InquiryVO {
         this.inquiry_index = inquiry_index;
     }
 
-    public String getMem_id() { return mem_id; }
+    public String getMem_id() {
+        return mem_id;
+    }
 
-    public void setMem_id(String mem_id) { this.mem_id = mem_id; }
+    public void setMem_id(String mem_id) {
+        this.mem_id = mem_id;
+    }
 
     public String getInquiry_title() {
         return inquiry_title;
@@ -46,9 +55,13 @@ public class InquiryVO {
         this.inquiry_con = inquiry_con;
     }
 
-    public String getInquiry_date() { return inquiry_date; }
+    public String getInquiry_date() {
+        return inquiry_date;
+    }
 
-    public void setInquiry_date(String inquiry_date) { this.inquiry_date = inquiry_date; }
+    public void setInquiry_date(String inquiry_date) {
+        this.inquiry_date = inquiry_date;
+    }
 
     public int getInquiry_ispublic() {
         return inquiry_ispublic;
@@ -66,19 +79,19 @@ public class InquiryVO {
         this.inquiry_photo = inquiry_photo;
     }
 
-    public String getInquiry_comment() { return inquiry_comment; }
-
-    public void setInquiry_comment(String inquiry_comment) { this.inquiry_comment = inquiry_comment; }
-
-    public String getInquiry_comment_date() { return inquiry_comment_date; }
-
-    public void setInquiry_comment_date(String inquiry_comment_date) { this.inquiry_comment_date = inquiry_comment_date; }
-
-    public MemberVO getMemberVo() {
-        return memberVo;
+    public Date getInquiry_comment_date() {
+        return inquiry_comment_date;
     }
 
-    public void setMemberVo(MemberVO memberVo) {
-        this.memberVo = memberVo;
+    public void setInquiry_comment_date(Date inquiry_comment_date) {
+        this.inquiry_comment_date = inquiry_comment_date;
+    }
+
+    public String getInquiry_comment() {
+        return inquiry_comment;
+    }
+
+    public void setInquiry_comment(String inquiry_comment) {
+        this.inquiry_comment = inquiry_comment;
     }
 }

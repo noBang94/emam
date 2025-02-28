@@ -9,6 +9,17 @@
         <result property="mem_joindate" column="MEM_JOINDATE"/>
     </resultMap>
 
+    <resultMap id="inquiryMap" type="kr.or.ddit.emam.vo.InquiryVO">
+        <id property="inquiry_index" column="INQUIRY_INDEX"/>
+        <result property="mem_id" column="MEM_ID"/>
+        <result property="inquiry_title" column="INQUIRY_TITLE"/>
+        <result property="inquiry_con" column="INQUIRY_CON"/>
+        <result property="inquiry_date" column="INQUIRY_DATE"/>
+        <result property="inquiry_ispublic" column="INQUIRY_ISPUBLIC"/>
+        <result property="inquiry_comment_date" column="INQUIRY_COMMENT_DATE"/>
+        <result property="inquiry_comment" column="INQUIRY_COMMENT"/>
+    </resultMap>
+
     <select id="getLoginAdmin" resultType="kr.or.ddit.emam.vo.AdminVO" parameterType="kr.or.ddit.emam.vo.AdminVO">
         select * from admin
         where ADMIN_ID = #{admin_id} and ADMIN_PW = #{admin_pw}
@@ -83,4 +94,36 @@
         delete from notice where NOTICE_INDEX = #{notice_index}
     </delete>
 
+
+    <select id="getInquiryList" resultMap="inquiryMap">
+        SELECT
+            INQUIRY_INDEX,
+            INQUIRY_TITLE,
+            MEM_ID,
+            INQUIRY_DATE,
+            INQUIRY_COMMENT
+        FROM INQUIRY
+        ORDER BY INQUIRY_INDEX DESC
+    </select>
+
+    <update id="updateInquiryComment" parameterType="kr.or.ddit.emam.vo.InquiryVO">
+        UPDATE INQUIRY
+        SET INQUIRY_COMMENT = #{inquiry_comment},
+            INQUIRY_COMMENT_DATE = SYSDATE
+        WHERE INQUIRY_INDEX = #{inquiry_index}
+    </update>
+
+    <select id="getInquiryDetail" parameterType="int" resultMap="inquiryMap">
+        SELECT
+            INQUIRY_INDEX,
+            INQUIRY_TITLE,
+            MEM_ID,
+            INQUIRY_CON,
+            INQUIRY_DATE,
+            INQUIRY_ISPUBLIC,
+            INQUIRY_COMMENT_DATE,
+            INQUIRY_COMMENT
+        FROM INQUIRY
+        WHERE INQUIRY_INDEX = #{inquiryIndex}
+    </select>
 </mapper>

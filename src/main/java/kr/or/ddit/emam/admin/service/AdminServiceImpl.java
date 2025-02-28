@@ -1,9 +1,9 @@
 package kr.or.ddit.emam.admin.service;
 
-
 import kr.or.ddit.emam.admin.dao.AdminDaoImpl;
 import kr.or.ddit.emam.admin.dao.IAdminDao;
 import kr.or.ddit.emam.vo.AdminVO;
+import kr.or.ddit.emam.vo.InquiryVO;
 import kr.or.ddit.emam.vo.MemberVO;
 import kr.or.ddit.emam.vo.NoticeVO;
 
@@ -21,7 +21,6 @@ public class AdminServiceImpl implements IAdminService {
         if(service == null)  service = new AdminServiceImpl();
         return service;
     }
-
 
     // 로그인 하기
     public AdminVO getLoginAdmin(AdminVO adminVo) {
@@ -44,6 +43,7 @@ public class AdminServiceImpl implements IAdminService {
     }
 
     @Override
+
     public NoticeVO getNotice(int noticeIndex) {
         return dao.getNotice(noticeIndex);
     }
@@ -67,4 +67,21 @@ public class AdminServiceImpl implements IAdminService {
     public int deleteNotice(int noticeIndex) {
         return dao.deleteNotice(noticeIndex);
     }
+
+
+    public List<InquiryVO> getInquiryList() {
+        return dao.getInquiryList();
+    }
+
+    @Override
+    public InquiryVO getInquiryDetail(int inquiryIndex) {
+        return dao.getInquiryDetail(inquiryIndex);
+    }
+
+    @Override
+    public int updateInquiryComment(InquiryVO inquiry) {
+        return dao.updateInquiryComment(inquiry);
+    }
 }
+
+

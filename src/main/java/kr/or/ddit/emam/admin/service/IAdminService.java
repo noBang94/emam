@@ -1,6 +1,7 @@
 package kr.or.ddit.emam.admin.service;
 
 import kr.or.ddit.emam.vo.AdminVO;
+import kr.or.ddit.emam.vo.InquiryVO;
 import kr.or.ddit.emam.vo.MemberVO;
 import kr.or.ddit.emam.vo.NoticeVO;
 
@@ -11,8 +12,8 @@ public interface IAdminService {
 
     int getTotalMemberCount(String searchId);
     List<MemberVO> getMemberList(MemberVO memberVo, int page, int pageSize);
-
     public int deleteMember(String memId);
+
 
     public NoticeVO getNotice(int noticeIndex);
 
@@ -23,4 +24,9 @@ public interface IAdminService {
     public List<NoticeVO> selectAllNotice(String getNotice);
 
     public int deleteNotice(int noticeIndex);
+
+    public List<InquiryVO> getInquiryList();
+    public InquiryVO getInquiryDetail(int inquiryIndex);
+    public int updateInquiryComment(InquiryVO inquiry);
 }
+
