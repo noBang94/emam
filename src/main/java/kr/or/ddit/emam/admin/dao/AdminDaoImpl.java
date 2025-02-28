@@ -2,6 +2,7 @@ package kr.or.ddit.emam.admin.dao;
 
 import kr.or.ddit.emam.util.MyBatisUtil;
 import kr.or.ddit.emam.vo.AdminVO;
+import kr.or.ddit.emam.vo.InquiryVO;
 import kr.or.ddit.emam.vo.MemberVO;
 import kr.or.ddit.emam.vo.NoticeVO;
 import org.apache.ibatis.session.SqlSession;
@@ -72,6 +73,7 @@ public class AdminDaoImpl implements IAdminDao {
         return cnt;
     }
 
+
     @Override
     public int getTotalMemberCount(String searchId) {
         SqlSession session = MyBatisUtil.getSqlSession();
@@ -127,6 +129,7 @@ public class AdminDaoImpl implements IAdminDao {
         return noticelist;
     }
 
+
     @Override
     public int deleteNotice(int noticeIndex) {
         try(SqlSession session = MyBatisUtil.getSqlSession()) {
@@ -135,4 +138,52 @@ public class AdminDaoImpl implements IAdminDao {
             return result;
         }
     }
+
+    @Override
+    public List<InquiryVO> getInquiryList() {
+        SqlSession session = MyBatisUtil.getSqlSession();
+        List<InquiryVO> iqVoList = null;
+
+        try {
+            iqVoList = session.selectList("admin.getInquiryList");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return iqVoList;
+    }
+
+    @Override
+    public InquiryVO getInquiryDetail(int inquiryIndex) {
+        SqlSession session = MyBatisUtil.getSqlSession();
+        InquiryVO inquiry = null;
+
+        try {
+            inquiry = session.selectOne("admin.getInquiryDetail", inquiryIndex);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return inquiry;
+    }
+
+    @Override
+    public int updateInquiryComment(InquiryVO inquiry) {
+        SqlSession session = MyBatisUtil.getSqlSession();
+        int result = 0;
+
+        try {
+            result = session.update("admin.updateInquiryComment", inquiry);
+            session.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return result;
+    }
+
+
 }

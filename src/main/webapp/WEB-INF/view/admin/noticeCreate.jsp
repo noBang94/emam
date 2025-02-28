@@ -57,8 +57,8 @@
   <h2><%= "update".equals(mode) ? "공지사항 수정" : "공지사항 작성" %></h2>
   <form action="<%=request.getContextPath() %>/admin/noticeUpdate.do" method="post">
     <% if ("update".equals(mode)) { %>
-      <input type="hidden" name="noticeIndex" value="<%= noticeVO.getNotice_index() %>">
-      <input type="hidden" name="mode" value="update">
+    <input type="hidden" name="noticeIndex" value="<%= noticeVO.getNotice_index() %>">
+    <input type="hidden" name="mode" value="update">
     <% } %>
     <div class="form-group">
       <label for="noticeTitle">제목</label>
@@ -66,9 +66,7 @@
     </div>
     <div class="form-group">
       <label for="noticeCon">내용</label>
-      <textarea class="form-control" id="noticeCon" name="noticeCon" rows="10" required>
-        <%= "update".equals(mode) ? noticeVO.getNotice_con() : "" %>
-      </textarea>
+      <textarea class="form-control" id="noticeCon" name="noticeCon" rows="10" required><%= "update".equals(mode) ? noticeVO.getNotice_con() : "" %></textarea>
     </div>
     <div class="btn-container">
       <button type="submit" class="btn btn-primary"><%= "update".equals(mode) ? "수정 완료" : "작성 완료" %></button>
