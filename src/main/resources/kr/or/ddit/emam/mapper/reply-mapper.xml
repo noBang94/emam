@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.emam.reply.dao.ReplyDAO">
+    <insert id="insertReply" parameterType="kr.or.ddit.emam.vo.ReplyVO">
+        INSERT INTO reply (
+        reply_index, post_index,
+        mem_id,
+        reply_con,
+        reply_parentreplyindex  <!
