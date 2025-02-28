@@ -16,16 +16,14 @@
     </settings>
 
     <typeAliases>
-
         <typeAlias type="kr.or.ddit.emam.vo.MemberVO" alias="memberVo"/>
         <typeAlias type="kr.or.ddit.emam.vo.ReportVO" alias="reportVo"/>
         <typeAlias type="kr.or.ddit.emam.vo.AdminVO" alias="adminVo"/>
+        <typeAlias type="kr.or.ddit.emam.vo.NoticeVO" alias="noticeVo"/>
         <typeAlias type="kr.or.ddit.emam.vo.InquiryVO" alias="inquiryVo"/>
         <typeAlias type="kr.or.ddit.emam.vo.PostVO" alias="PostVO"/>
         <typeAlias type="kr.or.ddit.emam.vo.PostPhotoVO" alias="PostPhotoVO"/>
         <typeAlias type="kr.or.ddit.emam.vo.PostPhotoDetailVO" alias="PostPhotoDetailVO"/>
-
-
     </typeAliases>
 
     <environments default="dev">
@@ -48,6 +46,5 @@
         <mapper resource="kr/or/ddit/emam/mapper/inquiry-mapper.xml"/>
         <mapper resource="kr/or/ddit/emam/mapper/post-mapper.xml"/>
         <mapper resource="kr/or/ddit/emam/mapper/post-photo-mapper.xml"/>
-
     </mappers>
 </configuration>

@@ -3,6 +3,7 @@ package kr.or.ddit.emam.admin.dao;
 import kr.or.ddit.emam.util.MyBatisUtil;
 import kr.or.ddit.emam.vo.AdminVO;
 import kr.or.ddit.emam.vo.MemberVO;
+import kr.or.ddit.emam.vo.NoticeVO;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.HashMap;
@@ -84,5 +85,54 @@ public class AdminDaoImpl implements IAdminDao {
             session.close();
         }
         return count != null ? count : 0;
+    }
+
+    @Override
+    public NoticeVO getNotice(int noticeIndex) {
+        try(SqlSession session = MyBatisUtil.getSqlSession()) {
+            return session.selectOne("admin.getNotice", noticeIndex);
+        }
+    }
+
+    @Override
+    public int insertNotice(NoticeVO noticeVO) {
+        try(SqlSession session = MyBatisUtil.getSqlSession()) {
+            int result = session.insert("admin.insertNotice", noticeVO);
+            session.commit();
+            return result;
+        }
+    }
+
+    @Override
+    public int updateNotice(NoticeVO noticeVO) {
+        try(SqlSession session = MyBatisUtil.getSqlSession()) {
+            int result = session.update("admin.updateNotice", noticeVO);
+            session.commit();
+            return result;
+        }
+    }
+
+    @Override
+    public List<NoticeVO> selectAllNotice(String getNotice) { // 전체 공지 조회
+        SqlSession session = MyBatisUtil.getSqlSession();
+        List<NoticeVO> noticelist = null;
+
+        try {
+            noticelist = session.selectList("admin.selectAllNotice");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return noticelist;
+    }
+
+    @Override
+    public int deleteNotice(int noticeIndex) {
+        try(SqlSession session = MyBatisUtil.getSqlSession()) {
+            int result = session.delete("admin.deleteNotice", noticeIndex);
+            session.commit();
+            return result;
+        }
     }
 }

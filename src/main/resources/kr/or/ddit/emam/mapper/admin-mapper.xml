@@ -47,4 +47,40 @@
         delete from member where MEM_ID = #{mem_id}
     </delete>
 
+    <!-- 공지사항 수정을 하기 위한 인덱스 불러오기 -->
+    <select id="getNotice" parameterType="int" resultType="NoticeVO">
+        select NOTICE_INDEX, NOTICE_TITLE, NOTICE_CON, NOTICE_DATE
+        from notice
+        where NOTICE_INDEX=#{notice_index}
+    </select>
+
+    <!-- 공지사항 작성 -->
+    <insert id="insertNotice" parameterType="noticeVo" >
+        insert into notice (
+            NOTICE_INDEX, NOTICE_TITLE, NOTICE_CON, NOTICE_DATE)
+        values(
+                  notice_NUM_SEQ.nextval, #{notice_title}, #{notice_con}, SYSDATE
+              )
+    </insert>
+
+    <!-- 공지사항 수정 -->
+    <update id="updateNotice" parameterType="noticeVo" >
+        update notice
+        set NOTICE_TITLE = #{notice_title},
+            NOTICE_CON = #{notice_con}
+        where NOTICE_INDEX = #{notice_index}
+    </update>
+
+    <!-- 공지사항 전체 리스트 조회 -->
+    <select id="selectAllNotice" resultType="noticeVO">
+        select NOTICE_INDEX, NOTICE_TITLE, NOTICE_CON, NOTICE_DATE
+        from notice
+        ORDER BY NOTICE_DATE DESC
+    </select>
+
+    <!-- 공지사항 삭제 -->
+    <delete id="deleteNotice" parameterType="int" >
+        delete from notice where NOTICE_INDEX = #{notice_index}
+    </delete>
+
 </mapper>
