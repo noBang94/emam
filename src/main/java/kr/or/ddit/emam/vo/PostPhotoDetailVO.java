@@ -19,6 +19,8 @@ public class PostPhotoDetailVO {
         this.post_photo = post_photo;
     }
 
+
+
     public int getPost_photo_sn() {
         return post_photo_sn;
     }

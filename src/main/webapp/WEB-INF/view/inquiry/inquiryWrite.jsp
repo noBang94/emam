@@ -16,6 +16,7 @@
 %>
   <script>
     $(function (){
+
       //등록 버튼 클릭 이벤트
       $('#insertBtn').on('click', function (){
         //제목과 본문 내용이 입력되었는지 확인하기
@@ -28,7 +29,7 @@
 
         //작성된 모든 값 가져오기
         const formData = $("#mainForm").serializeJSON();
-        console.log(formData);
+
         fetch(`<%=request.getContextPath()%>/inquiry/inquiryWrite.do`, {
           method: 'post',
           headers: {'Content-Type': 'application/json;charset=utf-8'},
@@ -38,15 +39,18 @@
                   if(response.ok) {
                     return response.json();
                   }else {
-                    throw new Error(`${response.status} ${response.statusText}`);
+                    throw new Error(`${response.status}`);
                   }
                 })
                 .then(data => {
                   if(data.result>0){
-                    window.location.href="inquiryList.jsp";
+                    location.href="<%=request.getContextPath()%>/inquiry/inquiryList.do";
                   }else {
                     alert("문의 등록 중 오류가 발생했습니다.");
                   }
+                })
+                .catch(error => {
+                  console.log(error);
                 });
       });
 
@@ -63,28 +67,31 @@
 <h3>문의하기</h3>
 <div id="main">
   <form id="mainForm" action="<%=request.getContextPath()%>/inquiry/inquiryWrite.do">
-    <input type="hidden" id="id" name="id" value="<%=loginMember.getMem_id()%>">
+    <input type="hidden" id="id" name="mem_id" value="<%=loginMember.getMem_id()%>">
     <table class="mainTable">
       <tr>
         <td>문의 제목</td>
         <td>
-          <input type="text" id="title" name="title">
+          <input type="text" id="title" name="inquiry_title">
         </td>
       </tr>
       <tr>
         <td>문의 내용</td>
         <td>
-          <input type="text" id="con" name="con">
+          <input type="text" id="con" name="inquiry_con">
         </td>
       </tr>
       <tr>
         <td>사진 첨부</td>
-        <td>사진 넣기...</td>
+        <td>
+          사진 넣어야 함...
+          <input type="text" id="photo" name="inquiry_photo">
+        </td>
       </tr>
       <tr>
         <td colspan="2">
-          <input type="radio" name="ispublic" value="true" checked>공개
-          <input type="radio" name="ispublic" value="false">비공개
+          <input type="radio" name="inquiry_ispublic" value="1" checked>공개
+          <input type="radio" name="inquiry_ispublic" value="0">비공개
         </td>
       </tr>
       <tr>

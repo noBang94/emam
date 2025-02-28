@@ -7,9 +7,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.or.ddit.emam.member.service.IMemberService;
 import kr.or.ddit.emam.member.service.MemberServiceImpl;
+import kr.or.ddit.emam.post.service.IPostPhotoService;
 import kr.or.ddit.emam.post.service.IPostService;
+import kr.or.ddit.emam.post.service.PostPhotoServiceImpl;
 import kr.or.ddit.emam.post.service.PostServiceImpl;
 import kr.or.ddit.emam.vo.MemberVO;
+import kr.or.ddit.emam.vo.PostPhotoDetailVO;
+import kr.or.ddit.emam.vo.PostPhotoVO;
 import kr.or.ddit.emam.vo.PostVO;
 
 import java.io.IOException;
@@ -31,11 +35,24 @@ public class PostSelect extends HttpServlet {
 
         PostVO pv = new PostVO();
 
+        if(pv.getPost_photo()>0){//첨부파일이 있을때
+            //객체생성
+            IPostPhotoService postPhotoService = PostPhotoServiceImpl.getInstance();
+            PostPhotoVO postPhotoVO = new PostPhotoVO();
+
+        }
+//        PostPhotoDetailVO detailVO = new PostPhotoDetailVO();
+
+//        detailVO = postPhotoService.getPostPhotoDetail(detailVO);
+
         List<PostVO> postList = postService.selectAllPost();
 
         for(PostVO postVo : postList){
             MemberVO memVo = memberService.getMember(postVo.getMem_id());
             postVo.setMemVo(memVo);
+
+            postVo.getPost_photo();
+
         }
 
         req.setAttribute("postList", postList);

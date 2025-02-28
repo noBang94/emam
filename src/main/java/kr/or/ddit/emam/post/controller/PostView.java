@@ -10,7 +10,11 @@ import kr.or.ddit.emam.post.service.IPostService;
 import kr.or.ddit.emam.post.service.PostPhotoServiceImpl;
 import kr.or.ddit.emam.vo.PostPhotoDetailVO;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
 
 @WebServlet("/post/postview.do")
 public class PostView extends HttpServlet {
@@ -25,6 +29,24 @@ public class PostView extends HttpServlet {
         PostPhotoDetailVO detailVO = new PostPhotoDetailVO();
         detailVO.setPost_photo(postPhoto);
         detailVO.setPost_photo_sn(postPhotoSn);
+        detailVO = postPhotoService.getPostPhotoDetail(detailVO);
+
+        resp.setContentType("application/octet-steam");
+        resp.setHeader("Content-Disposition", "attachment; filename=\""
+                + URLEncoder.encode(detailVO.getOrg_photo_nm(), "UTF-8")
+                .replaceAll("\\+", "%20") +"\"");
+
+
+        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(detailVO.getPhoto_stre_cours()));
+
+        BufferedOutputStream bos = new BufferedOutputStream(resp.getOutputStream());
+
+        int data = 0;
+        while ((data = bis.read()) != -1) {
+            bos.write(data);
+        }
+        bis.close();
+        bos.close();
 
     }
 

@@ -23,7 +23,7 @@
     $(function (){
 
       //기존에 선택한 공개여부에 따라 공개여부 선택값(라디오버튼 설정값) 가져와 적용하기
-      $('input:radio[name="ispublic"]:input[value="<%=inquiryVo.getInquiry_ispublic()%>"]').attr("checked", true);
+      $('input:radio[name="inquiry_ispublic"]:input[value="<%=inquiryVo.getInquiry_ispublic()%>"]').attr("checked", true);
 
       //수정 버튼 클릭 이벤트
       $('#updateBtn').on('click', function (){
@@ -37,7 +37,7 @@
 
         //작성된 모든 값 가져오기
         const formData = $("#mainForm").serializeJSON();
-        console.log(formData);
+
         fetch(`<%=request.getContextPath()%>/inquiry/inquiryUpdate.do`, {
           method: 'post',
           headers: {'Content-Type': 'application/json;charset=utf-8'},
@@ -47,15 +47,18 @@
                   if(response.ok) {
                     return response.json();
                   }else {
-                    throw new Error(`${response.status} ${response.statusText}`);
+                    throw new Error(`${response.status}`);
                   }
                 })
                 .then(data => {
                   if(data.result>0){
-                    window.location.href="inquiryList.jsp";
+                    location.href="<%=request.getContextPath()%>/inquiry/inquiryList.do";
                   }else {
                     alert("문의 수정 중 오류가 발생했습니다.");
                   }
+                })
+                .catch(error => {
+                  console.log(error);
                 });
       });
 
@@ -71,19 +74,20 @@
 <body>
 <h3>문의 수정하기</h3>
 <div id="main">
-  <form id="mainForm" action="<%=request.getContextPath()%>/inquiry/inquiryWrite.do">
-    <input type="hidden" id="id" name="id" value="<%=loginMember.getMem_id()%>">
+  <form id="mainForm" action="<%=request.getContextPath()%>/inquiry/inquiryUpdate.do">
+    <input type="hidden" id="id" name="mem_id" value="<%=loginMember.getMem_id()%>">
+    <input type="hidden" id="id" name="inquiry_index" value="<%=inquiryVo.getInquiry_index()%>">
     <table class="mainTable">
       <tr>
         <td>문의 제목</td>
         <td>
-          <input type="text" id="title" name="title" value="<%=inquiryVo.getInquiry_title()%>>">
+          <input type="text" id="title" name="inquiry_title" value="<%=inquiryVo.getInquiry_title()%>">
         </td>
       </tr>
       <tr>
         <td>문의 내용</td>
         <td>
-          <input type="text" id="con" name="con" value="<%=inquiryVo.getInquiry_con()%>>">
+          <input type="text" id="con" name="inquiry_con" value="<%=inquiryVo.getInquiry_con()%>">
         </td>
       </tr>
       <tr>
@@ -92,8 +96,8 @@
       </tr>
       <tr>
         <td colspan="2">
-          <input type="radio" name="ispublic" value="true">공개
-          <input type="radio" name="ispublic" value="false">비공개
+          <input type="radio" name="inquiry_ispublic" value="1">공개
+          <input type="radio" name="inquiry_ispublic" value="0">비공개
         </td>
       </tr>
       <tr>

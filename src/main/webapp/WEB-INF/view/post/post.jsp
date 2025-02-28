@@ -1,6 +1,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="kr.or.ddit.emam.vo.PostVO" %>
-<%@ page import="kr.or.ddit.emam.vo.MemberVO" %><%--
+<%@ page import="kr.or.ddit.emam.vo.MemberVO" %>
+<%@ page import="kr.or.ddit.emam.vo.PostPhotoVO" %>
+<%@ page import="kr.or.ddit.emam.vo.PostPhotoDetailVO" %><%--
   Created by IntelliJ IDEA.
   User: PC-10
   Date: 2025-02-24
@@ -10,7 +12,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
+
+    MemberVO loginMember = (MemberVO)session.getAttribute("loginMember");
     List<PostVO> postList = (List<PostVO>) request.getAttribute("postList");
+    PostPhotoVO postPhotoVO = (PostPhotoVO) request.getAttribute("postPhotoVO");
 //    postList에서 membervo를 가져온뒤 membervo에서 각 컬럼값을 가져옴
    for(PostVO pvo : postList){
        pvo.getMemVo().getMem_name();
@@ -124,8 +129,6 @@
 
         /*토글 스위치(e)*/
 
-
-
         .post-ipt{width: 100%;display: block;height: 100px;background: green;}
         .modal-body{display: flex;width: 100%;}
         .modal-l{width: 50%;}
@@ -140,6 +143,13 @@
     </style>
 </head>
 <body>
+<div>
+    <% if (loginMember != null) { %>
+    계정ID : <span><%=loginMember.getMem_id()%></span>
+    <% } else { %>
+    <span>로그인 정보가 없습니다.</span>
+    <% } %>
+</div>
     <table border="1">
         <tr>
             <th>수정 버튼</th>
@@ -153,10 +163,12 @@
             <th>POST_REPLYCNT</th>
             <th>POST_ILIKECNT</th>
             <th>POST_VIEWCNT</th>
+            <td>댓글</td>
         </tr>
         <%
             int pz = postList.size();
             if(pz == 0){
+                System.out.println("siiiiiiiiii");
         %>
             <tr>
                 <td colspan="2"></td>
@@ -164,6 +176,8 @@
         <%
         }else{
             for(PostVO p : postList){
+                System.out.println(p);
+
         %>
         <tr>
             <td><div class="update-btn pointer" data-index="<%=p.getPost_index() %>">수정</div></td>
@@ -173,20 +187,32 @@
             <td><%=p.getPost_con() %></td>
             <td>
                 <%
-                    if (p.getPost_photo() == -1){
+                    if(p.getPost_photo_detail_list() !=null){
+
+                        for(PostPhotoDetailVO PhotoDetailVO : p.getPost_photo_detail_list()){
+                %>
+                    <img class="prof-ph" src="<%=request.getContextPath()%>/post/postview.do?postphoto=<%=PhotoDetailVO.getPost_photo() %>&postphotosn=<%=PhotoDetailVO.getPost_photo_sn() %>">
+                <%      }
+                    }else{
                 %>
                     <img class="prof-ph" src="<%=request.getContextPath() %>/upload/demo_logo.png">
                 <%
-                    }else{
-                        p.getPost_photo();
                     }
                 %>
+
+
             </td>
             <td><%=p.getPost_date() %></td>
             <td><%=p.getPost_visible() %></td>
             <td><%=p.getPost_replycnt() %></td>
             <td><%=p.getPost_ilikecnt() %></td>
             <td><%=p.getPost_viewcnt() %></td>
+            <td>
+                <form action="<%=request.getContextPath() %>/reply/replyinsert.do">
+                    <input type="text" placeholder="댓글을 입력하세요" name="reply"/>
+                    <input type="submit" value="댓글달기">
+                </form>
+            </td>
         </tr>
         <%
                 }

@@ -1,7 +1,7 @@
 package kr.or.ddit.emam.inquiry.service;
 
 import kr.or.ddit.emam.vo.InquiryVO;
-import kr.or.ddit.emam.vo.PageInquiryVO;
+import kr.or.ddit.emam.vo.PageVO;
 
 import java.util.List;
 import java.util.Map;
@@ -26,5 +26,5 @@ public interface IInquiryService {
     public int totalCount(Map<String, Object> map);
 
     //페이지별 정보 구하기 (페이지, 제목 검색 키워드, 내 문의 보기 체크 시 현재 로그인한 계정ID)
-    public PageInquiryVO pageInquiry(int page, String sword, String myInquiry);
+    public PageVO pageInquiry(int page, String sword, String myInquiry);
 }
