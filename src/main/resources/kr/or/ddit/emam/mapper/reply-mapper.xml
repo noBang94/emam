@@ -1,9 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kr.or.ddit.emam.reply.dao.ReplyDAO">
+<mapper namespace="kr.or.ddit.emam.reply.dao.IReplyDAO">
     <insert id="insertReply" parameterType="kr.or.ddit.emam.vo.ReplyVO">
         INSERT INTO reply (
-        reply_index, post_index,
-        mem_id,
-        reply_con,
-        reply_parentreplyindex  <!
+            REPLY_INDEX,
+            POST_INDEX,
+            REPLY_PARENTREPLYINDEX,
+            MEM_ID,
+            REPLY_DATE,
+            REPLY_CON
+        )
+        VALUES (
+                     reply_num_seq.nextval,
+                     #{postIndex},
+                     reply_num_seq.nextval,
+                     #{memId},
+                     sysdate,
+                     #{replyContent}
+                 )
+    </insert>
+
+    <update id="updateReply" parameterType="kr.or.ddit.emam.vo.ReplyVO">
+        UPDATE reply
+        SET REPLY_CON = #{replyContent},
+            REPLY_DATE = sysdate
+        WHERE reply_index = #{replyIndex}
+    </update>
+
+    <select id="selectReplyListByPostIndex" parameterType="int" resultType="kr.or.ddit.emam.vo.ReplyVO">
+        SELECT
+            reply_index,
+            post_index,
+            mem_id,
+            reply_con,
+            reply_date
+        FROM reply
+        WHERE post_index = #{postIndex}
+        ORDER BY reply_date ASC
+    </select>
+</mapper>

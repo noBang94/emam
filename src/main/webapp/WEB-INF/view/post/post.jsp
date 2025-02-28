@@ -136,6 +136,8 @@
 
         .post_write_btn{position: fixed; bottom: 80px; right: 20px; width: 100px;}
 
+
+        table th{ width: 15px;}
     </style>
 </head>
 <body>
@@ -150,15 +152,15 @@
         <tr>
             <th>수정 버튼</th>
             <th>삭제 버튼</th>
-            <th>POST_INDEX</th>
-            <th>MEM_ID</th>
-            <th>POST_CON</th>
-            <th>POST_PHOTO</th>
-            <th>POST_DATE</th>
-            <th>POST_VISIBLE</th>
-            <th>POST_REPLYCNT</th>
-            <th>POST_ILIKECNT</th>
-            <th>POST_VIEWCNT</th>
+            <th>INDEX</th>
+            <th>ID</th>
+            <th>CON</th>
+            <th>PHOTO</th>
+            <th>DATE</th>
+            <th>VISIBLE</th>
+            <th>REPLYCNT</th>
+            <th>ILIKECNT</th>
+            <th>VIEWCNT</th>
             <td>댓글</td>
         </tr>
         <%
@@ -204,10 +206,28 @@
             <td><%=p.getPost_ilikecnt() %></td>
             <td><%=p.getPost_viewcnt() %></td>
             <td>
-                <form action="<%=request.getContextPath() %>/reply/replyinsert.do">
-                    <input type="text" placeholder="댓글을 입력하세요" name="reply"/>
+                <ul>
+                    <c:forEach var="reply" items="${p.replyList}">
+                        <li>
+                            작성자: ${reply.mem_id} | 내용: ${reply.reply_con} | 작성일: ${reply.reply_date}
+                                <%-- TODO: 댓글 수정/삭제 기능 추가 (선택사항) --%>
+                        </li>
+                    </c:forEach>
+                </ul>
+
+                <form action="<%=request.getContextPath() %>/reply/replyInsert.do" method="post">
+                    <input type="hidden" name="post_index" value="<%=p.getPost_index()%>"/> <%-- 게시글 번호 전달 --%>
+                    <input type="text" placeholder="댓글을 입력하세요" name="reply"/> <%-- textarea 대신 input type=text 사용 --%>
                     <input type="submit" value="댓글달기">
                 </form>
+            </td>
+        </tr>
+        <tr>
+
+            <td colspan="11"> <%-- 댓글 영역 --%>
+                <ul>
+                    <%--  TODO: 댓글 목록 출력  --%>
+                </ul>
             </td>
         </tr>
         <%

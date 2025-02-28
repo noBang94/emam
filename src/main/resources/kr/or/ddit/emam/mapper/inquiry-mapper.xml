@@ -23,15 +23,17 @@
     <!-- 문의 작성 -->
     <insert id="insertInquiry" parameterType="inquiryVo">
         insert into inquiry
-            values(
-                inquiry_num_seq.nextval,
-                #{mem_id},
-                #{inquiry_title},
-                #{inquiry_con},
-                SYSDATE,
-                #{inquiry_ispublic},
-                #{inquiry_photo}
-            )
+        values(
+                  inquiry_num_seq.nextval,
+                  #{mem_id},
+                  #{inquiry_title},
+                  #{inquiry_con},
+                  SYSDATE,
+                  #{inquiry_ispublic},
+                  #{inquiry_photo},
+                  null,
+                  null
+              )
     </insert>
 
     <!-- 문의 삭제 -->

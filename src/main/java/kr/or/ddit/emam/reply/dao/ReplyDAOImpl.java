@@ -1,60 +1,69 @@
 package kr.or.ddit.emam.reply.dao;
 
-import kr.or.ddit.emam.report.dao.IReportDao;
+import kr.or.ddit.emam.util.MyBatisUtil;
+import kr.or.ddit.emam.vo.PostVO;
 import kr.or.ddit.emam.vo.ReplyVO;
-import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
-import java.io.IOException;
-import java.io.Reader;
+import java.util.ArrayList;
 import java.util.List;
 
+public class ReplyDAOImpl implements IReplyDAO {
 
-private SqlSessionFactory sqlSessionFactory;
-private String namespace = "kr.or.ddit.emam.reply.dao.IReplyDAO."; // Mapper namespace 설정 변경: ReplyDAO -> IReplyDAO
-
-// 생성자에서 SqlSessionFactory 초기화 (또는 서블릿 초기화 시)
-public ReplyDAOImpl() {
-    try {
-        String resource = "mybatis-config.xml"; // MyBatis 설정 파일 경로
-        Reader reader = Resources.getResourceAsReader(resource);
-        sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
-    } catch (IOException e) {
-        e.printStackTrace(); // 예외 처리
-        // 또는 예외를 던져서 서블릿 초기화 실패 처리
+    private static IReplyDAO dao;
+    private ReplyDAOImpl() {}
+    public static IReplyDAO getInstance() { // 싱글톤 instance 반환 메소드
+        if (dao == null) dao = new ReplyDAOImpl();
+        return dao;
     }
-}
 
-
-@Override
-public int insertReply(ReplyVO replyVO) {
-    SqlSession sqlSession = sqlSessionFactory.openSession(); // SqlSession 얻기
-    try {
-        return sqlSession.insert(namespace + "insertReply", replyVO);
-    } finally {
-        sqlSession.close(); // SqlSession 닫기 (finally 블록에서 항상 닫도록)
+    @Override
+    public int insertReply(ReplyVO replyVO) {
+        int cnt = 0;
+        SqlSession session = MyBatisUtil.getSqlSession();
+        try {
+            cnt = session.insert("reply.insertReply",replyVO);
+            if(cnt > 0){
+                session.commit();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+        return cnt;
     }
-}
 
-@Override
-public int updateReply(ReplyVO replyVO) {
-    SqlSession sqlSession = sqlSessionFactory.openSession();
-    try {
-        return sqlSession.update(namespace + "updateReply", replyVO);
-    } finally {
-        sqlSession.close();
-    }
-}
+    @Override
+    public int updateReply(ReplyVO replyVO) {
+        int cnt = 0;
+        SqlSession session = MyBatisUtil.getSqlSession();
+        try {
+            cnt = session.update("reply.updateReply",replyVO);
+            if(cnt > 0){
+                session.commit();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
 
-@Override
-public List<ReplyVO> selectReplyListByPostIndex(int postIndex) {
-    SqlSession sqlSession = sqlSessionFactory.openSession();
-    try {
-        return sqlSession.selectList(namespace + "selectReplyListByPostIndex", postIndex);
-    } finally {
-        sqlSession.close();
+        return cnt;
     }
-}
+
+    @Override
+    public List<ReplyVO> selectReplyListByPostIndex(int postIndex) {
+        List<ReplyVO> RList = new ArrayList<ReplyVO>();
+        SqlSession session = MyBatisUtil.getSqlSession();
+        try{
+            RList = session.selectList("reply.selectAllreply");
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
+        return RList;
+    }
 }
