@@ -10,7 +10,6 @@ import kr.or.ddit.emam.inquiry.service.InquiryServiceImpl;
 import kr.or.ddit.emam.member.service.IMemberService;
 import kr.or.ddit.emam.member.service.MemberServiceImpl;
 import kr.or.ddit.emam.vo.InquiryVO;
-import kr.or.ddit.emam.vo.InquiryproVO;
 import kr.or.ddit.emam.vo.MemberVO;
 
 import java.io.IOException;
@@ -27,19 +26,15 @@ public class InquiryView extends HttpServlet {
         //service객체 구하기
         IInquiryService inquiryService = InquiryServiceImpl.getInstance();
         IMemberService memberService = MemberServiceImpl.getInstance();
-        //IInquiryproService inquiryproService = InquiryproServiceImpl.getInstance();
 
         //문의번호에 맞는 문의 정보 가져오기
         InquiryVO inquiryVo = inquiryService.getInquiry(num);
         if(inquiryVo!=null){
             MemberVO memberVo = memberService.getMember(inquiryVo.getMem_id());
             inquiryVo.setMemberVo(memberVo);
-            //문의번호에 맞는 문의처리 정보 가져오기
-            //InquiryproVO inquiryproVo = inquiryproService.getInquiry(num);
         }
 
 		request.setAttribute("inquiryVo", inquiryVo);
-		//request.setAttribute("inquiryproVo", inquiryproVo);
 
 		request.getRequestDispatcher("/WEB-INF/view/inquiry/inquiryView.jsp").forward(request, response);
 

@@ -2,9 +2,6 @@
 <%@ page import="kr.or.ddit.emam.vo.PageVO" %>
 <%@ page import="kr.or.ddit.emam.vo.InquiryVO" %>
 <%@ page import="java.util.List" %>
-<%@ page import="kr.or.ddit.emam.vo.InquiryproVO" %>
-<%@ page import="kr.or.ddit.emam.inquiry.service.IInquiryService" %>
-<%@ page import="kr.or.ddit.emam.inquiry.service.InquiryServiceImpl" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -84,7 +81,6 @@
 <%
   if(inquiryVo==null){
 %>
-<%--  <script>history.go(-1);</script>--%>
 <%
   }else {
 %>
@@ -110,14 +106,35 @@
 <%
   //로그인한 회원의 계정과 문의작성자 계정이 같으면 수정, 삭제버튼을 출력
     if(loginMemberVo!=null && inquiryVo.getMem_id().equals(loginMemberVo.getMem_id())){
+      //문의답변이 처리되지 않았을 때에만 수정버튼을 출력
+      if(inquiryVo.getInquiry_comment()==null){
 %>
           <input type="button" data-num="<%=inquiryVo.getInquiry_index() %>" id="updateBtn" value="수정">
+<%
+      } //if문 종료
+%>
           <input type="button" data-num="<%=inquiryVo.getInquiry_index() %>" id="deleteBtn" value="삭제">
 <%
     } //if문 종료
   } //else if문 종료
 %>
       </td>
+    </tr>
+    <tr>
+      <td colspan="3">문의 답변</td>
+    </tr>
+    <tr>
+<%
+  if(inquiryVo.getInquiry_comment()==null){
+%>
+      <td colspan="3">아직 답변이 처리되지 않은 문의입니다.</td>
+<%
+  }else{
+%>
+      <td colspan="3"><%=inquiryVo.getInquiry_comment() %></td>
+<%
+  }
+%>
     </tr>
   </table>
 </div>

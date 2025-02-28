@@ -34,6 +34,7 @@
 </head>
 <body>
 <div class="topArea">
+
   로고/날짜/시간/날씨 영역
 </div>
 

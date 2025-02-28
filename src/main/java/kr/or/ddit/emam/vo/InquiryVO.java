@@ -11,6 +11,8 @@ public class InquiryVO {
     private int inquiry_ispublic; //문의공개여부
 
     private long inquiry_photo = -1; //문의사진
+    private String inquiry_comment; //문의답변
+    private String inquiry_comment_date; //문의답변일시
 
     private MemberVO memberVo; //회원VO (문의자VO)
 
@@ -63,6 +65,14 @@ public class InquiryVO {
     public void setInquiry_photo(long inquiry_photo) {
         this.inquiry_photo = inquiry_photo;
     }
+
+    public String getInquiry_comment() { return inquiry_comment; }
+
+    public void setInquiry_comment(String inquiry_comment) { this.inquiry_comment = inquiry_comment; }
+
+    public String getInquiry_comment_date() { return inquiry_comment_date; }
+
+    public void setInquiry_comment_date(String inquiry_comment_date) { this.inquiry_comment_date = inquiry_comment_date; }
 
     public MemberVO getMemberVo() {
         return memberVo;

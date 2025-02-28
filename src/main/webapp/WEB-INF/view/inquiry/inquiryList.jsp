@@ -2,9 +2,6 @@
 <%@ page import="kr.or.ddit.emam.vo.InquiryVO" %>
 <%@ page import="java.util.List" %>
 <%@ page import="kr.or.ddit.emam.vo.PageVO" %>
-<%@ page import="kr.or.ddit.emam.vo.InquiryproVO" %>
-<%@ page import="kr.or.ddit.emam.inquiry.service.IInquiryService" %>
-<%@ page import="kr.or.ddit.emam.inquiry.service.InquiryServiceImpl" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -126,7 +123,19 @@
 %>
       </td>
       <td><%=vo.getInquiry_date()%></td>
-      <td>문의처리여부...</td>
+      <td>
+<%
+      if(vo.getInquiry_comment()==null){
+%>
+        <p>답변대기</p>
+<%
+      }else{
+%>
+        <p>답변완료</p>
+<%
+      }
+%>
+      </td>
     </tr>
 <%
     } //for문 종료

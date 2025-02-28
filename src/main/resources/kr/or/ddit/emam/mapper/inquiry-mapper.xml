@@ -35,7 +35,9 @@
                 #{inquiry_con},
                 SYSDATE,
                 #{inquiry_ispublic},
-                #{inquiry_photo}
+                #{inquiry_photo},
+                null,
+                null
             )
     </insert>
 
