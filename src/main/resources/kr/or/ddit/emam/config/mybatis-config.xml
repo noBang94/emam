@@ -24,6 +24,8 @@
         <typeAlias type="kr.or.ddit.emam.vo.PostVO" alias="PostVO"/>
         <typeAlias type="kr.or.ddit.emam.vo.PostPhotoVO" alias="PostPhotoVO"/>
         <typeAlias type="kr.or.ddit.emam.vo.PostPhotoDetailVO" alias="PostPhotoDetailVO"/>
+        <typeAlias type="kr.or.ddit.emam.vo.ReplyVO" alias="ReplyVO"/>
+
     </typeAliases>
 
     <environments default="dev">
@@ -46,5 +48,7 @@
         <mapper resource="kr/or/ddit/emam/mapper/inquiry-mapper.xml"/>
         <mapper resource="kr/or/ddit/emam/mapper/post-mapper.xml"/>
         <mapper resource="kr/or/ddit/emam/mapper/post-photo-mapper.xml"/>
+        <mapper resource="kr/or/ddit/emam/mapper/reply-mapper.xml"/>
+
     </mappers>
 </configuration>

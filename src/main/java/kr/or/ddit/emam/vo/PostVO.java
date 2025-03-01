@@ -7,7 +7,7 @@ public class PostVO {
     private int post_index; //게시글 번호
     private String mem_id; //작성자 아이디
     private String post_con; // 게시글 내용
-    private long post_photo = -1; //게시글 사진
+    private long post_photo; //게시글 사진
     private String post_date; // 게시글 작성일
     private String post_visible; //게시글 공개 여부
     private int post_replycnt; //댓글 개수
@@ -16,14 +16,14 @@ public class PostVO {
     private MemberVO memVo; //작성자 정보
 
     private PostPhotoVO postPhotoVO; //게시글 사진 정보
-    private List<PostPhotoDetailVO> post_photo_detail_list;
+    private List<PostPhotoDetailVO> postPhotoDetailList;
 
-    public List<PostPhotoDetailVO> getPost_photo_detail_list() {
-        return post_photo_detail_list;
+    public List<PostPhotoDetailVO> getPostPhotoDetailList() {
+        return postPhotoDetailList;
     }
 
-    public void setPost_photo_detail_list(List<PostPhotoDetailVO> post_photo_detail_list) {
-        this.post_photo_detail_list = post_photo_detail_list;
+    public void setPostPhotoDetailList(List<PostPhotoDetailVO> postPhotoDetailList) {
+        this.postPhotoDetailList = postPhotoDetailList;
     }
 
     public PostPhotoVO getPostPhotoVO() {

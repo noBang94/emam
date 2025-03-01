@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <style>
     /* 기본 스타일 초기화 */
     html, body, div, span, applet, object, iframe,
@@ -27,6 +28,7 @@
         display: block;
     }
     body {
+        margin-top: 70px;
         line-height: 1;
     }
     ol, ul {
@@ -133,18 +135,18 @@
         align-items: center;}
 </style>
 <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script>
     $(function(){
         $(".gnb-button").on("click", function(){
             $(".dropdown-menu").toggleClass("view")
         });
-
         // $("html").on('click', function(e){
         //     if(!$(e.target).closest('.dropdown-menu').length) {
         //         $(this).removeClass("view");
         //     }
         // });
-
+        //
         // $(document).click(function(event) {
         //     if($(".dropdown-menu.view").length>0){
         //         if (!$(event.target).closest(".dropdown-menu").length) {

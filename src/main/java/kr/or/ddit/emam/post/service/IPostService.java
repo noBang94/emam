@@ -19,4 +19,7 @@ public interface IPostService {
 
     //게시글 수정
     public int updatePost(PostVO postVo);
+
+    //게시글에 정보 가져오기
+    public PostVO getPost(int num);
 }

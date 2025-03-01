@@ -28,35 +28,23 @@ public class PostSelect extends HttpServlet {
 
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html");
-
         //서비스 객체 얻기
         IMemberService memberService = MemberServiceImpl.getInstance();
         IPostService postService = PostServiceImpl.getInstance();
 
-        PostVO pv = new PostVO();
-
-        if(pv.getPost_photo()>0){//첨부파일이 있을때
-            //객체생성
-            IPostPhotoService postPhotoService = PostPhotoServiceImpl.getInstance();
-            PostPhotoVO postPhotoVO = new PostPhotoVO();
-
-        }
-//        PostPhotoDetailVO detailVO = new PostPhotoDetailVO();
-
-//        detailVO = postPhotoService.getPostPhotoDetail(detailVO);
-
         List<PostVO> postList = postService.selectAllPost();
 
-        for(PostVO postVo : postList){
-            MemberVO memVo = memberService.getMember(postVo.getMem_id());
-            postVo.setMemVo(memVo);
+        System.out.println("postList->postList : " + postList);
 
-            postVo.getPost_photo();
+        for(PostVO postVO : postList){
+            MemberVO memVo = memberService.getMember(postVO.getMem_id());
+
+            System.out.println("postList->memVo : " + memVo);
+            postVO.setMemVo(memVo);
 
         }
 
         req.setAttribute("postList", postList);
-
         req.getRequestDispatcher("/WEB-INF/view/post/post.jsp").forward(req, resp);
     }
 

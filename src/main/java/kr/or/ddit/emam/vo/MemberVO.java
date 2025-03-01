@@ -224,5 +224,20 @@ public class MemberVO {
     public String getMem_joindate() { return mem_joindate; }
 
     public void setMem_joindate(String mem_joindate) { this.mem_joindate = mem_joindate; }
+
+    @Override
+    public String toString() {
+        return "MemberVO{" +
+                "mem_id='" + mem_id + '\'' +
+                ", mem_pw='" + mem_pw + '\'' +
+                ", mem_nickname='" + mem_nickname + '\'' +
+                ", mem_name='" + mem_name + '\'' +
+                ", mem_addr='" + mem_addr + '\'' +
+                ", mem_phone='" + mem_phone + '\'' +
+                ", mem_bir='" + mem_bir + '\'' +
+                ", mem_gen='" + mem_gen + '\'' +
+                ", mem_joindate='" + mem_joindate + '\'' +
+                '}';
+    }
 }
 

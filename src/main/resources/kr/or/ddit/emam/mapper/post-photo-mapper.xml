@@ -7,7 +7,7 @@
         <selectKey keyProperty="post_photo" resultType="long" order="BEFORE">
             select post_photo_num_seq.nextval from dual
         </selectKey>
-        insert into POST_PHOTOTB
+        insert into POST_PHOTO_TB
         (
             POST_PHOTO
         ) values (
@@ -34,8 +34,8 @@
         )
     </insert>
 
-    <resultMap id="postPhotoMap" type="PostPhotoVO">
-        <id property="post_photo" column="POST_PHOTO" />
+    <resultMap id="postMap" type="PostVO">
+        <id property="post_index" column="POST_INDEX" />
         <collection property="postPhotoDetailList" resultMap="postPhotoDetailMap" />
     </resultMap>
 
@@ -48,10 +48,13 @@
         <result property="photo_extsn" column="PHOTO_EXTSN"></result>
     </resultMap>
 
-    <select id="getPostPhoto" resultMap="postPhotoMap">
-        select * from POST a, POST_PHOTO_DETAIL b
-        where a.POST_PHOTO = b.POST_PHOTO
-          and a.POST_photo = #{post_photo};
+
+
+    <select id="getPhotoList" resultMap="postMap">
+        SELECT
+            *
+        FROM POST a
+                 INNER JOIN POST_PHOTO_DETAIL b ON(a.POST_PHOTO = b.POST_PHOTO)
     </select>
     
     <select id="getPostPhotoDetail" parameterType="PostPhotoDetailVO" resultMap="postPhotoDetailMap">
