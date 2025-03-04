@@ -7,4 +7,6 @@ public interface IReplyService {
     int insertReply(ReplyVO replyVO);
     int updateReply(ReplyVO replyVO);
     List<ReplyVO> selectReplyListByPostIndex(int postIndex);
+
+    ReplyVO selectOneReply(int postIndex);
 }

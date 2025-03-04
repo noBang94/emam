@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kr.or.ddit.emam.reply.dao.IReplyDAO">
+<mapper namespace="reply">
     <insert id="insertReply" parameterType="kr.or.ddit.emam.vo.ReplyVO">
         INSERT INTO reply (
             REPLY_INDEX,
@@ -13,7 +13,7 @@
         VALUES (
                      reply_num_seq.nextval,
                      #{postIndex},
-                     reply_num_seq.nextval,
+                     NULL,
                      #{memId},
                      sysdate,
                      #{replyContent}
@@ -38,4 +38,23 @@
         WHERE post_index = #{postIndex}
         ORDER BY reply_date ASC
     </select>
+
+    <select id="selectAllreply" parameterType="int" resultType="kr.or.ddit.emam.vo.ReplyVO">
+        SELECT
+            reply_index,
+            post_index,
+            mem_id,
+            reply_con,
+            reply_date
+        FROM reply
+        WHERE post_index = #{postIndex}
+        ORDER BY reply_date ASC
+    </select>
+
+    <select id="selectonereply" parameterType="int" resultType="kr.or.ddit.emam.vo.ReplyVO">
+        SELECT * FROM
+                (SELECT * FROM reply WHERE post_index = #{postIndex} ORDER BY 1)
+        WHERE ROWNUM= 1
+    </select>
+
 </mapper>

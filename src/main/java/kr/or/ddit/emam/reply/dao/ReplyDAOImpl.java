@@ -1,9 +1,9 @@
 package kr.or.ddit.emam.reply.dao;
 
 import kr.or.ddit.emam.util.MyBatisUtil;
-import kr.or.ddit.emam.vo.PostVO;
 import kr.or.ddit.emam.vo.ReplyVO;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,5 +65,20 @@ public class ReplyDAOImpl implements IReplyDAO {
         }
 
         return RList;
+    }
+
+    @Override
+    public ReplyVO selectOneReply(int postIndex) {
+        ReplyVO rv = null;
+        SqlSession session = MyBatisUtil.getSqlSession();
+        try{
+            rv = session.selectOne("reply.selectonereply");
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
+        return rv;
     }
 }

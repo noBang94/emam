@@ -60,4 +60,17 @@ public class ReplyVO {
         this.reply_parentreplyindex = reply_parentreplyindex;
     }
 
+
+    @Override
+    public String toString() {
+        return "ReplyVO{" +
+                "reply_index=" + reply_index +
+                ", post_index=" + post_index +
+                ", reply_parentreplyindex=" + reply_parentreplyindex +
+                ", mem_id='" + mem_id + '\'' +
+                ", reply_con='" + reply_con + '\'' +
+                ", reply_date=" + reply_date +
+                '}';
+    }
+
 }
