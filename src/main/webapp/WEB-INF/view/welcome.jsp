@@ -20,7 +20,6 @@
     //컨트롤러에서 자료 받기
     List<NoticeVO> noticeList = (List<NoticeVO>) request.getAttribute("noticeList");
     String wSky = (String) request.getAttribute("wSky");
-
   %>
 
   <script>
@@ -121,12 +120,14 @@
   </div>
   <!-- 테스트용 -->
   <input type="button" value="문의" onclick="location.href='<%=request.getContextPath()%>/inquiry/inquiryList.do'">
+  <input type="button" value="친구목록" onclick="location.href='<%=request.getContextPath()%>/friend/friendList.do'">
 </div>
 
 <!-- 공지사항 View 폼 -->
 <form action="<%=request.getContextPath()%>/notice/noticeView.do" method="get" id="viewForm">
   <input type="hidden" name="num" id="viewNum">
 </form>
+
 
 </body>
 </html>
