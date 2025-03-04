@@ -1,5 +1,6 @@
 package kr.or.ddit.emam.post.service;
 
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.Part;
 import kr.or.ddit.emam.post.dao.IPostPhotoDao;
 import kr.or.ddit.emam.post.dao.PostPhotoDaoImpl;
@@ -27,7 +28,8 @@ public class PostPhotoServiceImpl implements IPostPhotoService {
 
     @Override
     public PostPhotoVO savePostPhoto(Collection<Part> parts) {
-        String uploadPath = "C:/Users/PC-07/Desktop/emam/src/main/webapp/upload";
+        //상대경로나  pc 환경에 맞게 되게 수정 요함
+        String uploadPath = "D:/emam/src/main/webapp/upload";
         File uploadDir =new File(uploadPath);
         if(!uploadDir.exists()) {
             uploadDir.mkdir();

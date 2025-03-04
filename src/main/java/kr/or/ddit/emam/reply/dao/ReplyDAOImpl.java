@@ -57,7 +57,7 @@ public class ReplyDAOImpl implements IReplyDAO {
         List<ReplyVO> RList = new ArrayList<ReplyVO>();
         SqlSession session = MyBatisUtil.getSqlSession();
         try{
-            RList = session.selectList("reply.selectAllreply");
+            RList = session.selectList("reply.selectAllreply",postIndex);
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -65,6 +65,20 @@ public class ReplyDAOImpl implements IReplyDAO {
         }
 
         return RList;
+    }
+
+    @Override
+    public int deleteReply(int num) {
+        int cnt = 0;
+        SqlSession session = MyBatisUtil.getSqlSession();
+        try {
+            cnt = session.delete( "reply.deleteReply",num );
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+        return cnt;
     }
 
     @Override

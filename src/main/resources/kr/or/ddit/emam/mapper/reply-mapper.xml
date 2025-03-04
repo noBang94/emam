@@ -12,19 +12,27 @@
         )
         VALUES (
                      reply_num_seq.nextval,
-                     #{postIndex},
-                     NULL,
-                     #{memId},
+                     #{post_index},
+                    <choose>
+                        <when test='reply_parentreplyindex != 0 and memId != "" '>
+                            #{reply_parentreplyindex}
+                        </when>
+                        <when test="reply_parentreplyindex == 0">
+                            reply_num_seq.nextval
+                        </when>
+                    </choose>
+                   ,
+                     #{mem_id},
                      sysdate,
-                     #{replyContent}
+                     #{reply_con}
                  )
     </insert>
 
     <update id="updateReply" parameterType="kr.or.ddit.emam.vo.ReplyVO">
         UPDATE reply
-        SET REPLY_CON = #{replyContent},
+        SET REPLY_CON = #{reply_con},
             REPLY_DATE = sysdate
-        WHERE reply_index = #{replyIndex}
+        WHERE reply_index = #{reply_index}
     </update>
 
     <select id="selectReplyListByPostIndex" parameterType="int" resultType="kr.or.ddit.emam.vo.ReplyVO">
@@ -35,20 +43,23 @@
             reply_con,
             reply_date
         FROM reply
-        WHERE post_index = #{postIndex}
+        WHERE post_index = #{post_index}
         ORDER BY reply_date ASC
     </select>
 
     <select id="selectAllreply" parameterType="int" resultType="kr.or.ddit.emam.vo.ReplyVO">
         SELECT
-            reply_index,
-            post_index,
-            mem_id,
-            reply_con,
-            reply_date
-        FROM reply
-        WHERE post_index = #{postIndex}
+            a.reply_index,
+            a.post_index,
+            a.mem_id,
+            a.reply_con,
+            a.reply_date,
+            b.MEM_NICKNAME
+        FROM reply a
+                 inner join member b ON(a.mem_id = b.mem_id)
+        WHERE post_index = #{post_index}
         ORDER BY reply_date ASC
+
     </select>
 
     <select id="selectonereply" parameterType="int" resultType="kr.or.ddit.emam.vo.ReplyVO">
@@ -56,5 +67,9 @@
                 (SELECT * FROM reply WHERE post_index = #{postIndex} ORDER BY 1)
         WHERE ROWNUM= 1
     </select>
+
+    <delete id="deleteReply" parameterType="int">
+        delete from reply where reply_index = #{reply_index}
+    </delete>
 
 </mapper>

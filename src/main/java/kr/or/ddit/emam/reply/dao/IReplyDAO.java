@@ -25,5 +25,7 @@ public interface IReplyDAO {
      */
     List<ReplyVO> selectReplyListByPostIndex(int postIndex);
 
+    int deleteReply(int num);
+
     ReplyVO selectOneReply(int postIndex);
 }

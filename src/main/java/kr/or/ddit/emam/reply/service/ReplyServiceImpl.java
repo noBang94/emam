@@ -39,6 +39,11 @@ public class ReplyServiceImpl implements IReplyService {
     }
 
     @Override
+    public int deleteReply(int num) {
+        return dao.deleteReply(num);
+    }
+
+    @Override
     public ReplyVO selectOneReply(int postIndex) {
         return null;
     }

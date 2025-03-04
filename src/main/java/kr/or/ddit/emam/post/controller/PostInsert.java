@@ -42,11 +42,6 @@ public class PostInsert extends HttpServlet {
             post.setPost_photo(postPhotoVO.getPost_photo());
         }
 
-        System.out.println(post.getMem_id());
-        System.out.println(post.getPost_con());
-        System.out.println(post.getPost_visible());
-        System.out.println(post.getPost_photo());
-
         int cnt = service.insertPost(post);
         if (cnt > 0) {
             resp.sendRedirect(req.getContextPath()+"/post/postList.do");

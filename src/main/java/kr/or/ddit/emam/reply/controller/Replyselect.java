@@ -6,6 +6,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kr.or.ddit.emam.member.service.IMemberService;
+import kr.or.ddit.emam.member.service.MemberServiceImpl;
 import kr.or.ddit.emam.post.service.IPostService;
 import kr.or.ddit.emam.post.service.PostServiceImpl;
 import kr.or.ddit.emam.reply.service.IReplyService;
@@ -22,26 +24,27 @@ import java.util.List;
 public class Replyselect extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html");
         IReplyService replyService = ReplyServiceImpl.getInstance();
-        IPostService postService = PostServiceImpl.getInstance();
+        IMemberService memberService = MemberServiceImpl.getInstance();
 
         String postindex = req.getParameter("postindex");
         int postindexInt = Integer.parseInt(postindex);
 
+        List<ReplyVO> ReplyList = replyService.selectReplyListByPostIndex(postindexInt);
+
+//        ReplyVO replyVO = replyService.selectOneReply(postindexInt);
+
         Gson gson = new Gson();
         String jsonData = null; //변환된 Json문자열이 저장될 변수
 
-        ReplyVO replyVO = replyService.selectOneReply(postindexInt);
-
-        List<ReplyVO> ReplyList = replyService.selectReplyListByPostIndex(postindexInt);
 
 
-        jsonData = gson.toJson(replyVO);
+        jsonData = gson.toJson(ReplyList);
 
         PrintWriter out = resp.getWriter();
         out.write(jsonData);
@@ -50,7 +53,7 @@ public class Replyselect extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doPost(req, resp);
     }
 }

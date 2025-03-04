@@ -22,44 +22,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
     <script>
-        $(function (){
+        $(function () {
             //게시글 작성 버튼클릭시
-            $(".post_write_btn").on('click', function(){
+            $(".post_write_btn").on('click', function () {
                 $(".post-insert-modal").toggleClass("view");
             });
 
             //모달 닫기 클릭
-            $(".close-btn").on('click', function(){
+            $(".close-btn").on('click', function () {
                 $(".modal").removeClass("view");
             });
 
-            $(".modal").on('click', function(e){
-                if(!$(e.target).closest('.modal-i-warp').length) {
+            $(".modal").on('click', function (e) {
+                if (!$(e.target).closest('.modal-i-warp').length) {
                     $(this).removeClass("view");
                 }
             });
 
             //게시글 수정버튼클릭시
-            $(".update-btn").on('click', function(){
+            $(".update-btn").on('click', function () {
                 $(".post-update-modal").toggleClass("view");
                 let postindex = $(this).data("index");
 
                 $.ajax({
-                    url:"/post/postDetailAjax.do",
-                    type:"post",
-                    data:"postindex="+postindex,
-                    contentType : "application/x-www-form-urlencoded", //content-type 설정 (생략가능)
-                    success:function(result){
+                    url: "/post/postDetailAjax.do",
+                    type: "post",
+                    data: "postindex=" + postindex,
+                    contentType: "application/x-www-form-urlencoded", //content-type 설정 (생략가능)
+                    success: function (result) {
 
                         console.log(result)
                         $('.post-update-modal input[name=postindex]').val(result.post_index);
                         $('.post-update-modal input[name=postwriter]').val(result.mem_id);
                         $('.post-update-modal textarea[name=postcon]').val(result.post_con);
 
-                        if(result.post_visible=="Y"){
-                            $("#updatetoggles").prop("checked",true);
-                        }else{
-                            $("#updatetoggles").prop("checked",false);
+                        if (result.post_visible == "Y") {
+                            $("#updatetoggles").prop("checked", true);
+                        } else {
+                            $("#updatetoggles").prop("checked", false);
                         }
                     }
                 });
@@ -67,7 +67,7 @@
             });
 
             //게시글 삭제 클릭시
-            $(".delete-btn").on('click', function(){
+            $(".delete-btn").on('click', function () {
                 $(".post-delete-modal").toggleClass("view");
                 let postindex = $(this).data("index")
                 $('.post-delete-modal input[name=postindex]').val(postindex);
@@ -77,20 +77,125 @@
             //댓글 가져오기 ajax
             $(".replybtn").on('click', function(){
                 let postindex = $(this).data("index");
-                console.log(postindex)
+                $('.a-c-rp[data-index='+postindex+']').toggleClass("view");
 
                 $.ajax({
                     url:"/reply/getreply.do",
-                    type:"get",
+                    type:"post",
                     data:"postindex="+postindex,
                     contentType : "application/x-www-form-urlencoded", //content-type 설정 (생략가능)
                     success:function(result){
-
                         console.log(result)
-                    }
+                        let htmlcode= "";
+                        if(result.length>0){
+                            $.each(result , function(i,v){
+                                if(v.mem_id=="<%=loginMember.getMem_id()%>"){
+                                    htmlcode +='<li>';
+                                    htmlcode +='    <div class="rp-r-wrap">';
+                                    htmlcode +='        <div class="rp-r-w-prf">';
+                                    htmlcode +='            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                    htmlcode +='        </div>';
+                                    htmlcode +='        <div class="rp-r-w-container">';
+                                    htmlcode +='            <div class="rp-r-w-con-warp">';
+                                    htmlcode +='                <span class="rp-r-w-nick">'+v.mem_nickname+'</span>';
+                                    htmlcode +='                <span class="rp-r-w-con">'+v.reply_con+'</span>';
+                                    htmlcode +='            </div>';
+                                    htmlcode +='            <div class="rp-r-w-btn-warp">';
+                                    htmlcode +='                <a class="btn s-btn re-re-btn">답글</a>';
+                                    htmlcode +='                <a class="btn s-btn re-up-btn" data-reindex='+v.reply_index+'>수정</a>';
+                                    htmlcode +='                <a class="btn s-btn re-del-btn" data-reindex='+v.reply_index+' href="<%=request.getContextPath() %>/reply/replyDelete.do?replyindex='+v.reply_index+'">삭제</a>';
+                                    htmlcode +='            </div>';
+                                    htmlcode +='        </div>';
+                                    htmlcode +='    </div>';
+                                    htmlcode +='</li>';
+                                }else{
+                                    htmlcode +='<li>';
+                                    htmlcode +='    <div class="rp-r-wrap">';
+                                    htmlcode +='        <div class="rp-r-w-prf">';
+                                    htmlcode +='            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                    htmlcode +='        </div>';
+                                    htmlcode +='        <div class="rp-r-w-container">';
+                                    htmlcode +='            <div class="rp-r-w-con-warp">';
+                                    htmlcode +='                <span class="rp-r-w-nick">'+v.mem_nickname+'</span>';
+                                    htmlcode +='                <span class="rp-r-w-con">'+v.reply_con+'</span>';
+                                    htmlcode +='            </div>';
+                                    htmlcode +='            <div class="rp-r-w-btn-warp">';
+                                    htmlcode +='                <a class="btn s-btn re-re-btn">답글</a>';
+                                    htmlcode +='            </div>';
+                                    htmlcode +='        </div>';
+                                    htmlcode +='    </div>';
+                                    htmlcode +='</li>';
+                                }
+                            });
+                        }else {
+                            htmlcode +='<li>';
+                            htmlcode +='    <div class="rp-r-wrap">';
+                            htmlcode +='        <div class="rp-r-w-prf"><img src="<%=request.getContextPath() %>/upload/demo_logo.png"></div>';
+                            htmlcode +='        <div class="rp-r-w-con">댓글이 없습니다.</div>';
+                            htmlcode +='    </div>';
+                            htmlcode +='</li>';
+                        }
+                        $('.a-c-rp[data-index='+postindex+'] .a-c-rp-r ul').html(htmlcode);
+                    },
+                    dataType : "json"
                 });
 
             });
+
+            //댓글 수정 폼
+            $(document).on("click",".re-up-btn",function(){
+                $(this).addClass("unvis");
+
+                let reindex = $(this).data("reindex");
+                console.log("reindex : ", reindex);
+
+                let con = $(this).parent().parent().children("div").eq(0).children("span").eq(1).html();
+                console.log("con : ", con);
+                //댓글 내용 가리기
+                $(this).parent().parent().children("div").eq(0).children("span").eq(1).css("display","none");
+
+                $(this).parent().parent().children("div").eq(0).append(`
+                    <span id="spn\${reindex}">
+                        <form action="<%=request.getContextPath() %>/reply/replyUpdate.do" method="get">
+                            <input type="text" id="txtindex\${reindex}" name="replyindex" value="\${reindex}" hidden/>
+                            <input type="text" id="txtCon\${reindex}" name="replycon" value="\${con}" />
+                            <button type="submit" class="btnConfirm" data-con="\${con}" data-reindex="\${reindex}">확인</button>
+                            <button type="button" class="btnCancel" data-reindex="\${reindex}">취소</button>
+                        </form>
+                    </span>
+                `);
+            });
+            //댓글 수정 확인 실행
+            $(document).on("click",".btnConfirm",function(){
+                //<button type="button" class="btnConfirm" data-con="댓글테스트" data-reindex="8">확인</button>
+                let reindex = $(this).data("reindex");
+                console.log("댓글 수정 확인->reindex : ", reindex);
+                let con = $(this).data("con");
+                console.log("댓글 수정 확인->con : ", con);
+
+            });
+            //댓글 수정 취소
+            $(document).on("click",".btnCancel",function(){
+                //<button type="button" class="btnCancel" data-reindex="8">취소</button>
+                let reindex = $(this).data("reindex");
+                console.log("댓글 수정 취소->reindex : ", reindex);
+
+                //댓글 내용 살리기
+                //취소버튼 부모 : span. 그 앞의 이웃
+
+                // $(this).parent().prev().css("display","inline");
+                $(this).parents(".rp-r-w-con-warp").find(".rp-r-w-con").css("display","inline");
+
+                /*
+                <span id="spn8">
+                    ...
+                </span>
+                 */
+                $("#spn"+reindex).remove();
+                $(".rp-r-w-btn-warp .re-up-btn[data-reindex="+reindex+"]").removeClass("unvis");
+            });
+
+
         });//제이쿼리 끝
     </script>
     <style>
@@ -107,7 +212,15 @@
         .btn:hover{background-color: #ffffff;  color: #E20707; border: 1px solid #D9D9D9; transition: all 0.2s ease-in;}
         a.btn {text-decoration: none}
         .btn_2th{display: flex}
+        .btn.s-btn{width: 40px;
+            height: 30px;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;}
         /*버튼(e)*/
+
+        .t-r-btn{position: absolute; top: 0;right: 0;}
 
         /*토글 스위치(s)*/
         .toggleSwitch {width: 50px;height: 20px;display: block;position: relative;border-radius: 30px;background-color: #fff;box-shadow: 0 0 16px 3px rgba(0 0 0 / 15%);cursor: pointer;margin: 10px;}
@@ -182,18 +295,33 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;}
+        .a-c-rp{overflow: hidden;
+            height: 0;
+        }
+        .a-c-rp.view{height:auto;}
 
-        .rp-r-wrap{display: flex;}
+        .a-c-rp-r ul li{padding: 8px 10px;}
+        .rp-r-wrap{display: flex; position: relative;}
         .rp-r-wrap .rp-r-w-prf{border-radius: 20px;
             width: 23px;
+            min-width: 23px;
             margin-right: 10px;
         }
         .rp-r-wrap .rp-r-w-prf > img{width: 100%;}
-        .rp-r-wrap .rp-r-w-con{width: auto;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;}
+        .rp-r-wrap .rp-r-w-container{}
+        .rp-r-wrap .rp-r-w-container .rp-r-w-con-warp{margin-bottom: 10px;}
+
+        .rp-r-wrap .rp-r-w-con-warp{}
+        .rp-r-wrap .rp-r-w-nick{
+
+        }
+        .rp-r-wrap .rp-r-w-con{
+
+        }
+
+        .rp-r-w-btn-warp{display: flex; gap: 12px;}
+
+        .unvis{display: none !important;}
     </style>
 </head>
 <body>
@@ -217,7 +345,7 @@
         <%
         }else{
             for(PostVO p : postList){
-                System.out.println(p);
+//                System.out.println(p);
 
         %>
         <article class="post-atc">
@@ -262,47 +390,43 @@
                     <div>집가고싶다</div>
                 </div>
 
-                <div class="a-c-bd"><%=p.getPost_con() %>
-                </div>
-                <div class="a-c-rp a-c-rp-w">
+                <div class="a-c-bd"><%=p.getPost_con() %></div>
+
+                <div class="a-c-rp a-c-rp-w" data-index="<%=p.getPost_index() %>">
                     <form action="<%=request.getContextPath() %>/reply/replyInsert.do" method="post">
                         <input type="hidden" name="post_index" value="<%=p.getPost_index()%>"/> <%-- 게시글 번호 전달 --%>
-                        <input type="text" placeholder="댓글을 입력하세요"
-                               name="reply"/> <%-- textarea 대신 input type=text 사용 --%>
+                        <input type="hidden" name="mem_id" value="<%=loginMember.getMem_id()%>"/> <%-- 댓글 작성자 전달 --%>
+                        <input type="hidden" name="mem_id" value="<%=loginMember.getMem_id()%>"/> <%-- 댓글 작성자 전달 --%>
+                        <input type="text" placeholder="댓글을 입력하세요" name="reply_con"/> <%-- textarea 대신 input type=text 사용 --%>
                         <input type="submit" value="댓글달기">
                     </form>
-                </div>
-                <div class="a-c-rp-r">
-                    <ul>
-                        <%
-                            p.getPost_index();
-                            List<ReplyVO> replyList = (List<ReplyVO>) session.getAttribute("ReplyList");; // PostVO 에서 댓글 목록 가져오기
-                            if (replyList != null && !replyList.isEmpty()) { // 댓글 목록이 있는 경우에만 출력
-                                for (ReplyVO reply : replyList) {
-                        %>
-                        <li>
-                            <div class="rp-r-wrap">
-                                <div class="rp-r-w-prf"><img src="<%=request.getContextPath() %>/upload/demo_logo.png">
+                    <div class="a-c-rp-r">
+                        <ul>
+                            <%-- 댓글 내용 출력 --%>
+                            <li>
+                                <div class="rp-r-wrap">
+                                    <div class="rp-r-w-prf">
+<%--                                        프로필 아이콘--%>
+                                        <img src="<%=request.getContextPath() %>/upload/demo_logo.png">
+                                    </div>
+
+                                    <div class="rp-r-w-container">
+                                        <div class="rp-r-w-con-warp">
+                                            <span class="rp-r-w-nick">닉네임자리</span>
+                                            <span class="rp-r-w-con">댓글이 없습니다.</span>
+                                        </div>
+                                        <div class="rp-r-w-btn-warp">
+                                            <a class="btn s-btn re-re-btn">답글</a>
+                                            <a class="btn s-btn re-up-btn">수정</a>
+                                            <a class="btn s-btn re-del-btn">삭제</a>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="rp-r-w-con"><%=reply.getReply_con()%>
-                                </div>
-                                <%-- 댓글 내용 출력 --%>
-                            </div>
-                        </li>
-                        <%
-                            }
-                        } else {
-                        %>
-                        <li>
-                            <div class="rp-r-wrap">
-                                댓글이 없습니다.
-                            </div>
-                        </li>
-                        <%
-                            }
-                        %>
-                    </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
+
             </div>
         </article>
         <%
@@ -322,7 +446,7 @@
                     <div>
                         프로필이 올자리 입니당
                         <input type="text" name="postindex"/>
-                        <input type="text" name="postwriter" placeholder="임시 작성자 인풋 있는 사용자만 됨" />
+                        <input type="text" name="postwriter" value="<%=loginMember.getMem_id()%>" hidden="hidden"/>
 
                         <div>
                             <textarea name="postcon"></textarea>
@@ -359,7 +483,7 @@
                 <div class="modal-r">
                     <div>
                         프로필이 올자리 입니당
-                        <input type="text" name="postwriter" placeholder="임시 작성자 인풋 있는 사용자만 됨">
+                        <input type="text" name="postwriter" value="<%=loginMember.getMem_id()%>" hidden="hidden">
 
                         <div>
                             <textarea name="postcon"></textarea>
