@@ -101,6 +101,10 @@
         location.href = "<%=request.getContextPath() %>/admin/noticeDelete.do?noticeIndex=" + noticeIndex;
       }
     }
+
+    function showNoticeDetail(noticeIndex) {
+      location.href = "<%=request.getContextPath()%>/admin/noticeUpdate.do?noticeIndex=" + noticeIndex;
+    }
   </script>
 </head>
 <body>
@@ -139,9 +143,9 @@
       if (errorMessage == null && noticeList != null && !(noticeList.isEmpty())) {
         for (NoticeVO notice : noticeList) {
     %>
-    <tr>
+    <tr onclick="showNoticeDetail('<%= notice.getNotice_index() %>')" style="cursor: pointer;">
       <td><%= notice.getNotice_index() %></td>
-      <td><a href="<%=request.getContextPath()%>/admin/noticeUpdate.do?noticeIndex=<%= notice.getNotice_index() %>"><%= notice.getNotice_title() %></a></td>
+      <td><%= notice.getNotice_title() %></td>
       <td><%= notice.getNotice_con() %></td>
       <td><%= notice.getNotice_date() %></td>
       <td>
