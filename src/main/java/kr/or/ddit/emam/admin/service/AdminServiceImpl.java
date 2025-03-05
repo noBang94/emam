@@ -27,64 +27,45 @@ public class AdminServiceImpl implements IAdminService {
         return dao.getLoginAdmin(adminVo);
     }
 
-    @Override
+    // 회원 관리
     public int getTotalMemberCount(String searchId) {
         return dao.getTotalMemberCount(searchId);
     }
-
-    @Override
     public List<MemberVO> getMemberList(MemberVO memberVo, int page, int pageSize) {
         return dao.getMemberList(memberVo, page, pageSize);
     }
-
-    @Override
     public int deleteMember(String memId) {
         return dao.deleteMember(memId);
     }
 
-    @Override
-
+    //관리자 공지사항
     public NoticeVO getNotice(int noticeIndex) {
         return dao.getNotice(noticeIndex);
     }
-
-    @Override
     public int insertNotice(NoticeVO noticeVO) {
         return dao.insertNotice(noticeVO);
     }
-
-    @Override
     public int updateNotice(NoticeVO noticeVO) {
         return dao.updateNotice(noticeVO);
     }
-
-    @Override
     public List<NoticeVO> selectAllNotice(String getNotice) {
         return dao.selectAllNotice(getNotice);
     }
-
-    @Override
     public int deleteNotice(int noticeIndex) {
         return dao.deleteNotice(noticeIndex);
     }
 
 
+    //관리자 문의사항
     public List<InquiryVO> getInquiryList() {
         return dao.getInquiryList();
     }
-
-    @Override
     public InquiryVO getInquiryDetail(int inquiryIndex) {
         return dao.getInquiryDetail(inquiryIndex);
     }
-
-    @Override
     public int updateInquiryComment(InquiryVO inquiry) {
         return dao.updateInquiryComment(inquiry);
     }
-
-    // 검색 기능 추가
-    @Override
     public List<InquiryVO> searchInquiryList(String searchTitle) {
         return dao.searchInquiryList(searchTitle);
     }
