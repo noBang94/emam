@@ -22,6 +22,7 @@ public class AdminDaoImpl implements IAdminDao {
         return dao;
     }
 
+    //관리자 로그인
     @Override
     public AdminVO getLoginAdmin(AdminVO adminVo) {
         SqlSession session = MyBatisUtil.getSqlSession();
@@ -37,6 +38,7 @@ public class AdminDaoImpl implements IAdminDao {
         return adVo;
     }
 
+    //관리자 공지사항
     @Override
     public List<MemberVO> getMemberList(MemberVO memberVo, int page, int pageSize) {
         SqlSession session = MyBatisUtil.getSqlSession();
@@ -118,7 +120,6 @@ public class AdminDaoImpl implements IAdminDao {
     public List<NoticeVO> selectAllNotice(String getNotice) { // 전체 공지 조회
         SqlSession session = MyBatisUtil.getSqlSession();
         List<NoticeVO> noticelist = null;
-
         try {
             noticelist = session.selectList("admin.selectAllNotice");
         } catch (Exception e) {
@@ -130,6 +131,18 @@ public class AdminDaoImpl implements IAdminDao {
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     @Override
     public int deleteNotice(int noticeIndex) {
         try(SqlSession session = MyBatisUtil.getSqlSession()) {
@@ -139,6 +152,7 @@ public class AdminDaoImpl implements IAdminDao {
         }
     }
 
+    //관리자 문의사항
     @Override
     public List<InquiryVO> getInquiryList() {
         SqlSession session = MyBatisUtil.getSqlSession();
