@@ -53,13 +53,9 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    $(function() {
-      $(document).on('click', '.row', function() {
-        const num = $(this).data("num");
-        $("#viewNum").val(num);
-        $("#viewForm").submit();
-      });
-    });
+    function viewNotice(noticeIndex) {
+      location.href = "<%=request.getContextPath()%>/notice/noticeDetail.do?noticeIndex=" + noticeIndex;
+    }
   </script>
   <style>
     body {
@@ -210,6 +206,8 @@
 <div class="tasks">
   <input type="button" value="문의"
          onclick="location.href='<%=request.getContextPath()%>/inquiry/inquiryList.do'">
+  <input type="button" value=신고"
+         onclick="location.href='<%=request.getContextPath()%>/report.do'">
   <input type="button" value="친구목록"
          onclick="location.href='<%=request.getContextPath()%>/friend/friendList.do'">
 </div>
@@ -219,7 +217,7 @@
   <ul>
     <% if (noticeList != null && !noticeList.isEmpty()) { %>
     <% for (NoticeVO notice : noticeList) { %>
-    <li class="row" data-num="<%= notice.getNotice_index() %>">
+    <li onclick="viewNotice('<%= notice.getNotice_index() %>')">
       <%= notice.getNotice_title() %>
     </li>
     <% } %>
@@ -228,10 +226,5 @@
     <% } %>
   </ul>
 </div>
-
-<form action="<%=request.getContextPath()%>/notice/noticeView.do" method="get"
-      id="viewForm">
-  <input type="hidden" name="num" id="viewNum">
-</form>
 </body>
 </html>

@@ -1,9 +1,9 @@
 package kr.or.ddit.emam.reply.dao;
 
 import kr.or.ddit.emam.util.MyBatisUtil;
-import kr.or.ddit.emam.vo.PostVO;
 import kr.or.ddit.emam.vo.ReplyVO;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +57,51 @@ public class ReplyDAOImpl implements IReplyDAO {
         List<ReplyVO> RList = new ArrayList<ReplyVO>();
         SqlSession session = MyBatisUtil.getSqlSession();
         try{
-            RList = session.selectList("reply.selectAllreply");
+            RList = session.selectList("reply.selectPostReply",postIndex);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
+        return RList;
+    }
+
+    @Override
+    public int deleteReply(int num) {
+        int cnt = 0;
+        SqlSession session = MyBatisUtil.getSqlSession();
+        try {
+            cnt = session.delete( "reply.deleteReply",num );
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+        return cnt;
+    }
+
+    @Override
+    public ReplyVO selectOneReply(int postIndex) {
+        ReplyVO rv = null;
+        SqlSession session = MyBatisUtil.getSqlSession();
+        try{
+            rv = session.selectOne("reply.selectonereply");
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
+        return rv;
+    }
+
+    @Override
+    public List<ReplyVO> selectReplyReplyList(ReplyVO replyVO) {
+        List<ReplyVO> RList = new ArrayList<ReplyVO>();
+        SqlSession session = MyBatisUtil.getSqlSession();
+        try{
+            RList = session.selectList("reply.getReplyReply",replyVO);
         }catch (Exception e){
             e.printStackTrace();
         }finally {

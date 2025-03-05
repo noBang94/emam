@@ -28,7 +28,6 @@ public class PostInsert extends HttpServlet {
         String post_con = req.getParameter("postcon");
         String post_visible = req.getParameter("postvis")==null?"N":req.getParameter("postvis");
 
-
         //service객체 얻기
         IPostService service = PostServiceImpl.getInstance();
 
@@ -41,11 +40,6 @@ public class PostInsert extends HttpServlet {
         if(postPhotoVO != null){
             post.setPost_photo(postPhotoVO.getPost_photo());
         }
-
-        System.out.println(post.getMem_id());
-        System.out.println(post.getPost_con());
-        System.out.println(post.getPost_visible());
-        System.out.println(post.getPost_photo());
 
         int cnt = service.insertPost(post);
         if (cnt > 0) {

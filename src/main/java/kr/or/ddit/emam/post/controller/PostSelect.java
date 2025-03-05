@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import kr.or.ddit.emam.member.service.IMemberService;
 import kr.or.ddit.emam.member.service.MemberServiceImpl;
 import kr.or.ddit.emam.post.service.IPostPhotoService;
@@ -28,24 +29,41 @@ public class PostSelect extends HttpServlet {
 
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html");
-        //서비스 객체 얻기
-        IMemberService memberService = MemberServiceImpl.getInstance();
-        IPostService postService = PostServiceImpl.getInstance();
 
-        List<PostVO> postList = postService.selectAllPost();
+        //회원service 객체 얻기
+        IMemberService service = MemberServiceImpl.getInstance();
 
-        System.out.println("postList->postList : " + postList);
+        //세션 객체 가져오기
+        HttpSession session = req.getSession();
+        //세션에 로그인멤버가 있는지 확인한다
+        MemberVO memcheck = (MemberVO) session.getAttribute("loginMember");
+        //회원이 없으면 로그인화면으로 이동
+        if(memcheck == null){
+            resp.sendRedirect("/");
+        }else {
+            //진짜 회원인지 확인한다
 
-        for(PostVO postVO : postList){
-            MemberVO memVo = memberService.getMember(postVO.getMem_id());
+            //서비스 객체 얻기
+            IMemberService memberService = MemberServiceImpl.getInstance();
+            IPostService postService = PostServiceImpl.getInstance();
 
-            System.out.println("postList->memVo : " + memVo);
-            postVO.setMemVo(memVo);
+            List<PostVO> postList = postService.selectAllPost();
 
+//            System.out.println("postList->postList : " + postList);
+
+            for(PostVO postVO : postList){
+                MemberVO memVo = memberService.getMember(postVO.getMem_id());
+
+//                System.out.println("postList->memVo : " + memVo);
+                postVO.setMemVo(memVo);
+
+            }
+
+            req.setAttribute("postList", postList);
+            req.getRequestDispatcher("/WEB-INF/view/post/post.jsp").forward(req, resp);
         }
+        
 
-        req.setAttribute("postList", postList);
-        req.getRequestDispatcher("/WEB-INF/view/post/post.jsp").forward(req, resp);
     }
 
 }

@@ -24,4 +24,15 @@ public interface IReplyDAO {
      * @return 댓글 목록
      */
     List<ReplyVO> selectReplyListByPostIndex(int postIndex);
+
+    int deleteReply(int num);
+
+    ReplyVO selectOneReply(int postIndex);
+
+    /**
+     * 대댓글(답글)조회
+     * @param replyVO
+     * @return
+     */
+    List<ReplyVO> selectReplyReplyList(ReplyVO replyVO);
 }

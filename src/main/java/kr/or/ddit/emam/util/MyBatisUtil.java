@@ -47,4 +47,5 @@ public class MyBatisUtil {
         SqlSession session = sqlSessionFactory.openSession(autoComm);
         return session;
     }
+
 }
