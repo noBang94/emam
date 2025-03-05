@@ -118,7 +118,7 @@
   <div class="action-container">
     <form action="<%=request.getContextPath()%>/admin/noticeList.do" method="get" class="search-form">
       <div class="form-group">
-        <label for="searchTitle" style="width: 90px">제목 검색 :</label>
+        <label for="searchTitle" style="width: 100px">제목 검색 :</label>
         <input type="text" class="form-control" id="searchTitle" name="searchTitle" value="<%= request.getParameter("searchTitle") != null ? request.getParameter("searchTitle") : "" %>">
       </div>
       <button type="submit" class="btn btn-primary">검색</button>
@@ -133,7 +133,6 @@
       <th>제목</th>
       <th>내용</th>
       <th>작성일</th>
-      <th>수정/삭제</th>
     </tr>
     </thead>
     <tbody>
@@ -148,10 +147,6 @@
       <td><%= notice.getNotice_title() %></td>
       <td><%= notice.getNotice_con() %></td>
       <td><%= notice.getNotice_date() %></td>
-      <td>
-        <a href="<%=request.getContextPath()%>/admin/noticeUpdate.do?noticeIndex=<%= notice.getNotice_index() %>" class="btn btn-primary btn-sm">수정</a>
-        <button type="button" class="btn btn-danger btn-sm" onclick="deleteNotice('<%= notice.getNotice_index() %>')">삭제</button>
-      </td>
     </tr>
     <%
       }
