@@ -210,6 +210,8 @@
 <div class="tasks">
   <input type="button" value="문의"
          onclick="location.href='<%=request.getContextPath()%>/inquiry/inquiryList.do'">
+  <input type="button" value=신고"
+         onclick="location.href='<%=request.getContextPath()%>/report.do'">
   <input type="button" value="친구목록"
          onclick="location.href='<%=request.getContextPath()%>/friend/friendList.do'">
 </div>
