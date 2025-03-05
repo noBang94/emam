@@ -49,11 +49,16 @@
     .search-container {
       margin-bottom: 20px;
       display: flex;
-      justify-content: flex-end;
+      justify-content: flex-start;
+    }
+    .search-container .search-form {
+      display: flex;
+      align-items: center;
     }
     .search-container .form-group {
       display: flex;
       align-items: center;
+      margin-right: 10px;
     }
     .search-container label {
       margin-right: 10px;
@@ -63,9 +68,11 @@
       padding: 8px 12px;
       border: 1px solid #ced4da;
       border-radius: 4px;
+      width: 200px; /* 검색창 너비 조정 */
     }
     .search-container .btn-primary {
       margin-left: 10px;
+      padding: 8px 15px; /* 검색 버튼 패딩 조정 */
     }
     .inquiry-title-link {
       cursor: pointer;
@@ -75,6 +82,11 @@
     .unprocessed {
       color: red;
       font-weight: bold;
+    }
+    .empty-message {
+      text-align: center;
+      padding: 20px;
+      color: #888;
     }
   </style>
 
@@ -99,7 +111,7 @@
 
 <div class="inquiry-list-container">
   <div class="search-container">
-    <form action="<%=request.getContextPath() %>/admin/qnaList.do" method="get" class="form-inline">
+    <form action="<%=request.getContextPath() %>/admin/qnaList.do" method="get" class="search-form">
       <div class="form-group">
         <label for="searchTitle">제목 검색:</label>
         <input type="text" class="form-control" id="searchTitle" name="searchTitle" value="<%= request.getParameter("searchTitle") != null ? request.getParameter("searchTitle") : "" %>">

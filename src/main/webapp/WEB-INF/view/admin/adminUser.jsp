@@ -53,7 +53,7 @@
         .search-container {
             margin-bottom: 20px;
             display: flex;
-            justify-content: flex-end;
+            justify-content: flex-start; /* 변경: 왼쪽 끝 정렬 */
         }
         .search-container .form-group {
             display: flex;

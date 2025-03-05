@@ -66,7 +66,8 @@
     </div>
     <div class="form-group">
       <label for="noticeCon">내용</label>
-      <textarea class="form-control" id="noticeCon" name="noticeCon" rows="10" required><%= "update".equals(mode) ? noticeVO.getNotice_con() : "" %></textarea>
+      <textarea class="form-control" id="noticeCon" name="noticeCon" rows="10" required><%if (noticeVO == null) {%><%} else {%><%="update".equals(mode) ? noticeVO.getNotice_con() : "" %><%}%></textarea>
+
     </div>
     <div class="btn-container">
       <button type="submit" class="btn btn-primary"><%= "update".equals(mode) ? "수정 완료" : "작성 완료" %></button>

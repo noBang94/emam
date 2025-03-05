@@ -82,6 +82,10 @@ public class AdminServiceImpl implements IAdminService {
     public int updateInquiryComment(InquiryVO inquiry) {
         return dao.updateInquiryComment(inquiry);
     }
+
+    // 검색 기능 추가
+    @Override
+    public List<InquiryVO> searchInquiryList(String searchTitle) {
+        return dao.searchInquiryList(searchTitle);
+    }
 }
-
-

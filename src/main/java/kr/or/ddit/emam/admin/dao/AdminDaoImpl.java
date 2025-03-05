@@ -185,5 +185,19 @@ public class AdminDaoImpl implements IAdminDao {
         return result;
     }
 
+    @Override
+    public List<InquiryVO> searchInquiryList(String searchTitle) {
+        SqlSession session = MyBatisUtil.getSqlSession();
+        List<InquiryVO> iqVoList = null;
+
+        try {
+            iqVoList = session.selectList("admin.searchInquiryList", searchTitle);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return iqVoList;
+    }
 
 }
