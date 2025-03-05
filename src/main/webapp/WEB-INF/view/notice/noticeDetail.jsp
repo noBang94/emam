@@ -35,6 +35,9 @@
     }
     textarea {
       resize: vertical;
+      overflow: auto;
+      box-sizing: border-box;
+      min-height: 100px;
     }
     .btn-container {
       text-align: center;
@@ -47,9 +50,21 @@
   </style>
 
   <script>
-    $(function(){
-      $("#listBtn").on("click", function(){
+    $(function() {
+      $("#listBtn").on("click", function () {
         window.location.href = "<%=request.getContextPath() %>/notice/notice.do";
+      });
+
+      // textarea 내용에 따라 높이 자동 조절
+      $("#noticeCon").each(function () {
+        this.style.height = "auto";
+        this.style.height = (this.scrollHeight) + "px";
+      });
+
+      // 페이지 로드 시 textarea 높이 자동 조절
+      $("#noticeCon").each(function () {
+        this.style.height = "auto";
+        this.style.height = (this.scrollHeight) + "px";
       });
     });
 
