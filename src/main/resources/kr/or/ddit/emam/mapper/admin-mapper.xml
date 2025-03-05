@@ -82,7 +82,7 @@
             NOTICE_DATE = SYSDATE
         where NOTICE_INDEX = #{notice_index}
     </update>
-    
+
     <select id="selectAllNotice" resultType="noticeVo">
         select NOTICE_INDEX, NOTICE_TITLE, NOTICE_CON, NOTICE_DATE
         from notice
