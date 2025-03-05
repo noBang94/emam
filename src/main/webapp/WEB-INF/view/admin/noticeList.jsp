@@ -30,26 +30,17 @@
       margin: 0;
       font-size: 24px;
     }
-    .top-bar .back-btn, .top-bar .logout-btn { /* back-btn과 logout-btn에 공통 스타일 적용 */
+    .top-bar .back-btn {
+      background-color: #007bff;
       color: white;
       border: none;
       padding: 8px 15px;
       border-radius: 5px;
       cursor: pointer;
       transition: background-color 0.3s ease;
-      margin-left: 10px;
-    }
-    .top-bar .back-btn {
-      background-color: #007bff;
     }
     .top-bar .back-btn:hover {
       background-color: #0056b3;
-    }
-    .top-bar .logout-btn {
-      background-color: #dc3545; /* 빨간색으로 변경 */
-    }
-    .top-bar .logout-btn:hover {
-      background-color: #c82333;
     }
     .notice-list-container {
       width: 80%;
@@ -103,10 +94,6 @@
       $("#backBtn").on("click", function(){
         window.location.href = "<%=request.getContextPath() %>/admin/adminMain.do";
       });
-      // 로그아웃 버튼 클릭 이벤트 핸들러 추가
-      $("#logoutBtn").on("click", function(){
-        window.location.href = "<%=request.getContextPath() %>/admin/adminLogout.do";
-      });
     });
 
     function deleteNotice(noticeIndex) {
@@ -124,9 +111,7 @@
 
 <div class="top-bar">
   <h2>공지사항 관리</h2>
-  <div>
-    <button id="backBtn" class="btn back-btn">뒤로가기</button>
-    <button id="logoutBtn" class="btn logout-btn">로그아웃</button> </div>
+  <button id="backBtn" class="btn back-btn">뒤로가기</button>
 </div>
 
 <div class="notice-list-container">
