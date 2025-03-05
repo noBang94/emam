@@ -44,9 +44,15 @@
   </style>
 
   <script>
-    $(function(){
-      $("#cancelBtn").on("click", function(){
+    $(function() {
+      $("#cancelBtn").on("click", function () {
         window.location.href = "<%=request.getContextPath() %>/admin/noticeList.do";
+      });
+
+      $("#deleteBtn").on("click", function () {
+        if (confirm("정말로 삭제하시겠습니까?")) {
+          location.href = "<%=request.getContextPath() %>/admin/noticeDelete.do?noticeIndex=<%= noticeVO != null ? noticeVO.getNotice_index() : "" %>";
+        }
       });
     });
   </script>
@@ -72,6 +78,9 @@
     <div class="btn-container">
       <button type="submit" class="btn btn-primary"><%= "update".equals(mode) ? "수정 완료" : "작성 완료" %></button>
       <button type="button" class="btn btn-secondary" id="cancelBtn">취소</button>
+      <% if ("update".equals(mode)) { %>
+      <button type="button" class="btn btn-danger delete-btn" id="deleteBtn">삭제</button>
+      <% } %>
     </div>
   </form>
 </div>
