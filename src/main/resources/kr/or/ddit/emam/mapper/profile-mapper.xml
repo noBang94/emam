@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.emam.profile.dao.IProfileDao">
+
+    <select id="selectProfile" parameterType="String" resultType="kr.or.ddit.emam.vo.ProfileVO">
+        SELECT
+            P.MEM_ID,
+            M.MEM_NICKNAME,
+            M.MEM_BIR,
+            P.PROFILE_PHOTO,
+            P.PROFILE_HEADERPHOTO,
+            P.PROFILE_INTRO,
+            P.PROFILE_URL,
+            P.PROFILE_POSTCNT,
+            P.PROFILE_FRIENDCNT
+        FROM
+            PROFILE P
+                JOIN
+            MEMBER M ON P.MEM_ID = M.MEM_ID
+        WHERE
+            P.MEM_ID = #{memId}
+    </select>
+
+    <select id="selectPostList" parameterType="String" resultType="kr.or.ddit.emam.vo.PostVO">
+        SELECT
+            POST_INDEX,
+            MEM_ID,
+            POST_CN,
+            POST_PHOTO,
+            POST_REG_DT
+        FROM
+            POST
+        WHERE
+            MEM_ID = #{memId}
+        ORDER BY
+            POST_REG_DT DESC
+    </select>
+
+</mapper>
