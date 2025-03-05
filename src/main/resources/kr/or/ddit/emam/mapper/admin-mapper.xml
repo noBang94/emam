@@ -89,7 +89,19 @@
         ORDER BY NOTICE_DATE DESC
     </select>
 
-    <!-- 공지사항 삭제 -->
+
+
+
+
+
+
+
+
+
+
+
+
+     <!-- 공지사항 삭제 -->
     <delete id="deleteNotice" parameterType="int" >
         delete from notice where NOTICE_INDEX = #{notice_index}
     </delete>
@@ -125,5 +137,17 @@
             INQUIRY_COMMENT
         FROM INQUIRY
         WHERE INQUIRY_INDEX = #{inquiryIndex}
+    </select>
+
+    <select id="searchInquiryList" parameterType="string" resultMap="inquiryMap">
+        SELECT
+            INQUIRY_INDEX,
+            INQUIRY_TITLE,
+            MEM_ID,
+            INQUIRY_DATE,
+            INQUIRY_COMMENT
+        FROM INQUIRY
+        WHERE INQUIRY_TITLE LIKE '%' || #{value} || '%'
+        ORDER BY INQUIRY_INDEX DESC
     </select>
 </mapper>
