@@ -54,6 +54,7 @@
         <mapper resource="kr/or/ddit/emam/mapper/reply-mapper.xml"/>
         <mapper resource="kr/or/ddit/emam/mapper/welcome-mapper.xml"/>
         <mapper resource="kr/or/ddit/emam/mapper/friend-mapper.xml"/>
+        <mapper resource="kr/or/ddit/emam/mapper/notice-mapper.xml"/>
 
     </mappers>
 </configuration>

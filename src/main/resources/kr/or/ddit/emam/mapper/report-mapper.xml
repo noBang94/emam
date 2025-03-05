@@ -4,6 +4,22 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="report">
+    <resultMap id="reportMap" type="kr.or.ddit.emam.vo.ReportVO">
+        <id property="reportId" column="REPORT_INDEX"/>
+        <result property="toId" column="REPORT_TOID"/>
+        <result property="fromId" column="REPORT_FROMID"/>
+        <result property="reportContent" column="REPORT_CON"/>
+        <result property="reportType" column="REPORT_TYPE"/>
+        <result property="reportPath" column="REPORT_PATH"/>
+        <result property="reportDate" column="REPORT_DATE"/>
+        <result property="reportStatus" column="REPORT_STATUS"/>
+        <result property="reportProdate" column="REPORT_PRODATE"/>
+        <result property="reportPhoto" column="REPORT_PHOTO"/>
+    </resultMap>
+
+
+
+
     <insert id="insertReport" parameterType="reportVO">
         insert into REPORT
         (
@@ -26,4 +42,41 @@
              'N'
             )
     </insert>
+
+
+
+
+
+
+    <select id="getReport" parameterType="int" resultMap="reportMap">
+        select REPORT_INDEX, REPORT_TOID,REPORT_FROMID,REPORT_CON,REPORT_TYPE,
+               REPORT_DATE,REPORT_PRODATE,REPORT_STATUS,REPORT_PHOTO
+        from   report
+        where REPORT_INDEX=#{reportId}
+    </select>
+
+
+    <select id="selectAllReport" resultMap="reportMap">
+        select REPORT_INDEX,REPORT_TOID,REPORT_FROMID,REPORT_CON,REPORT_TYPE,
+               REPORT_DATE,REPORT_PRODATE,REPORT_STATUS,REPORT_PHOTO
+        from   report
+        order by REPORT_INDEX desc
+    </select>
+
+
+    <select id="searchReportId" parameterType="String" resultMap="reportMap">
+        select REPORT_INDEX,REPORT_TOID,REPORT_FROMID,REPORT_CON,REPORT_TYPE,
+               REPORT_DATE,REPORT_PRODATE,REPORT_STATUS,REPORT_PHOTO
+        from   report
+        where REPORT_TOID = #{toId}
+        order by REPORT_INDEX desc
+    </select>
+
+    <update id="updateReport" parameterType="int">
+        update report
+        set REPORT_STATUS = 'Y', REPORT_PRODATE = SYSDATE
+        where REPORT_INDEX = #{reportId}
+    </update>
+
+
 </mapper>

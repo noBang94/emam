@@ -51,6 +51,11 @@ public class AdminServiceImpl implements IAdminService {
     public List<NoticeVO> selectAllNotice(String getNotice) {
         return dao.selectAllNotice(getNotice);
     }
+    @Override
+    public List<NoticeVO> searchTitle(String searchTitle) {
+        return dao.searchTitle(searchTitle);
+    }
+    @Override
     public int deleteNotice(int noticeIndex) {
         return dao.deleteNotice(noticeIndex);
     }

@@ -56,12 +56,17 @@ public class UserList extends HttpServlet {
         request.setAttribute("errorMessage", errorMessage);
         int totalCount = adminService.getTotalMemberCount(searchId);
         int totalPages = (int) Math.ceil((double) totalCount / PAGE_SIZE);
+
+
         MemberVO memberVo = null;
         if (searchId != null && !searchId.isEmpty()) {
             memberVo = new MemberVO();
             memberVo.setMem_id(searchId);
         }
         List<MemberVO> memberList = adminService.getMemberList(memberVo, page, PAGE_SIZE);
+
+
+
         request.setAttribute("memberList", memberList);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
