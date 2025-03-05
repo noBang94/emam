@@ -14,7 +14,7 @@
                      reply_num_seq.nextval,
                      #{post_index},
                     <choose>
-                        <when test='reply_parentreplyindex != 0 and memId != "" '>
+                        <when test='reply_parentreplyindex != 0'>
                             #{reply_parentreplyindex}
                         </when>
                         <when test="reply_parentreplyindex == 0">
@@ -35,22 +35,11 @@
         WHERE reply_index = #{reply_index}
     </update>
 
-    <select id="selectReplyListByPostIndex" parameterType="int" resultType="kr.or.ddit.emam.vo.ReplyVO">
-        SELECT
-            reply_index,
-            post_index,
-            mem_id,
-            reply_con,
-            reply_date
-        FROM reply
-        WHERE post_index = #{post_index}
-        ORDER BY reply_date ASC
-    </select>
-
-    <select id="selectAllreply" parameterType="int" resultType="kr.or.ddit.emam.vo.ReplyVO">
+    <select id="selectPostReply" parameterType="int" resultType="kr.or.ddit.emam.vo.ReplyVO">
         SELECT
             a.reply_index,
             a.post_index,
+            a.REPLY_PARENTREPLYINDEX,
             a.mem_id,
             a.reply_con,
             a.reply_date,
@@ -58,8 +47,25 @@
         FROM reply a
                  inner join member b ON(a.mem_id = b.mem_id)
         WHERE post_index = #{post_index}
+          and a.reply_index = a.REPLY_PARENTREPLYINDEX
         ORDER BY reply_date ASC
+    </select>
 
+    <select id="getReplyReply" parameterType="int" resultType="kr.or.ddit.emam.vo.ReplyVO">
+        SELECT
+            a.reply_index,
+            a.post_index,
+            a.REPLY_PARENTREPLYINDEX,
+            a.mem_id,
+            a.reply_con,
+            a.reply_date,
+            b.MEM_NICKNAME
+        FROM reply a
+                 inner join member b ON(a.mem_id = b.mem_id)
+        WHERE post_index = #{post_index}
+          and REPLY_PARENTREPLYINDEX = #{reply_index}
+          and reply_index != #{reply_index}
+        ORDER BY reply_date ASC
     </select>
 
     <select id="selectonereply" parameterType="int" resultType="kr.or.ddit.emam.vo.ReplyVO">

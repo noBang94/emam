@@ -28,7 +28,6 @@ public class PostInsert extends HttpServlet {
         String post_con = req.getParameter("postcon");
         String post_visible = req.getParameter("postvis")==null?"N":req.getParameter("postvis");
 
-
         //service객체 얻기
         IPostService service = PostServiceImpl.getInstance();
 

@@ -1,6 +1,7 @@
 package kr.or.ddit.emam.post.controller;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,6 +14,7 @@ import kr.or.ddit.emam.vo.PostVO;
 import java.io.IOException;
 
 @WebServlet("/post/updatepost.do")
+@MultipartConfig
 public class PostUpdate extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -23,11 +25,11 @@ public class PostUpdate extends HttpServlet {
         String post_visible = req.getParameter("postvis")==null?"N":req.getParameter("postvis");
 
         //인덱스를 인트로 변환
-        int post_idex = Integer.parseInt(post_indexS);
+        int post_index = Integer.parseInt(post_indexS);
 
-        PostVO post = new PostVO(post_idex,mem_id, post_con, post_visible);
+        PostVO post = new PostVO(post_index,mem_id, post_con, post_visible);
 
-        PostVO pv = new PostVO();
+
 
         //service객체 얻기
         IPostService service = PostServiceImpl.getInstance();

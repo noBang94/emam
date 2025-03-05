@@ -48,5 +48,8 @@ public class ReplyServiceImpl implements IReplyService {
         return null;
     }
 
+    @Override
+    public List<ReplyVO> selectReplyReplyList(ReplyVO replyVO) {return dao.selectReplyReplyList(replyVO);}
+
 
 }

@@ -11,4 +11,6 @@ public interface IReplyService {
     int deleteReply(int num);
 
     ReplyVO selectOneReply(int postIndex);
+
+    List<ReplyVO> selectReplyReplyList(ReplyVO replyVO);
 }

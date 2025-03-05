@@ -73,6 +73,11 @@
                 $('.post-delete-modal input[name=postindex]').val(postindex);
             });
 
+            //게시글 줄여보기 > 전체보이게
+            $(".a-c-bd").on('click', function () {
+                $(this).addClass("view");
+            });
+
 
             //댓글 가져오기 ajax
             $(".replybtn").on('click', function(){
@@ -95,13 +100,13 @@
                                     htmlcode +='        <div class="rp-r-w-prf">';
                                     htmlcode +='            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
                                     htmlcode +='        </div>';
-                                    htmlcode +='        <div class="rp-r-w-container">';
+                                    htmlcode +='        <div class="rp-r-w-container" data-reindex='+v.reply_index+'>';
                                     htmlcode +='            <div class="rp-r-w-con-warp">';
                                     htmlcode +='                <span class="rp-r-w-nick">'+v.mem_nickname+'</span>';
                                     htmlcode +='                <span class="rp-r-w-con">'+v.reply_con+'</span>';
                                     htmlcode +='            </div>';
                                     htmlcode +='            <div class="rp-r-w-btn-warp">';
-                                    htmlcode +='                <a class="btn s-btn re-re-btn">답글</a>';
+                                    htmlcode +='                <a class="btn s-btn re-re-btn" data-reindex='+v.reply_index+'>답글</a>';
                                     htmlcode +='                <a class="btn s-btn re-up-btn" data-reindex='+v.reply_index+'>수정</a>';
                                     htmlcode +='                <a class="btn s-btn re-del-btn" data-reindex='+v.reply_index+' href="<%=request.getContextPath() %>/reply/replyDelete.do?replyindex='+v.reply_index+'">삭제</a>';
                                     htmlcode +='            </div>';
@@ -114,13 +119,14 @@
                                     htmlcode +='        <div class="rp-r-w-prf">';
                                     htmlcode +='            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
                                     htmlcode +='        </div>';
-                                    htmlcode +='        <div class="rp-r-w-container">';
+                                    htmlcode +='        <div class="rp-r-w-container" data-reindex='+v.reply_index+'>';
                                     htmlcode +='            <div class="rp-r-w-con-warp">';
                                     htmlcode +='                <span class="rp-r-w-nick">'+v.mem_nickname+'</span>';
                                     htmlcode +='                <span class="rp-r-w-con">'+v.reply_con+'</span>';
                                     htmlcode +='            </div>';
                                     htmlcode +='            <div class="rp-r-w-btn-warp">';
-                                    htmlcode +='                <a class="btn s-btn re-re-btn">답글</a>';
+                                    htmlcode +='                <a class="btn s-btn re-re-btn" data-reindex='+v.reply_index+'>답글</a>';
+                                    htmlcode +='                <a class="btn s-btn re-report-btn" data-reindex='+v.reply_index+'>신고</a>';
                                     htmlcode +='            </div>';
                                     htmlcode +='        </div>';
                                     htmlcode +='    </div>';
@@ -149,10 +155,10 @@
                 let reindex = $(this).data("reindex");
                 console.log("reindex : ", reindex);
 
-                let con = $(this).parent().parent().children("div").eq(0).children("span").eq(1).html();
+                let con = $(this).parents(".rp-r-w-container").find(".rp-r-w-con").html()
                 console.log("con : ", con);
                 //댓글 내용 가리기
-                $(this).parent().parent().children("div").eq(0).children("span").eq(1).css("display","none");
+                $(this).parents(".rp-r-w-container").find(".rp-r-w-con").css("display","none");
 
                 $(this).parent().parent().children("div").eq(0).append(`
                     <span id="spn\${reindex}">
@@ -165,6 +171,7 @@
                     </span>
                 `);
             });
+
             //댓글 수정 확인 실행
             $(document).on("click",".btnConfirm",function(){
                 //<button type="button" class="btnConfirm" data-con="댓글테스트" data-reindex="8">확인</button>
@@ -195,9 +202,115 @@
                 $(".rp-r-w-btn-warp .re-up-btn[data-reindex="+reindex+"]").removeClass("unvis");
             });
 
+            //답글 쓰기 클릭시
+            $(document).on("click",".re-re-btn",function(){
+                let reindex = $(this).data("reindex");
+                let postindex = $(this).parents(".a-c-rp-w").data("index");
+                $(this).parents(".rp-r-w-btn-warp").find(".btn").css("display","none");
+
+                $(this).parents(".rp-r-w-btn-warp").append(`
+                    <span id="spn\${reindex}">
+                        <form action="<%=request.getContextPath() %>/reply/replyInsert.do" method="post">
+                            <input type="text" id="pindex\${postindex}" name="post_index" value="\${postindex}" hidden/>
+                            <input type="text" id="rindex\${reindex}" name="Replyindex" value="\${reindex}" hidden/>
+                            <input type="text" name="mem_id" value="<%=loginMember.getMem_id()%>" hidden/>
+                            <input type="text" id="txtCon\${reindex}" name="reply_con" value="" />
+                            <button type="submit" class="rerebtnConfirm" data-reindex="\${reindex}">답글달기</button>
+                        </form>
+                    </span>
+                `);
+
+                //대댓글 가져오기
+                $.ajax({
+                    url:"/reply/getreplyreply.do",
+                    type:"post",
+                    data:"postindex="+postindex+"&Replyindex="+reindex,
+                    contentType : "application/x-www-form-urlencoded", //content-type 설정 (생략가능)
+                    success:function(result){
+                        console.log(result)
+                        let htmlcode= "";
+                        if(result.length>0){
+                            $.each(result , function(i,v){
+                                if(v.mem_id=="<%=loginMember.getMem_id()%>"){
+                                    htmlcode +='<li>';
+                                    htmlcode +='    <div class="rp-r-wrap">';
+                                    htmlcode +='        <div class="rp-r-w-prf">';
+                                    htmlcode +='            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                    htmlcode +='        </div>';
+                                    htmlcode +='        <div class="rp-r-w-container">';
+                                    htmlcode +='            <div class="rp-r-w-con-warp">';
+                                    htmlcode +='                <span class="rp-r-w-nick">'+v.mem_nickname+'</span>';
+                                    htmlcode +='                <span class="rp-r-w-con">'+v.reply_con+'</span>';
+                                    htmlcode +='            </div>';
+                                    htmlcode +='            <div class="rp-r-w-btn-warp">';
+                                    htmlcode +='                <a class="btn s-btn re-re-up-btn" data-reindex='+v.reply_index+'>수정</a>';
+                                    htmlcode +='                <a class="btn s-btn re-del-btn" data-reindex='+v.reply_index+' href="<%=request.getContextPath() %>/reply/replyDelete.do?replyindex='+v.reply_index+'">삭제</a>';
+                                    htmlcode +='            </div>';
+                                    htmlcode +='        </div>';
+                                    htmlcode +='    </div>';
+                                    htmlcode +='</li>';
+                                }else{
+                                    htmlcode +='<li>';
+                                    htmlcode +='    <div class="rp-r-wrap">';
+                                    htmlcode +='        <div class="rp-r-w-prf">';
+                                    htmlcode +='            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                    htmlcode +='        </div>';
+                                    htmlcode +='        <div class="rp-r-w-container">';
+                                    htmlcode +='            <div class="rp-r-w-con-warp">';
+                                    htmlcode +='                <span class="rp-r-w-nick">'+v.mem_nickname+'</span>';
+                                    htmlcode +='                <span class="rp-r-w-con">'+v.reply_con+'</span>';
+                                    htmlcode +='            </div>';
+                                    htmlcode +='            <div class="rp-r-w-btn-warp">';
+                                    htmlcode +='                <a class="btn s-btn re-report-btn" data-reindex='+v.reply_index+'>신고</a>';
+                                    htmlcode +='            </div>';
+                                    htmlcode +='        </div>';
+                                    htmlcode +='    </div>';
+                                    htmlcode +='</li>';
+                                }
+                            });
+                        }
+                        $('.a-c-rp[data-index='+postindex+'] .a-c-rp-r ul .rp-r-w-container[data-reindex='+reindex+']').append(htmlcode);
+                    },
+                    dataType : "json"
+                });
+
+                //대댓글 수정 폼
+                $(document).on("click",".re-re-up-btn",function(){
+                    $(this).addClass("unvis");
+
+                    let reindex = $(this).data("reindex");
+                    console.log("reindex : ", reindex);
+
+                    let con = $(this).parents(".rp-r-w-container").eq(0).find(".rp-r-w-con").html()
+                    console.log("con : ", con);
+                    //댓글 내용 가리기
+                    $(this).parents(".rp-r-w-container").eq(0).find(".rp-r-w-con").css("display","none");
+
+                    $(this).parent().parent().children("div").eq(0).append(`
+                    <span id="spn\${reindex}">
+                        <form action="<%=request.getContextPath() %>/reply/replyUpdate.do" method="get">
+                            <input type="text" id="txtindex\${reindex}" name="replyindex" value="\${reindex}" hidden/>
+                            <input type="text" id="txtCon\${reindex}" name="replycon" value="\${con}" />
+                            <button type="submit" class="btnConfirm" data-con="\${con}" data-reindex="\${reindex}">확인</button>
+                            <button type="button" class="rebtnCancel" data-reindex="\${reindex}">취소</button>
+                        </form>
+                    </span>
+                    `);
+                });
+                $(document).on("click",".rebtnCancel",function(){
+                    let reindex = $(this).data("reindex");
+                    $(this).parents(".rp-r-w-con-warp").eq(0).find(".rp-r-w-con").css("display","inline");
+
+                    $("#spn"+reindex).remove();
+                    $(".rp-r-w-btn-warp .re-re-up-btn[data-reindex="+reindex+"]").removeClass("unvis");
+                });
+
+            });
+
 
         });//제이쿼리 끝
     </script>
+    <link rel="stylesheet" href="<%=request.getContextPath() %>/css/swiper-11.2.5.css" />
     <style>
         *{padding: 0;margin: 0;}
         body{position: relative; margin-top: 70px;}
@@ -208,16 +321,12 @@
         .modal-i-warp{position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; width: 1000px; height: auto;}
         .modal.view{display: block}
         /*버튼(s)*/
+        .btn-cover{cursor: pointer;}
         .btn{cursor: pointer; background-color: #E20707; color: #ffffff; display: flex;align-items: center;justify-content: center;border-radius: 10px;font-style: normal;font-weight: 500;font-size: 18px;width: calc(50% - 5px);height: 50px;border: 1px solid #D9D9D9; transition: all 0.2s ease-in;}
         .btn:hover{background-color: #ffffff;  color: #E20707; border: 1px solid #D9D9D9; transition: all 0.2s ease-in;}
         a.btn {text-decoration: none}
         .btn_2th{display: flex}
-        .btn.s-btn{width: 40px;
-            height: 30px;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;}
+        .btn.s-btn{width: 40px;height: 30px;padding: 0;display: flex;justify-content: center;align-items: center;}
         /*버튼(e)*/
 
         .t-r-btn{position: absolute; top: 0;right: 0;}
@@ -246,82 +355,46 @@
 
         table th{ width: 15px;}
 
-        .post-atc{position: relative; border: 20px solid rgb(201 156 24);}
+        .post-atc{position: relative; border: 20px solid rgb(144 233 159);}
         .post-atc{width: 500px; margin: 0 auto;}
-        .a-hd{display: flex ;
-            align-items: center;
-            justify-content: space-between;}
+        .a-hd{display: flex ;align-items: center;justify-content: space-between;}
         .a-h-prf-pho a img{border-radius: 20px; width: 23px;}
-        .a-bd{position: relative;}
+        .a-bd{position: relative;height: 400px;}
         .a-bd .a-bd-img{text-align: center;}
-        .a-bd .a-bd-btns{background-color: rgba(0, 0, 0, 0.5);
-            text-align: center;
-            display: flex;
-            justify-content: flex-end;
-            gap: 20px;
-            position: absolute;
-            bottom: 0;
-            right: 0;}
+        .a-bd .a-bd-btns{z-index: 1; background-color: rgba(0, 0, 0, 0.5);text-align: center;display: flex;justify-content: flex-end;gap: 20px;position: absolute;bottom: 0;right: 0;}
         .a-con{}
-        .a-c-h{
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-        }
-        .a-c-h > div{
-            margin: 0 5px 10px;
-            padding: 6px 8px 7px;
-            border-radius: 4px;
-            font-size: 12px;
-            line-height: 12px;
-            letter-spacing: -.2px;
-            border-width: 2px;
-            --border-opacity: 1;
-            border-color: #bfbfbf;
-            --text-opacity: 1;
-            color: #9f9f9f;
-            cursor: pointer;
-            border: 2px solid;
-        }
-        .a-c-h > div:hover{
-            --bg-opacity: 1;
-            background-color: #ebebeb;
-            --text-opacity: 1;
-            color: #333;
-            color: rgba(51, 51, 51, var(--text-opacity));
-        }
-        .a-c-bd{width: auto;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;}
-        .a-c-rp{overflow: hidden;
-            height: 0;
-        }
+        .a-c-h{display: flex;flex-wrap: wrap;justify-content: flex-start;}
+        .a-c-h > div{margin: 0 5px 10px;padding: 6px 8px 7px;border-radius: 4px;font-size: 12px;line-height: 12px;letter-spacing: -0.2px;border-width: 2px;--border-opacity: 1;border-color: #bfbfbf;--text-opacity: 1;color: #9f9f9f;cursor: pointer;border: 2px solid;}
+        .a-c-h > div:hover{--bg-opacity: 1;background-color: #ebebeb;--text-opacity: 1;color: #333;color: rgba(51, 51, 51, var(--text-opacity));}
+        .a-c-bd{width: auto;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;}
+        .a-c-bd.view{display: block;}
+        .a-c-rp{overflow: hidden;height: 0;}
         .a-c-rp.view{height:auto;}
 
         .a-c-rp-r ul li{padding: 8px 10px;}
         .rp-r-wrap{display: flex; position: relative;}
-        .rp-r-wrap .rp-r-w-prf{border-radius: 20px;
-            width: 23px;
-            min-width: 23px;
-            margin-right: 10px;
-        }
+        .rp-r-wrap .rp-r-w-prf{border-radius: 20px;width: 23px;min-width: 23px;margin-right: 10px;}
         .rp-r-wrap .rp-r-w-prf > img{width: 100%;}
         .rp-r-wrap .rp-r-w-container{}
         .rp-r-wrap .rp-r-w-container .rp-r-w-con-warp{margin-bottom: 10px;}
 
         .rp-r-wrap .rp-r-w-con-warp{}
-        .rp-r-wrap .rp-r-w-nick{
+        .rp-r-wrap .rp-r-w-nick{}
+        .rp-r-wrap .rp-r-w-con{}
 
-        }
-        .rp-r-wrap .rp-r-w-con{
-
-        }
+        /*수정된 글*/
+        .modicheck{}
 
         .rp-r-w-btn-warp{display: flex; gap: 12px;}
 
         .unvis{display: none !important;}
+        .post-photo-img{max-width: 100%}
+
+        /*슬리이드 스와이퍼 css(s)*/
+        .swiper {width: 100%;height: 100%;}
+        .swiper-slide {text-align: center;font-size: 18px;background: #fff;display: flex;justify-content: center;align-items: center;}
+        .swiper-slide img {display: block;width: 100%;height: 100%;object-fit: contain;}
+        /*슬리이드 스와이퍼 css(e)*/
     </style>
 </head>
 <body>
@@ -337,7 +410,6 @@
         <%
             int pz = postList.size();
             if(pz == 0){
-                System.out.println("siiiiiiiiii");
         %>
         <article>
             데이터가 없습니다.
@@ -345,8 +417,6 @@
         <%
         }else{
             for(PostVO p : postList){
-//                System.out.println(p);
-
         %>
         <article class="post-atc">
             <div class="a-hd">
@@ -360,7 +430,24 @@
                 <div class="t-stemp"><%=p.getPost_date() %></div>
             </div>
             <div class="a-bd">
-                <div class="a-bd-img"><img src="<%=request.getContextPath() %>/upload/demo_logo.png"></div>
+                <div class="a-bd-img">
+                    <%if(p.getPostPhotoDetailList().size()>0){%>
+                    <div class="swiper post-photo-swiper">
+                        <div class="swiper-wrapper">
+                        <%for(PostPhotoDetailVO pd : p.getPostPhotoDetailList()){%>
+                            <div class="swiper-slide">
+                                <img class="post-photo-img" src="<%=request.getContextPath() %>/post/postview.do?postphoto=<%=pd.getPost_photo() %>&postphotosn=<%=pd.getPost_photo_sn()%>">
+                            </div>
+                        <%}%>
+                        </div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                    <%}else {%>
+                    <img src="<%=request.getContextPath() %>/upload/demo_logo.png">
+                    <%}%>
+                </div>
                 <div class="a-bd-btns">
                     <div class="btn-cover">
                         <svg aria-label="좋아요" class="" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
@@ -374,12 +461,27 @@
                             <path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path>
                         </svg>
                     </div>
+
+                    <%
+                        //로그인한 회원과 작성자의 아이디가 같을때
+                        if(p.getMem_id().equals(loginMember.getMem_id())){
+                    %>
                     <div class="btn-cover">
                         <div class="update-btn pointer" data-index="<%=p.getPost_index() %>">수정</div>
                     </div>
                     <div class="btn-cover">
                         <div class="delete-btn pointer" data-index="<%=p.getPost_index() %>">삭제</div>
                     </div>
+                    <%
+                        }else{
+                    %>
+                    <div class="btn-cover">
+                        <div class="report-btn pointer" data-index="<%=p.getPost_index() %>">신고</div>
+                    </div>
+                    <%
+                        }
+                    %>
+
                 </div>
             </div>
             <div class="a-con">
@@ -390,39 +492,18 @@
                     <div>집가고싶다</div>
                 </div>
 
-                <div class="a-c-bd"><%=p.getPost_con() %></div>
+                <div class="a-c-bd"><%=p.getPost_con().replaceAll("(\r\n|\r|\n)", "<br>") %></div>
 
                 <div class="a-c-rp a-c-rp-w" data-index="<%=p.getPost_index() %>">
                     <form action="<%=request.getContextPath() %>/reply/replyInsert.do" method="post">
                         <input type="hidden" name="post_index" value="<%=p.getPost_index()%>"/> <%-- 게시글 번호 전달 --%>
-                        <input type="hidden" name="mem_id" value="<%=loginMember.getMem_id()%>"/> <%-- 댓글 작성자 전달 --%>
                         <input type="hidden" name="mem_id" value="<%=loginMember.getMem_id()%>"/> <%-- 댓글 작성자 전달 --%>
                         <input type="text" placeholder="댓글을 입력하세요" name="reply_con"/> <%-- textarea 대신 input type=text 사용 --%>
                         <input type="submit" value="댓글달기">
                     </form>
                     <div class="a-c-rp-r">
                         <ul>
-                            <%-- 댓글 내용 출력 --%>
-                            <li>
-                                <div class="rp-r-wrap">
-                                    <div class="rp-r-w-prf">
-<%--                                        프로필 아이콘--%>
-                                        <img src="<%=request.getContextPath() %>/upload/demo_logo.png">
-                                    </div>
-
-                                    <div class="rp-r-w-container">
-                                        <div class="rp-r-w-con-warp">
-                                            <span class="rp-r-w-nick">닉네임자리</span>
-                                            <span class="rp-r-w-con">댓글이 없습니다.</span>
-                                        </div>
-                                        <div class="rp-r-w-btn-warp">
-                                            <a class="btn s-btn re-re-btn">답글</a>
-                                            <a class="btn s-btn re-up-btn">수정</a>
-                                            <a class="btn s-btn re-del-btn">삭제</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
+<%--                            댓글 올자리--%>
                         </ul>
                     </div>
                 </div>
@@ -434,18 +515,21 @@
             }
         %>
     </div>
+
 <div class="post_write_btn btn">글 쓰기</div>
+
+
 <div class="post-update-modal modal">
     <div class="modal-i-warp">
         <form action="<%=request.getContextPath() %>/post/updatepost.do" method="post" enctype="multipart/form-data">
             <div class="modal-body">
                 <div class="modal-l">
-                    <input type="file" class="post-ipt" multiple="multiple" name="postphoto"/>
+                    수정할때 사진 못넣습니다~
                 </div>
                 <div class="modal-r">
                     <div>
                         프로필이 올자리 입니당
-                        <input type="text" name="postindex"/>
+                        <input type="text" name="postindex" hidden="hidden"/>
                         <input type="text" name="postwriter" value="<%=loginMember.getMem_id()%>" hidden="hidden"/>
 
                         <div>
@@ -465,7 +549,6 @@
             <div class="modal-footer">
                 <div class="btn_2th">
                     <a href="javascript:void(0);" class="btn close-btn">닫기</a>
-                    <%--                        <a href="<%=request.getContextPath() %>/post/insertpost.do" class="btn">등록하기</a>--%>
                     <input type="submit" class="btn" value="수정하기">
 
                 </div>
@@ -526,5 +609,20 @@
     </div>
 </div>
 
+<script src="<%=request.getContextPath() %>/js/swiper-11.2.5.js"></script>
+<script>
+    var swiper = new Swiper(".post-photo-swiper", {
+        cssMode: true,
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        pagination: {
+            el: ".swiper-pagination",
+        },
+        mousewheel: true,
+        keyboard: true,
+    });
+</script>
 </body>
 </html>

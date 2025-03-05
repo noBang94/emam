@@ -13,6 +13,11 @@ public class ReplyVO {
 
     private MemberVO memVo;
 
+    public ReplyVO(int reply_index, int post_index) {
+        this.reply_index = reply_index;
+        this.post_index = post_index;
+    }
+
     public ReplyVO(int post_index, Integer reply_parentreplyindex, String mem_id, String reply_con) {
         super();
         this.post_index = post_index;
