@@ -53,13 +53,9 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    $(function() {
-      $(document).on('click', '.row', function() {
-        const num = $(this).data("num");
-        $("#viewNum").val(num);
-        $("#viewForm").submit();
-      });
-    });
+    function viewNotice(noticeIndex) {
+      location.href = "<%=request.getContextPath()%>/notice/noticeDetail.do?noticeIndex=" + noticeIndex;
+    }
   </script>
   <style>
     body {
@@ -219,7 +215,7 @@
   <ul>
     <% if (noticeList != null && !noticeList.isEmpty()) { %>
     <% for (NoticeVO notice : noticeList) { %>
-    <li class="row" data-num="<%= notice.getNotice_index() %>">
+    <li onclick="viewNotice('<%= notice.getNotice_index() %>')">
       <%= notice.getNotice_title() %>
     </li>
     <% } %>
@@ -228,10 +224,5 @@
     <% } %>
   </ul>
 </div>
-
-<form action="<%=request.getContextPath()%>/notice/noticeView.do" method="get"
-      id="viewForm">
-  <input type="hidden" name="num" id="viewNum">
-</form>
 </body>
 </html>
