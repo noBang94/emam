@@ -7,4 +7,10 @@ public interface IReplyService {
     int insertReply(ReplyVO replyVO);
     int updateReply(ReplyVO replyVO);
     List<ReplyVO> selectReplyListByPostIndex(int postIndex);
+
+    int deleteReply(int num);
+
+    ReplyVO selectOneReply(int postIndex);
+
+    List<ReplyVO> selectReplyReplyList(ReplyVO replyVO);
 }

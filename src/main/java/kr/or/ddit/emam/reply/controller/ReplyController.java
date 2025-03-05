@@ -13,8 +13,9 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/reply/replyInsert.do", "/reply/replyUpdate.do"})
+//@WebServlet(urlPatterns = {"/reply/replyInsert.do", "/reply/replyUpdate.do"})
 public class ReplyController extends HttpServlet {
+
 
     private static ReplyController instance; // 싱글톤 instance
     private IReplyService replyService; // 서비스 인터페이스

@@ -60,6 +60,7 @@
 
     /* GNB 스타일 */
     .gnb {
+        z-index: 9999;
         width: 100%;
         height: auto;
         position: fixed;

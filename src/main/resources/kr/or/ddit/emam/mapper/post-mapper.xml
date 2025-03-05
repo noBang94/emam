@@ -38,6 +38,8 @@
         SELECT *
         FROM POST a
         INNER JOIN POST_PHOTO_DETAIL b ON(a.POST_PHOTO = b.POST_PHOTO)
+        where POST_VISIBLE = 'Y'
+        order by POST_DATE desc
     </select>
 
 
@@ -58,7 +60,6 @@
         update post set
             MEM_ID = #{mem_id},
             POST_CON = #{post_con},
-            POST_PHOTO = #{post_photo},
             POST_DATE = sysdate,
             POST_VISIBLE = #{post_visible}
         where POST_INDEX = #{post_index}

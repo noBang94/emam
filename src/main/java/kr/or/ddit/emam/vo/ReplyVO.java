@@ -9,6 +9,45 @@ public class ReplyVO {
     private Integer reply_parentreplyindex; // Integer 타입으로 변경 (NULL 값 허용)
     private String mem_id;
     private String reply_con;
+    private String mem_nickname;
+
+    private MemberVO memVo;
+
+    public ReplyVO(int reply_index, int post_index) {
+        this.reply_index = reply_index;
+        this.post_index = post_index;
+    }
+
+    public ReplyVO(int post_index, Integer reply_parentreplyindex, String mem_id, String reply_con) {
+        super();
+        this.post_index = post_index;
+        this.reply_parentreplyindex = reply_parentreplyindex;
+        this.mem_id = mem_id;
+        this.reply_con = reply_con;
+    }
+
+    public ReplyVO(int reply_index, String reply_con) {
+        this.reply_index = reply_index;
+        this.reply_con = reply_con;
+    }
+
+    public ReplyVO() {}
+
+    public String getMem_nickname() {
+        return mem_nickname;
+    }
+
+    public void setMem_nickname(String mem_nickname) {
+        this.mem_nickname = mem_nickname;
+    }
+
+    public MemberVO getMemVo() {
+        return memVo;
+    }
+
+    public void setMemVo(MemberVO memVo) {
+        this.memVo = memVo;
+    }
 
     public String getReply_con() {
         return reply_con;
@@ -58,6 +97,19 @@ public class ReplyVO {
 
     public void setReply_parentreplyindex(Integer reply_parentreplyindex) {
         this.reply_parentreplyindex = reply_parentreplyindex;
+    }
+
+
+    @Override
+    public String toString() {
+        return "ReplyVO{" +
+                "reply_index=" + reply_index +
+                ", post_index=" + post_index +
+                ", reply_parentreplyindex=" + reply_parentreplyindex +
+                ", mem_id='" + mem_id + '\'' +
+                ", reply_con='" + reply_con + '\'' +
+                ", reply_date=" + reply_date +
+                '}';
     }
 
 }
