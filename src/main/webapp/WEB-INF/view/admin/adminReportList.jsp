@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
-<%@ page import="kr.or.ddit.emam.vo.NoticeVO" %>
+<%@ page import="kr.or.ddit.emam.vo.ReportVO" %>
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>공지사항 관리</title>
+  <title>신고 관리</title>
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
@@ -42,7 +42,7 @@
     .top-bar .back-btn:hover {
       background-color: #0056b3;
     }
-    .notice-list-container {
+    .report-list-container {
       width: 80%;
       margin: 50px auto;
     }
@@ -80,13 +80,6 @@
     .search-container .btn-primary {
       margin-left: 10px;
     }
-    .create-btn-container {
-      margin-bottom: 20px;
-      text-align: right;
-    }
-    .create-btn-container .btn-success {
-      padding: 8px 15px;
-    }
   </style>
 
   <script>
@@ -96,65 +89,68 @@
       });
     });
 
-    function deleteNotice(noticeIndex) {
-      if (confirm("정말로 삭제하시겠습니까?")) {
-        location.href = "<%=request.getContextPath() %>/admin/noticeDelete.do?noticeIndex=" + noticeIndex;
-      }
+    function showReportDetail(reportId) {
+      window.location.href = "<%=request.getContextPath()%>/admin/processReport.do?reportId=" + reportId;
     }
   </script>
 </head>
 <body>
 
 <div class="top-bar">
-  <h2>공지사항 관리</h2>
+  <h2>신고 관리</h2>
   <button id="backBtn" class="btn back-btn">뒤로가기</button>
 </div>
 
-<div class="notice-list-container">
+<div class="report-list-container">
   <div class="action-container">
-    <form action="<%=request.getContextPath()%>/admin/noticeList.do" method="get" class="search-form">
+    <form action="<%=request.getContextPath()%>/admin/reportList.do" method="get" class="search-form">
       <div class="form-group">
-        <label for="searchTitle" style="width: 90px">제목 검색 :</label>
+        <label for="searchTitle" style="width: 130px">신고자 검색 :</label>
         <input type="text" class="form-control" id="searchTitle" name="searchTitle" value="<%= request.getParameter("searchTitle") != null ? request.getParameter("searchTitle") : "" %>">
       </div>
       <button type="submit" class="btn btn-primary">검색</button>
     </form>
-    <a href="<%=request.getContextPath()%>/admin/noticeCreate.do" class="btn btn-success">공지사항 작성</a>
   </div>
 
   <table class="table table-bordered table-hover">
     <thead>
     <tr>
       <th>번호</th>
-      <th>제목</th>
-      <th>내용</th>
-      <th>작성일</th>
-      <th>수정/삭제</th>
+      <th>신고자명</th>
+      <th>신고 대상</th>
+      <th>신고 유형</th>
+      <th>신고 내역</th>
+      <th>신고일</th>
+      <th>처리 날짜</th>
+      <th>처리 상태</th>
     </tr>
     </thead>
     <tbody>
     <%
       String errorMessage = (String) request.getAttribute("errorMessage");
-      List<NoticeVO> noticeList = (List<NoticeVO>) request.getAttribute("noticeList");
-      if (errorMessage == null && noticeList != null && !(noticeList.isEmpty())) {
-        for (NoticeVO notice : noticeList) {
+      List<ReportVO> reportList = (List<ReportVO>) request.getAttribute("reportList");
+      if (errorMessage == null && reportList != null && !(reportList.isEmpty())) {
+        for (ReportVO report : reportList) {
+          if(report == null) {
+            continue;
+          }
     %>
-    <tr>
-      <td><%= notice.getNotice_index() %></td>
-      <td><a href="<%=request.getContextPath()%>/admin/noticeUpdate.do?noticeIndex=<%= notice.getNotice_index() %>"><%= notice.getNotice_title() %></a></td>
-      <td><%= notice.getNotice_con() %></td>
-      <td><%= notice.getNotice_date() %></td>
-      <td>
-        <a href="<%=request.getContextPath()%>/admin/noticeUpdate.do?noticeIndex=<%= notice.getNotice_index() %>" class="btn btn-primary btn-sm">수정</a>
-        <button type="button" class="btn btn-danger btn-sm" onclick="deleteNotice('<%= notice.getNotice_index() %>')">삭제</button>
-      </td>
+    <tr onclick="showReportDetail('<%= report.getReportId() %>')" style="cursor: pointer;">
+      <td><%= report.getReportId() %></td>
+      <td><%= report.getFromId() %></td>
+      <td><%= report.getToId() %></td>
+      <td><%= report.getReportType() %></td>
+      <td><%= report.getReportContent() %></td>
+      <td><%= report.getReportDate() %></td>
+      <td><%= report.getReportProdate() == null ? "미처리" : report.getReportProdate() %></td>
+      <td><%= "Y".equals(report.getReportStatus()) ? "처리 완료" : "미처리" %></td>
     </tr>
     <%
       }
     } else if (errorMessage != null) {
     %>
     <tr>
-      <td colspan="4" class="empty-message">
+      <td colspan="8" class="empty-message">
         <%= errorMessage %>
       </td>
     </tr>
@@ -162,7 +158,7 @@
     } else {
     %>
     <tr>
-      <td colspan="4" class="empty-message">공지사항 목록이 없습니다.</td>
+      <td colspan="8" class="empty-message">신고 게시글 목록이 없습니다.</td>
     </tr>
     <%
       }

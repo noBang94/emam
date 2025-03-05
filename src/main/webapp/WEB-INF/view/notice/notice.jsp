@@ -90,36 +90,25 @@
   </style>
 
   <script>
-    $(function(){
-      $("#backBtn").on("click", function(){
-        window.location.href = "<%=request.getContextPath() %>/admin/adminMain.do";
-      });
-    });
 
-    function deleteNotice(noticeIndex) {
-      if (confirm("정말로 삭제하시겠습니까?")) {
-        location.href = "<%=request.getContextPath() %>/admin/noticeDelete.do?noticeIndex=" + noticeIndex;
-      }
-    }
+
   </script>
 </head>
 <body>
 
 <div class="top-bar">
-  <h2>공지사항 관리</h2>
-  <button id="backBtn" class="btn back-btn">뒤로가기</button>
+  <h2>공지사항</h2>
 </div>
 
 <div class="notice-list-container">
   <div class="action-container">
-    <form action="<%=request.getContextPath()%>/admin/noticeList.do" method="get" class="search-form">
+    <form action="<%=request.getContextPath()%>/notice/notice.do" method="get" class="search-form">
       <div class="form-group">
         <label for="searchTitle" style="width: 90px">제목 검색 :</label>
         <input type="text" class="form-control" id="searchTitle" name="searchTitle" value="<%= request.getParameter("searchTitle") != null ? request.getParameter("searchTitle") : "" %>">
       </div>
       <button type="submit" class="btn btn-primary">검색</button>
     </form>
-    <a href="<%=request.getContextPath()%>/admin/noticeCreate.do" class="btn btn-success">공지사항 작성</a>
   </div>
 
   <table class="table table-bordered table-hover">
@@ -127,9 +116,7 @@
     <tr>
       <th>번호</th>
       <th>제목</th>
-      <th>내용</th>
       <th>작성일</th>
-      <th>수정/삭제</th>
     </tr>
     </thead>
     <tbody>
@@ -141,13 +128,8 @@
     %>
     <tr>
       <td><%= notice.getNotice_index() %></td>
-      <td><a href="<%=request.getContextPath()%>/admin/noticeUpdate.do?noticeIndex=<%= notice.getNotice_index() %>"><%= notice.getNotice_title() %></a></td>
-      <td><%= notice.getNotice_con() %></td>
+      <td><a href="<%=request.getContextPath()%>/notice/noticeDetail.do?noticeIndex=<%= notice.getNotice_index() %>"><%= notice.getNotice_title() %></a></td>
       <td><%= notice.getNotice_date() %></td>
-      <td>
-        <a href="<%=request.getContextPath()%>/admin/noticeUpdate.do?noticeIndex=<%= notice.getNotice_index() %>" class="btn btn-primary btn-sm">수정</a>
-        <button type="button" class="btn btn-danger btn-sm" onclick="deleteNotice('<%= notice.getNotice_index() %>')">삭제</button>
-      </td>
     </tr>
     <%
       }

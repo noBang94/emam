@@ -130,6 +130,20 @@ public class AdminDaoImpl implements IAdminDao {
         return noticelist;
     }
 
+    @Override
+    public List<NoticeVO> searchTitle(String searchTitle) {
+        SqlSession session = MyBatisUtil.getSqlSession();
+        List<NoticeVO> noticelist = null;
+
+        try {
+            noticelist = session.selectList("admin.searchTitle", searchTitle);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return noticelist;
+    }
 
 
 

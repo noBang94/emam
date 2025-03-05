@@ -78,28 +78,25 @@
     <update id="updateNotice" parameterType="noticeVo" >
         update notice
         set NOTICE_TITLE = #{notice_title},
-            NOTICE_CON = #{notice_con}
+            NOTICE_CON = #{notice_con},
+            NOTICE_DATE = SYSDATE
         where NOTICE_INDEX = #{notice_index}
     </update>
     
     <select id="selectAllNotice" resultType="noticeVo">
         select NOTICE_INDEX, NOTICE_TITLE, NOTICE_CON, NOTICE_DATE
         from notice
-        ORDER BY NOTICE_DATE DESC
+        ORDER BY NOTICE_INDEX DESC
     </select>
 
-
-
-
-
-
-
-
-
-
-
-
-
+    <!-- 공지사항 제목 조회 -->
+    <select id="searchTitle" parameterType="String" resultType="noticeVo">
+        select NOTICE_INDEX, NOTICE_TITLE, NOTICE_CON, NOTICE_DATE
+        from notice
+        where
+            NOTICE_TITLE = #{notice_title}
+        ORDER BY NOTICE_INDEX DESC
+    </select>
 
     <delete id="deleteNotice" parameterType="int" >
         delete from notice where NOTICE_INDEX = #{notice_index}

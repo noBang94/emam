@@ -1,10 +1,12 @@
 package kr.or.ddit.emam.vo;
 
+import java.sql.Timestamp;
+
 public class NoticeVO {
     private int notice_index;
     private String notice_title;
     private String notice_con;
-    private String notice_date;
+    private Timestamp notice_date;
 
     public int getNotice_index() {
         return notice_index;
@@ -30,11 +32,11 @@ public class NoticeVO {
         this.notice_con = notice_con;
     }
 
-    public String getNotice_date() {
+    public Timestamp getNotice_date() {
         return notice_date;
     }
 
-    public void setNotice_date(String notice_date) {
+    public void setNotice_date(Timestamp notice_date) {
         this.notice_date = notice_date;
     }
 }

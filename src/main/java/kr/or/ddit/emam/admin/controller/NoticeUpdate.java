@@ -10,7 +10,7 @@ import kr.or.ddit.emam.admin.service.IAdminService;
 import kr.or.ddit.emam.vo.NoticeVO;
 
 import java.io.IOException;
-import java.util.Date;
+import java.sql.Timestamp;
 
 @WebServlet("/admin/noticeUpdate.do")
 public class NoticeUpdate extends HttpServlet {
@@ -56,12 +56,15 @@ public class NoticeUpdate extends HttpServlet {
         IAdminService adminService = AdminServiceImpl.getInstance();
         int result;
 
+        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+
         if("update".equals(mode)) {
             int noticeIndex = Integer.parseInt(request.getParameter("noticeIndex"));
             noticeVO.setNotice_index(noticeIndex);
+            noticeVO.setNotice_date(currentTime);
             result = adminService.updateNotice(noticeVO);
         } else {
-            noticeVO.setNotice_date(String.valueOf(new Date()));
+            noticeVO.setNotice_date(currentTime);
             result = adminService.insertNotice(noticeVO);
         }
 

@@ -21,6 +21,7 @@ public interface IAdminService {
     public int insertNotice(NoticeVO noticeVO);
     public int updateNotice(NoticeVO noticeVO);
     public List<NoticeVO> selectAllNotice(String getNotice);
+    public List<NoticeVO> searchTitle(String searchTitle);
     public int deleteNotice(int noticeIndex);
 
 
