@@ -29,7 +29,6 @@ public class InquiryUpdate extends HttpServlet {
         //service객체 구하기
         IInquiryService inquiryService = InquiryServiceImpl.getInstance();
         IMemberService memberService = MemberServiceImpl.getInstance();
-        //IInquiryproService inquiryproService = InquiryproServiceImpl.getInstance();
 
         //문의번호에 맞는 문의 정보 가져오기
         InquiryVO inquiryVo = inquiryService.getInquiry(num);
@@ -39,7 +38,6 @@ public class InquiryUpdate extends HttpServlet {
         }
 
         request.setAttribute("inquiryVo", inquiryVo);
-        //request.setAttribute("inquiryproVo", inquiryproVo);
 
         request.getRequestDispatcher("/WEB-INF/view/inquiry/inquiryUpdate.jsp").forward(request, response);
     }
@@ -51,7 +49,6 @@ public class InquiryUpdate extends HttpServlet {
         response.setContentType("application/json; charset=utf-8");
 
         //작성 완료 시 데이터 받기
-
         String reqStr = StreamData.getJsonStream(request);
 
         //역직렬화 - InquiryVO객체로 변환
@@ -73,6 +70,5 @@ public class InquiryUpdate extends HttpServlet {
         PrintWriter out = response.getWriter();
         out.write(jsonStr);
         response.flushBuffer();
-
     }
 }
