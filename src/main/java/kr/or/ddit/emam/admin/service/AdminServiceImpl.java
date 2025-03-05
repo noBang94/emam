@@ -22,12 +22,12 @@ public class AdminServiceImpl implements IAdminService {
         return service;
     }
 
-    // 로그인 하기
+    // 관리자 로그인
     public AdminVO getLoginAdmin(AdminVO adminVo) {
         return dao.getLoginAdmin(adminVo);
     }
 
-    // 회원 관리
+    // 관리자 회원관리
     public int getTotalMemberCount(String searchId) {
         return dao.getTotalMemberCount(searchId);
     }

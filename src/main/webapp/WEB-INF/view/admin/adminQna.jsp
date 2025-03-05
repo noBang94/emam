@@ -38,9 +38,23 @@
       border-radius: 5px;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      margin-left: 10px;
     }
     .top-bar .logout-btn:hover {
       background-color: #c82333;
+    }
+    .top-bar .back-btn {
+      background-color: #007bff; /* 파란색으로 변경 */
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-left: 10px;
+    }
+    .top-bar .back-btn:hover {
+      background-color: #0056b3; /* 호버 시 약간 어두운 파란색 */
     }
     .inquiry-list-container {
       width: 80%;
@@ -74,10 +88,8 @@
       margin-left: 10px;
       padding: 8px 15px; /* 검색 버튼 패딩 조정 */
     }
-    .inquiry-title-link {
+    .inquiry-row {
       cursor: pointer;
-      color: blue;
-      text-decoration: underline;
     }
     .unprocessed {
       color: red;
@@ -95,18 +107,26 @@
       $("#logoutBtn").on("click", function(){
         window.location.href = "<%=request.getContextPath() %>/admin/adminLogout.do";
       });
-    });
 
-    function showInquiryDetail(inquiryIndex) {
-      window.location.href = "<%=request.getContextPath() %>/admin/qnaDetail.do?inquiryIndex=" + inquiryIndex;
-    }
+      $("#backBtn").on("click", function(){
+        window.history.back();
+      });
+
+      $(document).on('click', '.inquiry-row', function() {
+        const inquiryIndex = $(this).data('index');
+        window.location.href = "<%=request.getContextPath() %>/admin/qnaDetail.do?inquiryIndex=" + inquiryIndex;
+      });
+    });
   </script>
 </head>
 <body>
 
 <div class="top-bar">
   <h2>문의 관리</h2>
-  <button id="logoutBtn" class="btn logout-btn">로그아웃</button>
+  <div>
+    <button id="backBtn" class="btn back-btn">뒤로 가기</button>
+    <button id="logoutBtn" class="btn logout-btn">로그아웃</button>
+  </div>
 </div>
 
 <div class="inquiry-list-container">
@@ -137,9 +157,9 @@
       if (errorMessage == null && inquiryList != null && !inquiryList.isEmpty()) {
         for (InquiryVO inquiry : inquiryList) {
     %>
-    <tr>
+    <tr class="inquiry-row" data-index="<%= inquiry.getInquiry_index() %>">
       <td><%= inquiry.getInquiry_index() %></td>
-      <td><span class="inquiry-title-link" onclick="showInquiryDetail('<%= inquiry.getInquiry_index() %>')"><%= inquiry.getInquiry_title() %></span></td>
+      <td><%= inquiry.getInquiry_title() %></td>
       <td><%= inquiry.getMem_id() %></td>
       <td><%= inquiry.getInquiry_date() %></td>
       <td>

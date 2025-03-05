@@ -30,17 +30,28 @@
       margin: 0;
       font-size: 24px;
     }
-    .top-bar .back-btn {
-      background-color: #007bff;
-      color: white;
-      border: none;
+    .top-bar .back-btn, .top-bar .logout-btn {
       padding: 8px 15px;
       border-radius: 5px;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      margin-left: 10px;
+    }
+    .top-bar .back-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
     }
     .top-bar .back-btn:hover {
       background-color: #0056b3;
+    }
+    .top-bar .logout-btn {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+    }
+    .top-bar .logout-btn:hover {
+      background-color: #c82333;
     }
     .report-list-container {
       width: 80%;
@@ -87,6 +98,9 @@
       $("#backBtn").on("click", function(){
         window.location.href = "<%=request.getContextPath() %>/admin/adminMain.do";
       });
+      $("#logoutBtn").on("click", function(){
+        window.location.href = "<%=request.getContextPath() %>/admin/adminLogout.do";
+      });
     });
 
     function showReportDetail(reportId) {
@@ -98,7 +112,10 @@
 
 <div class="top-bar">
   <h2>신고 관리</h2>
-  <button id="backBtn" class="btn back-btn">뒤로가기</button>
+  <div>
+    <button id="backBtn" class="btn back-btn">뒤로가기</button>
+    <button id="logoutBtn" class="btn logout-btn">로그아웃</button>
+  </div>
 </div>
 
 <div class="report-list-container">

@@ -38,9 +38,23 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            margin-left: 10px;
         }
         .top-bar .logout-btn:hover {
             background-color: #c82333;
+        }
+        .top-bar .back-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-left: 10px;
+        }
+        .top-bar .back-btn:hover {
+            background-color: #0056b3;
         }
         .user-list-container {
             width: 80%;
@@ -53,7 +67,7 @@
         .search-container {
             margin-bottom: 20px;
             display: flex;
-            justify-content: flex-start; /* 변경: 왼쪽 끝 정렬 */
+            justify-content: flex-start;
         }
         .search-container .form-group {
             display: flex;
@@ -78,6 +92,10 @@
             $("#logoutBtn").on("click", function(){
                 window.location.href = "<%=request.getContextPath() %>/admin/adminLogout.do";
             });
+
+            $("#backBtn").on("click", function(){
+                window.history.back();
+            });
         });
 
         function deleteUser(userId) {
@@ -91,7 +109,10 @@
 
 <div class="top-bar">
     <h2>회원 관리</h2>
-    <button id="logoutBtn" class="btn logout-btn">로그아웃</button>
+    <div>
+        <button id="backBtn" class="btn back-btn">뒤로 가기</button>
+        <button id="logoutBtn" class="btn logout-btn">로그아웃</button>
+    </div>
 </div>
 
 <div class="user-list-container">
