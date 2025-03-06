@@ -47,10 +47,14 @@ public class ReplyInsert extends HttpServlet {
         ReplyVO replyVO = new ReplyVO(postindexInt,replyindexInt,memid,replycon);
 
         int cnt = replyService.insertReply(replyVO);
+        String msg=null;
         if (cnt > 0) {
             resp.sendRedirect(req.getContextPath() + "/post/postList.do");
+            msg="success";
+        }else{
+            msg="fail";
         }
-
+        req.setAttribute("msg", msg);
     }
 
     @Override

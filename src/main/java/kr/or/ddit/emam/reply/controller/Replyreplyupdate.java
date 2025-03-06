@@ -14,8 +14,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet("/reply/replyUpdate.do")
-public class Replyupdate extends HttpServlet {
+@WebServlet("/reply/replyreplyUpdate.do")
+public class Replyreplyupdate extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -28,27 +28,30 @@ public class Replyupdate extends HttpServlet {
         int postindexInt = Integer.parseInt(postindex);
         
         //뎃글 인덱스
-        String Replyindex = req.getParameter("replyindex");
-        int ReplyindexInt = Integer.parseInt(Replyindex);
-        
+        String reindex = req.getParameter("replyindex");
+        int replyindexInt = Integer.parseInt(reindex);
+
+        //부모 댓글 인덱스
+        String parentreindex = req.getParameter("parentreindex");
+        int parentreindexInt = Integer.parseInt(parentreindex);
+
         //수정될 뎃글 내용
         String Replycon = req.getParameter("replycon");
 
         //댓글 객체 생성
         IReplyService replyService = ReplyServiceImpl.getInstance();
 
-        ReplyVO replyVO = new ReplyVO(ReplyindexInt,Replycon);
+        ReplyVO replyVO = new ReplyVO(replyindexInt,Replycon);
 
         int cnt = replyService.updateReply(replyVO);
 
 
-
         if (cnt > 0) {
-//            resp.sendRedirect(req.getContextPath() + "/post/postList.do");
-            List<ReplyVO> ReplyList = replyService.selectReplyListByPostIndex(postindexInt);
+            ReplyVO replyVO2 = new ReplyVO(parentreindexInt,postindexInt);
+            List<ReplyVO> ReplyList = replyService.selectReplyReplyList(replyVO2);
 
             Gson gson = new Gson();
-            String jsonData = null;
+            String jsonData = null; //변환된 Json문자열이 저장될 변수
 
             jsonData = gson.toJson(ReplyList);
 

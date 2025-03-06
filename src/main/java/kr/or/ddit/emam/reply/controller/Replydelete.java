@@ -28,9 +28,14 @@ public class Replydelete extends HttpServlet {
         IReplyService replyService = ReplyServiceImpl.getInstance();
 
         int cnt = replyService.deleteReply(ReplyindexInt);
+        String msg=null;
         if (cnt > 0) {
-            resp.sendRedirect(req.getContextPath() + "/post/postList.do");
+//            resp.sendRedirect(req.getContextPath() + "/post/postList.do");
+            msg="success";
+        }else{
+            msg="fail";
         }
+        req.setAttribute("msg", msg);
     }
 
     @Override
