@@ -29,7 +29,7 @@
     <insert id="insertInquiry" parameterType="inquiryVo">
         insert into inquiry
             values(
-                inquiry_num_seq.nextval,
+                num_seq.nextval,
                 #{mem_id},
                 #{inquiry_title},
                 #{inquiry_con},

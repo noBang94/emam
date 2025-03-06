@@ -14,7 +14,7 @@
         insert into notice (
             NOTICE_INDEX, NOTICE_TITLE, NOTICE_CON, NOTICE_DATE)
         values(
-                  notice_NUM_SEQ.nextval, #{notice_title}, #{notice_con}, SYSDATE
+                  NUM_SEQ.nextval, #{notice_title}, #{notice_con}, SYSDATE
               )
     </insert>
 

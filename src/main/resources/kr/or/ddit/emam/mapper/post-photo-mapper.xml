@@ -5,7 +5,7 @@
 <mapper  namespace="postphoto">
     <insert id="insertphoto" parameterType="PostPhotoVO">
         <selectKey keyProperty="post_photo" resultType="long" order="BEFORE">
-            select post_photo_num_seq.nextval from dual
+            select num_seq.nextval from dual
         </selectKey>
         insert into POST_PHOTO_TB
         (

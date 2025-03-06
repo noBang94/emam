@@ -7,7 +7,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.or.ddit.emam.admin.service.AdminServiceImpl;
 import kr.or.ddit.emam.admin.service.IAdminService;
+import kr.or.ddit.emam.inquiry.service.IInquiryService;
+import kr.or.ddit.emam.inquiry.service.InquiryServiceImpl;
+import kr.or.ddit.emam.notification.service.INotificationService;
+import kr.or.ddit.emam.notification.service.NotificationServiceImpl;
 import kr.or.ddit.emam.vo.InquiryVO;
+import kr.or.ddit.emam.vo.NotificationVO;
 
 import java.io.IOException;
 
@@ -29,6 +34,20 @@ public class QnaComment extends HttpServlet {
             int result = adminService.updateInquiryComment(inquiry);
 
             if (result > 0) {
+                // 댓글 등록 성공 시 회원의 알림 추가
+                IInquiryService inquiryService = InquiryServiceImpl.getInstance();
+                InquiryVO inquiryVo = inquiryService.getInquiry(inquiryIndex);
+                INotificationService notificationService = NotificationServiceImpl.getInstance();
+                NotificationVO notificationVo = new NotificationVO();
+                notificationVo.setTo_id(inquiryVo.getMem_id());
+                notificationVo.setFrom_id(null);
+                notificationVo.setNotification_target(inquiryVo.getInquiry_index());
+                notificationVo.setNotification_type("inquiry");
+                String notificationContent = "문의글 " + inquiryVo.getInquiry_title() + "에 대한 답변이 완료되었습니다.";
+                notificationVo.setNotification_con(notificationContent);
+                notificationVo.setNotification_isread(0);
+                notificationService.insertNotification(notificationVo);
+
                 // 댓글 등록 성공 시 문의 상세 페이지로 리다이렉트
                 response.sendRedirect(request.getContextPath() + "/admin/qnaDetail.do?inquiryIndex=" + inquiryIndex);
             } else {

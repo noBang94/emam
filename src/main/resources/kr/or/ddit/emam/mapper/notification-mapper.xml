@@ -24,7 +24,7 @@
     <insert id="insertNotification" parameterType="notificationVo">
         insert into notification
             values(
-                inquiry_num_seq.nextval,
+                num_seq.nextval,
                 #{to_id},
                 #{from_id},
                 #{notification_target},

@@ -11,14 +11,14 @@
             REPLY_CON
         )
         VALUES (
-                     reply_num_seq.nextval,
+                     num_seq.nextval,
                      #{post_index},
                     <choose>
                         <when test='reply_parentreplyindex != 0'>
                             #{reply_parentreplyindex}
                         </when>
                         <when test="reply_parentreplyindex == 0">
-                            reply_num_seq.nextval
+                            num_seq.nextval
                         </when>
                     </choose>
                    ,

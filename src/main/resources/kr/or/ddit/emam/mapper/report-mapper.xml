@@ -30,7 +30,7 @@
         )
         values
             (
-                REPORT_NUM_SEQ.nextval,
+               NUM_SEQ.nextval,
                 #{toId},
                 #{fromId},
                 #{reportContent},

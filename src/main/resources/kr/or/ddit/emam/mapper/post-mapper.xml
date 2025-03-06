@@ -9,7 +9,7 @@
     <insert id="insertPost" parameterType="kr.or.ddit.emam.vo.PostVO">
         insert into post
             (POST_INDEX, MEM_ID, POST_CON, POST_PHOTO, POST_DATE, POST_VISIBLE)
-        values (post_num_seq.nextval,#{mem_id},#{post_con},#{post_photo},sysdate,#{post_visible})
+        values (num_seq.nextval,#{mem_id},#{post_con},#{post_photo},sysdate,#{post_visible})
     </insert>
 
 <!--    사용하던 쿼리-->

@@ -117,7 +117,7 @@
                 <%
                     if(vo.getInquiry_ispublic()==0){
                 %>
-                ︎
+                ︎   <img height="20" width="20" src="../../.././images/lock.png">
                 <%
                     }
                 %>

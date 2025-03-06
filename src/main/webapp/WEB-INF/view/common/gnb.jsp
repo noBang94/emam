@@ -1,3 +1,7 @@
+<%@ page import="kr.or.ddit.emam.vo.MemberVO" %>
+<%@ page import="kr.or.ddit.emam.usersettings.service.IUsersettingsService" %>
+<%@ page import="kr.or.ddit.emam.usersettings.service.UsersettingsServiceImpl" %>
+<%@ page import="kr.or.ddit.emam.vo.UsersettingsVO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <style>
@@ -137,6 +141,13 @@
 </style>
 <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<%
+    MemberVO loginMemberVo = (MemberVO) session.getAttribute("loginMember");
+    IUsersettingsService usersettingsService = UsersettingsServiceImpl.getInstance();
+    UsersettingsVO usersettingsVo = usersettingsService.checkUsersettings(loginMemberVo.getMem_id());
+%>
+
 <script>
     $(function(){
         $(".gnb-button").on("click", function(){
@@ -155,6 +166,12 @@
         //         }
         //     }
         // });
+
+        //토글버튼을 DB값대로 on/off 표기하기
+        <% if(usersettingsVo.getSet_friend()==1) { %> $("#friendtoggles").attr("checked", true); <% } %>
+        <% if(usersettingsVo.getSet_reply()==1) { %> $("#replytoggles").attr("checked", true); <% } %>
+        <% if(usersettingsVo.getSet_ilike()==1) { %> $("#iliketoggles").attr("checked", true); <% } %>
+        <% if(usersettingsVo.getSet_chat()==1) { %> $("#chattoggles").attr("checked", true); <% } %>
     });
 
 </script>
@@ -189,32 +206,32 @@
                 <li><a href="<%=request.getContextPath() %>/inquiry/inquiryList.do">문의 사항</a></li>
                 <li><a href="<%=request.getContextPath() %>/notice/notice.do">공지사항</a></li>
                 <li>
-                    <form>
+                    <form id="toggliesForm">
                         <div>설정</div>
                         <div class="noti-set">
                             <span>친구 알람</span>
-                            <input type="checkbox" name="friendnoti" id="friendtoggles" value="Y" />
+                            <input type="checkbox" name="friendnoti" id="friendtoggles" value="1" class="toggles" />
                             <label for="friendtoggles" class="toggleSwitch">
                                 <span class="toggleButton"></span>
                             </label>
                         </div>
                         <div class="noti-set">
                             <span>댓글 알람</span>
-                            <input type="checkbox" name="replynoti" id="replytoggles" value="Y" />
+                            <input type="checkbox" name="replynoti" id="replytoggles" value="1" class="toggles" />
                             <label for="replytoggles" class="toggleSwitch">
                                 <span class="toggleButton"></span>
                             </label>
                         </div>
                         <div class="noti-set">
                             <span>좋아요 알람</span>
-                            <input type="checkbox" name="ilikenoti" id="iliketoggles" value="Y" />
+                            <input type="checkbox" name="ilikenoti" id="iliketoggles" value="1" class="toggles" />
                             <label for="iliketoggles" class="toggleSwitch">
                                 <span class="toggleButton"></span>
                             </label>
                         </div>
                         <div class="noti-set">
                             <span>채팅 허용</span>
-                            <input type="checkbox" name="chatnoti" id="chattoggles" value="Y" />
+                            <input type="checkbox" name="chatnoti" id="chattoggles" value="1" class="toggles" />
                             <label for="chattoggles" class="toggleSwitch">
                                 <span class="toggleButton"></span>
                             </label>

@@ -33,7 +33,7 @@
     <insert id="requestFriend" parameterType="friendVo">
         insert into friend
             values(
-                inquiry_num_seq.nextval,
+                num_seq.nextval,
                 #{friend_toid},
                 #{friend_fromid},
                 SYSDATE,
