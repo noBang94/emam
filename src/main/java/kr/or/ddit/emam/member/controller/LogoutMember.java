@@ -21,7 +21,7 @@ public class LogoutMember extends HttpServlet {
 
         session.invalidate();	// 세션 삭제
 
-        response.sendRedirect(request.getContextPath() + "/board/boardList.do");
+        response.sendRedirect(request.getContextPath() + "/");
 
     }
 

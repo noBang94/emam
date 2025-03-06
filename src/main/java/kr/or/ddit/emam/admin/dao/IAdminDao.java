@@ -29,4 +29,16 @@ public interface IAdminDao {
     public InquiryVO getInquiryDetail(int inquiryIndex);
     public int updateInquiryComment(InquiryVO inquiry);
     public List<InquiryVO> searchInquiryList(String searchTitle);
+
+    //관리자 메인화면
+    public int getTotalPosts();
+    public int getTotalReports();
+    public int getUnprocessedReportsCount();
+    public int getUnprocessedInquiriesCount();
+
+    public int getNewMembersCount();
+    public int getNewPostsCount();
+    public int getNewReportsCount();
+    public int getNewInquiriesCount();
 }
+;

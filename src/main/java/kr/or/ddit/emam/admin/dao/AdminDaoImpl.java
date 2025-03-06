@@ -22,7 +22,7 @@ public class AdminDaoImpl implements IAdminDao {
         return dao;
     }
 
-    //관리자 로그인
+    // 관리자 로그인
     @Override
     public AdminVO getLoginAdmin(AdminVO adminVo) {
         SqlSession session = MyBatisUtil.getSqlSession();
@@ -38,7 +38,7 @@ public class AdminDaoImpl implements IAdminDao {
         return adVo;
     }
 
-    //관리자 공지사항
+    // 관리자 회원관리
     @Override
     public List<MemberVO> getMemberList(MemberVO memberVo, int page, int pageSize) {
         SqlSession session = MyBatisUtil.getSqlSession();
@@ -75,7 +75,6 @@ public class AdminDaoImpl implements IAdminDao {
         return cnt;
     }
 
-
     @Override
     public int getTotalMemberCount(String searchId) {
         SqlSession session = MyBatisUtil.getSqlSession();
@@ -91,16 +90,17 @@ public class AdminDaoImpl implements IAdminDao {
         return count != null ? count : 0;
     }
 
+    // 관리자 공지사항
     @Override
     public NoticeVO getNotice(int noticeIndex) {
-        try(SqlSession session = MyBatisUtil.getSqlSession()) {
+        try (SqlSession session = MyBatisUtil.getSqlSession()) {
             return session.selectOne("admin.getNotice", noticeIndex);
         }
     }
 
     @Override
     public int insertNotice(NoticeVO noticeVO) {
-        try(SqlSession session = MyBatisUtil.getSqlSession()) {
+        try (SqlSession session = MyBatisUtil.getSqlSession()) {
             int result = session.insert("admin.insertNotice", noticeVO);
             session.commit();
             return result;
@@ -109,7 +109,7 @@ public class AdminDaoImpl implements IAdminDao {
 
     @Override
     public int updateNotice(NoticeVO noticeVO) {
-        try(SqlSession session = MyBatisUtil.getSqlSession()) {
+        try (SqlSession session = MyBatisUtil.getSqlSession()) {
             int result = session.update("admin.updateNotice", noticeVO);
             session.commit();
             return result;
@@ -145,28 +145,16 @@ public class AdminDaoImpl implements IAdminDao {
         return noticelist;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     @Override
     public int deleteNotice(int noticeIndex) {
-        try(SqlSession session = MyBatisUtil.getSqlSession()) {
+        try (SqlSession session = MyBatisUtil.getSqlSession()) {
             int result = session.delete("admin.deleteNotice", noticeIndex);
             session.commit();
             return result;
         }
     }
 
-    //관리자 문의사항
+    // 관리자 문의사항
     @Override
     public List<InquiryVO> getInquiryList() {
         SqlSession session = MyBatisUtil.getSqlSession();
@@ -228,4 +216,85 @@ public class AdminDaoImpl implements IAdminDao {
         return iqVoList;
     }
 
+    // 관리자 메인화면 (대시보드)
+    @Override
+    public int getTotalPosts() {
+        SqlSession session = MyBatisUtil.getSqlSession();
+        Integer count = null;
+        try {
+            count = session.selectOne("admin.getTotalPosts");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return count != null ? count : 0;
+    }
+
+    @Override
+    public int getTotalReports() {
+        SqlSession session = MyBatisUtil.getSqlSession();
+        Integer count = null;
+        try {
+            count = session.selectOne("admin.getTotalReports");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return count != null ? count : 0;
+    }
+
+    @Override
+    public int getUnprocessedReportsCount() {
+        SqlSession session = MyBatisUtil.getSqlSession();
+        Integer count = null;
+        try {
+            count = session.selectOne("admin.getUnprocessedReportsCount");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return count != null ? count : 0;
+    }
+
+    @Override
+    public int getUnprocessedInquiriesCount() {
+        SqlSession session = MyBatisUtil.getSqlSession();
+        Integer count = null;
+        try {
+            count = session.selectOne("admin.getUnprocessedInquiriesCount");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return count != null ? count : 0;
+    }
+
+    //수정
+    @Override
+    public int getNewMembersCount() {
+        SqlSession session = MyBatisUtil.getSqlSession();
+        return session.selectOne("admin.getNewMembersCount");
+    }
+
+    @Override
+    public int getNewPostsCount() {
+        SqlSession session = MyBatisUtil.getSqlSession();
+        return session.selectOne("admin.getNewPostsCount");
+    }
+
+    @Override
+    public int getNewReportsCount() {
+        SqlSession session = MyBatisUtil.getSqlSession();
+        return session.selectOne("admin.getNewReportsCount");
+    }
+
+    @Override
+    public int getNewInquiriesCount() {
+        SqlSession session = MyBatisUtil.getSqlSession();
+        return session.selectOne("admin.getNewInquiriesCount");
+    }
 }
