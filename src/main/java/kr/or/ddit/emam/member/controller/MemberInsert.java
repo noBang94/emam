@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.or.ddit.emam.member.service.IMemberService;
 import kr.or.ddit.emam.member.service.MemberServiceImpl;
+import kr.or.ddit.emam.usersettings.service.IUsersettingsService;
+import kr.or.ddit.emam.usersettings.service.UsersettingsServiceImpl;
 import kr.or.ddit.emam.vo.MemberVO;
 
 import java.io.IOException;
@@ -42,11 +44,14 @@ public class MemberInsert extends HttpServlet {
             vo.setMem_gen(gen);
 
             IMemberService service = MemberServiceImpl.getInstance();
+            IUsersettingsService usersettingsService = UsersettingsServiceImpl.getInstance();
+
             int insetCnt = service.insertMember(vo);
 
             String result;
             if (insetCnt > 0) {
                 result = String.format("{\"flag\": \"%s님 가입을 축하합니다\", \"redirectUrl\": \"%s/member/loginMember.do\"}", vo.getMem_name(), request.getContextPath());
+                usersettingsService.insertUsersettings(vo.getMem_id());
             } else {
                 result = "{\"flag\": \"이미 존재하는 회원입니다.\"}";
             }

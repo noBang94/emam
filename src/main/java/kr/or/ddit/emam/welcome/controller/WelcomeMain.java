@@ -58,7 +58,7 @@ public class WelcomeMain extends HttpServlet {
 
         //날씨 - 날짜와 시간과 좌표 받아서 API URL로 보내기
         String baseDate = today.format(formatterBaseDate);
-        String baseTime = nowtime.plusHours(-1).format(formatterBaseTime); //날씨정보 발표시간
+        String baseTime = nowtime.plusHours(-4).format(formatterBaseTime); //날씨정보 발표시간
         String nx = weatherVo.getLocal_nx();
         String ny = weatherVo.getLocal_ny();
 
@@ -68,8 +68,8 @@ public class WelcomeMain extends HttpServlet {
         urlBuilder.append("&" + URLEncoder.encode("dataType","UTF-8") + "=" + URLEncoder.encode("JSON", "UTF-8")); //요청자료형식
         urlBuilder.append("&" + URLEncoder.encode("base_date","UTF-8") + "=" + baseDate); //날씨발표일자(최근 1일)
         urlBuilder.append("&" + URLEncoder.encode("base_time","UTF-8") + "=" + baseTime); //날씨발표시간(30분 단위)
-        urlBuilder.append("&" + URLEncoder.encode("nx","UTF-8") + "=" + 98); //예보지점 X 좌표값
-        urlBuilder.append("&" + URLEncoder.encode("ny","UTF-8") + "=" + 76); //예보지점 Y 좌표값
+        urlBuilder.append("&" + URLEncoder.encode("nx","UTF-8") + "=" + nx); //예보지점 X 좌표값
+        urlBuilder.append("&" + URLEncoder.encode("ny","UTF-8") + "=" + ny); //예보지점 Y 좌표값
 
         //날씨 - GET형식으로 전송해서 정보 받아오기
         URL url = new URL(urlBuilder.toString());
