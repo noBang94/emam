@@ -56,6 +56,22 @@
   </style>
   <script>
     $(function(){
+      //입력값 판단을 위한 정규식들
+      let replaceNotInt = /[^0-9]/gi; //숫자가 아닌 정규식
+      let replaceNotEng = /[^a-zA-Z]/gi; //영어가 아닌 정규식
+      let replaceNotIntEng = /[^a-zA-Z0-9]/gi; //숫자와 영어가 아닌 정규식
+      let replaceNotFullKorean = /[ㄱ-ㅎㅏ-ㅣ]/gi; //완성형 아닌 한글 정규식
+      let replaceNotKorean = /[^가-힣]/gi; //한글이 아닌 정규식
+      let replaceNotKorean2 = /[^ㄱ-ㅎㅏ-ㅣ가-힣]/gi;
+
+      //input 입력값 제한
+      //비밀번호 - 숫자와 영어만 입력하도록 제한
+      $("#mem_pw").on("keyup", function () { $(this).val($(this).val().replace(replaceNotIntEng,"") );});
+      //닉네임 - 숫자와 영어만 입력하도록 제한
+      $("#mem_nickname").on("keyup", function () { $(this).val($(this).val().replace(replaceNotIntEng,"") );});
+      //전화번호 - 숫자만 입력하도록 제한
+      $("#mem_phone").on("keyup", function () { $(this).val($(this).val().replace(replaceNotInt,"") );});
+
       // 기존 회원 정보 불러오기
       $.ajax({
         url: '<%=request.getContextPath() %>/member/memberset.do',
@@ -284,7 +300,7 @@
   <div class="form-group">
     <label class="control-label col-sm-2" for="mem_phone">전화번호</label>
     <div class="col-sm-3">
-      <input type="text" name="mem_phone" class="form-control" id="mem_phone" placeholder="전화번호 입력">
+      <input type="text" name="mem_phone" class="form-control" id="mem_phone" placeholder="전화번호 입력" maxlength="13">
     </div>
   </div>
   <div class="form-group">

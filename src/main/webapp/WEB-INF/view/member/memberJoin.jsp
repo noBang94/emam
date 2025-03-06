@@ -22,6 +22,35 @@
 
   <script>
     $(function(){
+      //입력값 판단을 위한 정규식들
+      let replaceNotInt = /[^0-9]/gi; //숫자가 아닌 정규식
+      let replaceNotEng = /[^a-zA-Z]/gi; //영어가 아닌 정규식
+      let replaceNotIntEng = /[^a-zA-Z0-9]/gi; //숫자와 영어가 아닌 정규식
+      let replaceNotFullKorean = /[ㄱ-ㅎㅏ-ㅣ]/gi; //완성형 아닌 한글 정규식
+      let replaceNotKorean = /[^가-힣]/gi; //한글이 아닌 정규식
+      let replaceNotKorean2 = /[^ㄱ-ㅎㅏ-ㅣ가-힣]/gi;
+
+      //input 입력값 제한
+      //인증번호 - 숫자만 입력하도록 제한
+      $("#authCode").on("keyup", function () { $(this).val($(this).val().replace(replaceNotInt,"") );});
+      //비밀번호 - 숫자와 영어만 입력하도록 제한
+      $("#mem_pw").on("keyup", function () { $(this).val($(this).val().replace(replaceNotIntEng,"") );});
+      //닉네임 - 숫자와 영어만 입력하도록 제한
+      $("#mem_nickname").on("keyup", function () { $(this).val($(this).val().replace(replaceNotIntEng,"") );});
+      //이름 - 완성형 한글만 입력하도록 제한 (한글 자음이나 모음만, 혹은 한글 아닌 문자가 입력되는 것을 막음)
+      $("#mem_name").on("focusout", function () {
+        let x = $(this).val();
+        if(x.length > 0) {
+          if(x.match(replaceNotKorean2)) {
+            x = x.replace(replaceNotKorean2, "");
+          } $(this).val(x);
+        }
+      }).on("keyup", function () {
+        $(this).val($(this).val().replace(replaceNotKorean, ""));
+      });
+      //전화번호 - 숫자만 입력하도록 제한
+      $("#mem_phone").on("keyup", function () { $(this).val($(this).val().replace(replaceNotInt,"") );});
+
       $('#send').on('click', () => {
         const formData = {
           mem_id: $('#mem_id').val(),
@@ -170,7 +199,6 @@
                 })
                 .catch(err => console.log(err));
       });
-
     });
   </script>
 </head>
@@ -255,7 +283,7 @@
   <div class="form-group">
     <label class="control-label col-sm-2" for="mem_phone">전화번호</label>
     <div class="col-sm-2">
-      <input type="text" name="mem_phone" class="form-control" id="mem_phone" placeholder="전화번호 입력">
+      <input type="text" name="mem_phone" class="form-control" id="mem_phone" placeholder="전화번호 입력" maxlength="13">
     </div>
   </div>
 
