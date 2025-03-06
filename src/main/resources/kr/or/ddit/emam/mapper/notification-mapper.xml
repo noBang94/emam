@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="notification">
+
+    <!-- 알림 리스트 -->
+    <select id="selectNotification" parameterType="String" resultType="notificationVo">
+        select *
+            from notification
+        where to_id = #{mem_id}
+    </select>
+
+    <!-- 미확인 알림 갯수 구하기 -->
+    <select id="totalCount" parameterType="String" resultType="int">
+        select count(*) from notification
+        where to_id = #{mem_id}
+        and notification_isread = 0
+    </select>
+
+    <!-- 알림 발생 -->
+    <insert id="insertNotification" parameterType="notificationVo">
+        insert into notification
+            values(
+                inquiry_num_seq.nextval,
+                #{to_id},
+                #{from_id},
+                #{notification_target},
+                #{notification_type},
+                #{notification_con},
+                SYSDATE,
+                #{notification_isread}
+            )
+    </insert>
+
+    <!-- 알림 확인 -->
+    <update id="updateNotification" parameterType="int">
+        update notification
+            set
+                notification_isread = 1
+        where notification_index = #{notification_index}
+    </update>
+
+    <!-- 알림 삭제 -->
+    <delete id="deleteNotification" parameterType="int">
+        delete from notification where notification_index = #{notification_index}
+    </delete>
+
+</mapper>
