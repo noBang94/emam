@@ -24,7 +24,7 @@ public class MemberDaoImpl implements IMemberDao {
             memVo = session.selectOne("member.getLoginMember", memberVo);
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             session.close();
         }
 
@@ -40,7 +40,7 @@ public class MemberDaoImpl implements IMemberDao {
             cnt = session.insert("member.insertMember", memberVo);
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             session.commit();
             session.close();
         }
@@ -57,7 +57,7 @@ public class MemberDaoImpl implements IMemberDao {
             count = session.selectOne("member.getMemberIdCount", memId);
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             session.close();
         }
 
@@ -73,7 +73,7 @@ public class MemberDaoImpl implements IMemberDao {
             memVo = session.selectOne("member.getMember", memId);
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             session.close();
         }
 
@@ -96,11 +96,11 @@ public class MemberDaoImpl implements IMemberDao {
     }
 
     @Override
-    public void updatePassword(MemberVO memberVo) {
+    public int updatePassword(MemberVO memberVo) {
         SqlSession  session = MyBatisUtil.getSqlSession();
-
+        int cnt = 0;
         try {
-            session.update("member.updatePassword", memberVo);
+            cnt = session.update("member.updatePassword", memberVo);
             session.commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,6 +108,7 @@ public class MemberDaoImpl implements IMemberDao {
         } finally {
             session.close();
         }
+        return cnt;
     }
 
     @Override
@@ -119,9 +120,26 @@ public class MemberDaoImpl implements IMemberDao {
             count = session.selectOne("member.getMemberNicknameCount", nickname);
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             session.close();
         }
         return count;
+    }
+
+    @Override
+    public int updateMember(MemberVO member) {
+        SqlSession  session = MyBatisUtil.getSqlSession();
+        int cnt = 0;
+
+        try {
+            cnt = session.update("member.updateMember", member);
+            session.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.rollback();
+        } finally {
+            session.close();
+        }
+        return cnt;
     }
 }

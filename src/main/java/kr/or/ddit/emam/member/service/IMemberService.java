@@ -17,8 +17,11 @@ public interface IMemberService {
 
     // 비밀번호 찾기
     public MemberVO getMemberByEmail(String email);
-    void updatePassword(MemberVO memberVo);
+    int updatePassword(MemberVO memberVo);
 
     //닉네임 중복검사
     public boolean getMemberNicknameCount(String nickname);
+
+    // 개인 정보 수정
+    int updateMember(MemberVO member);
 }

@@ -45,12 +45,17 @@ public class MemberServiceImpl implements IMemberService {
     }
 
     @Override
-    public void updatePassword(MemberVO memberVo) {
-        dao.updatePassword(memberVo);
+    public int updatePassword(MemberVO memberVo) {
+        return dao.updatePassword(memberVo);
     }
 
     @Override
     public boolean getMemberNicknameCount(String nickname) {
         return dao.getMemberNicknameCount(nickname);
+    }
+
+    @Override
+    public int updateMember(MemberVO member) {
+        return dao.updateMember(member);
     }
 }

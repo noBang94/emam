@@ -19,6 +19,11 @@ import kr.or.ddit.emam.vo.MemberVO;
 public class LoginMember extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 로그인 페이지 표시 로직
+        request.getRequestDispatcher("/").forward(request, response);
+    }
+
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

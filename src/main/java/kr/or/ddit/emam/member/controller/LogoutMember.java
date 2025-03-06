@@ -24,5 +24,4 @@ public class LogoutMember extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/");
 
     }
-
 }

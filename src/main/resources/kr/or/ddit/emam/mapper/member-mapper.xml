@@ -51,12 +51,19 @@
         where MEM_NICKNAME=#{mem_nickname}
     </select>
 
-
     <select id="getMemberListById" parameterType="String" resultType="kr.or.ddit.emam.vo.MemberVO">
         SELECT mem_id, mem_name, mem_nickname, mem_joindate
         FROM member
         WHERE mem_id LIKE '%' || #{searchId} || '%'
     </select>
 
+    <!--개인 정보 수정-->
+    <update id="updateMember" parameterType="memberVo">
+        update member
+        set MEM_NICKNAME=#{mem_nickname},
+            MEM_ADDR=#{mem_addr},
+            MEM_PHONE=#{mem_phone}
+        where MEM_ID=#{mem_id}
+    </update>
 
 </mapper>

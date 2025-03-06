@@ -20,6 +20,6 @@ public class AdminLogout extends HttpServlet {
             session.invalidate();
         }
 
-        response.sendRedirect(request.getContextPath() + "/admin/adminLogin.do");
+        response.sendRedirect(request.getContextPath() + "/");
     }
 }

@@ -23,34 +23,39 @@
   <script>
     $(function(){
       $('#send').on('click', () => {
-        const vid = $('#mem_id').val();
-        const vname = $('#mem_name').val();
-        const vhp = $('#mem_phone').val();
-        const vpass = $('#mem_pw').val();
-        const vmail = $('#mem_mail').val();
-        const vbir = $('#mem_bir').val();
-        const vzip = $('#zipcode').val();
-        const vadd1 = $('#mem_addr').val();
-        const vgen = $("input[name='mem_gen']:checked").val();
-        const vnickname = $("#mem_nickname").val();
+        const formData = {
+          mem_id: $('#mem_id').val(),
+          mem_name: $('#mem_name').val(),
+          mem_phone: $('#mem_phone').val(),
+          mem_pw: $('#mem_pw').val(),
+          mem_mail: $('#mem_mail').val(),
+          mem_bir: $('#mem_bir').val(),
+          zipcode: $('#zipcode').val(),
+          mem_addr: $('#mem_addr').val(),
+          mem_gen: $("input[name='mem_gen']:checked").val(),
+          mem_nickname: $("#mem_nickname").val()
+        };
 
-        const vdata1 = "mem_id=" + vid + "&mem_name=" + vname + "&mem_pw=" + vpass +
-                "&mem_phone=" + vhp + "&mem_bir=" + vbir + "&mem_mail=" + vmail +
-                "&mem_addr=" + vadd1 + "&mem_gen=" + vgen + "&mem_nickname=" + vnickname;
-
-        fetch('<%=request.getContextPath() %>/member/memberInsert.do', {
-          method: 'post',
-          headers: { "Content-type": "application/x-www-form-urlencoded" },
-          body: vdata1
-        })
-                .then(res => {
-                  if(res.ok) return res.json();
-                  else throw new Error(res.statusText)
-                })
-                .then(result => {
-                  $('#joinspan').html(result.flag).css('color', 'red');
-                })
-                .catch(err => console.log(err));
+        $.ajax({
+          url: '<%=request.getContextPath() %>/member/memberInsert.do',
+          type: 'post',
+          data: formData,
+          dataType: 'json',
+          success: function(result) {
+            if (result && result.flag) {
+              $('#joinspan').html(result.flag).css('color', 'red');
+              if (result.redirectUrl) {
+                window.location.href = result.redirectUrl;
+              }
+            } else {
+              $('#joinspan').html('회원 가입에 실패했습니다.').css('color', 'red');
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error('AJAX 요청 실패:', status, error);
+            $('#joinspan').html('서버 오류가 발생했습니다. 관리자에게 문의해주세요.').css('color', 'red');
+          }
+        });
       });
 
       $('#zipbtn').on('click', function(){

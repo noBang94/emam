@@ -7,8 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.or.ddit.emam.member.service.IMemberService;
 import kr.or.ddit.emam.member.service.MemberServiceImpl;
-import kr.or.ddit.emam.usersettings.service.IUsersettingsService;
-import kr.or.ddit.emam.usersettings.service.UsersettingsServiceImpl;
 import kr.or.ddit.emam.vo.MemberVO;
 
 import java.io.IOException;
@@ -19,75 +17,50 @@ public class MemberInsert extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("utf-8");
         response.setContentType("application/json; charset=utf-8");
 
-        // 클라이언트가 파라미터 형식으로 보낸 데이터 받기 -
-        String id = request.getParameter("mem_id");
-        String pass = request.getParameter("mem_pw");
-        String name = request.getParameter("mem_name");
-        String nickName = request.getParameter("mem_nickname");
-        String hp = request.getParameter("mem_phone");
-        String addr = request.getParameter("mem_addr");
-        String bir = request.getParameter("mem_bir");
-        String gen = request.getParameter("mem_gen");
-        //String mail = request.getParameter("mem_mail");
-        //String zip = request.getParameter("mem_zip");
-        //String add2 = request.getParameter("mem_add2");
+        try {
+            String id = request.getParameter("mem_id");
+            String pass = request.getParameter("mem_pw");
+            String name = request.getParameter("mem_name");
+            String nickName = request.getParameter("mem_nickname");
+            String hp = request.getParameter("mem_phone");
+            String addr = request.getParameter("mem_addr");
+            String bir = request.getParameter("mem_bir");
+            String gen = request.getParameter("mem_gen");
 
-        MemberVO  vo = new MemberVO();
-        vo.setMem_id(id);
-        vo.setMem_pw(pass);
-        vo.setMem_name(name);
-        vo.setMem_nickname(nickName);
-        vo.setMem_addr(addr);
-        vo.setMem_phone(hp);
-        vo.setMem_bir(bir);
-        vo.setMem_gen(gen);
-        //vo.setMem_mail(mail);
-        //vo.setMem_zip(zip);
-        //vo.setMem_add1(add1);
+            MemberVO vo = new MemberVO();
+            vo.setMem_id(id);
+            vo.setMem_pw(pass);
+            vo.setMem_name(name);
+            vo.setMem_nickname(nickName);
+            vo.setMem_addr(addr);
+            vo.setMem_phone(hp);
+            vo.setMem_bir(bir);
+            vo.setMem_gen(gen);
 
-        //--------------------------------------------------------
-        // 클라이언트가 JSON 문자열로 보낸 자료 받기
-//    	String strMemJson = StreamData.dataChange(request);
-//    	Gson gson = new Gson();
-//
-//    	MemberVO  vo = gson.fromJson(strMemJson, MemberVO.class);
+            IMemberService service = MemberServiceImpl.getInstance();
+            int insetCnt = service.insertMember(vo);
 
-        //---------------------------------------------------------------
+            String result;
+            if (insetCnt > 0) {
+                result = String.format("{\"flag\": \"%s님 가입을 축하합니다\", \"redirectUrl\": \"%s/member/loginMember.do\"}", vo.getMem_name(), request.getContextPath());
+            } else {
+                result = "{\"flag\": \"이미 존재하는 회원입니다.\"}";
+            }
 
+            PrintWriter out = response.getWriter();
+            out.write(result);
+            response.flushBuffer();
 
-        //service 객체 얻기
-        IMemberService service = MemberServiceImpl.getInstance();
-        IUsersettingsService usersettingsService = UsersettingsServiceImpl.getInstance();
-
-        //service메소드 호출 - 결과값 받기
-        int insetCnt = service.insertMember(vo);
-
-        String result = "";
-        if(insetCnt > 0){
-            result =
-                    """
-                             {
-                               "flag"  : "%s님 가입을 축하합니다"
-                             }
-                    """.formatted(vo.getMem_name());
-            usersettingsService.insertUsersettings(vo.getMem_id());
-        }else {
-            result =
-                    """	 	
-                         {
-                            "flag"  : "앗~~ 가입실패"
-                         }
-                    """	;
+        } catch (Exception e) {
+            e.printStackTrace(); // 로깅
+            String errorResult = "{\"flag\": \"서버 오류가 발생했습니다.\"}";
+            PrintWriter out = response.getWriter();
+            out.write(errorResult);
+            response.flushBuffer();
         }
-        PrintWriter out = response.getWriter();
-        out.write(result);
-
-        response.flushBuffer();
     }
-
 }

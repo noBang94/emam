@@ -1,5 +1,7 @@
 package kr.or.ddit.emam.vo;
 
+import java.util.Date;
+
 public class MemberVO {
     /*private String mem_mail;
     private String mem_job;

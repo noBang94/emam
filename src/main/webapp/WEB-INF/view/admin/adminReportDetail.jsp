@@ -94,16 +94,6 @@
       <td>처리 상태</td>
       <td><%= reportVO.getReportStatus().equals("Y") ? "처리 완료" : "미처리" %></td>
     </tr>
-    <tr>
-      <td>첨부 파일</td>
-      <td>
-        <% if (reportVO.getReportPhoto() != null && !reportVO.getReportPhoto().isEmpty()) { %>
-        <img src="<%=request.getContextPath()%>/upload/<%= reportVO.getReportPhoto() %>" alt="첨부 이미지" style="max-width: 300px; max-height: 300px;">
-        <% } else { %>
-        첨부된 파일이 없습니다.
-        <% } %>
-      </td>
-    </tr>
   </table>
   <div style="text-align: center; margin-top: 20px;">
     <button type="button" class="btn btn-success" onclick="processReport('<%= reportVO.getReportId() %>')">접수</button>
