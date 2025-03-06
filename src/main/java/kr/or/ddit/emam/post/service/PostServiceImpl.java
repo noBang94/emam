@@ -50,4 +50,7 @@ public class PostServiceImpl implements IPostService {
     //39
     @Override
     public PostVO getPost(int num) {return  dao.getPost(num);}
+
+    @Override
+    public List<PostVO> selectScrollPost(int page, int num) {return dao.selectScrollPost(page, num);}
 }

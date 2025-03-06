@@ -6,7 +6,9 @@ import kr.or.ddit.emam.vo.PostVO;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PostDaoImpl implements IPostDao {
     //싱글톤
@@ -120,5 +122,24 @@ public class PostDaoImpl implements IPostDao {
         }
 
         return pv;
+    }
+
+    @Override
+    public List<PostVO> selectScrollPost(int page, int num) {
+        List<PostVO> pList = new ArrayList<PostVO>();
+        SqlSession session = MyBatisUtil.getSqlSession();
+        try{
+            Map<String, Integer> params = new HashMap<>();
+            params.put("start", (page-1) * num + 1);
+            params.put("end", page * num);
+
+            pList = session.selectList("post.selectScrollPost", params);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
+        return pList;
     }
 }

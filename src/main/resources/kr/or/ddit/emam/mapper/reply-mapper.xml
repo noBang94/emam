@@ -31,7 +31,7 @@
     <update id="updateReply" parameterType="kr.or.ddit.emam.vo.ReplyVO">
         UPDATE reply
         SET REPLY_CON = #{reply_con},
-            REPLY_DATE = sysdate
+--             REPLY_DATE = sysdate
         WHERE reply_index = #{reply_index}
     </update>
 

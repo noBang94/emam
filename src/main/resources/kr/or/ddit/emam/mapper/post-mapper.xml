@@ -12,6 +12,8 @@
         values (post_num_seq.nextval,#{mem_id},#{post_con},#{post_photo},sysdate,#{post_visible})
     </insert>
 
+<!--    사용하던 쿼리-->
+<!--
     <resultMap id="postMap" type="PostVO">
         <id property="post_index" column="POST_INDEX" />
         <result property="mem_id" column="MEM_ID"></result>
@@ -41,9 +43,69 @@
         where POST_VISIBLE = 'Y'
         order by POST_DATE desc
     </select>
+-->
+    <resultMap id="postMap" type="PostVO">
+        <id property="post_index" column="POST_INDEX" />
+        <result property="mem_id" column="MEM_ID" />
+        <result property="post_con" column="POST_CON" />
+        <result property="post_photo" column="POST_PHOTO" />
+        <result property="post_date" column="POST_DATE" />
+        <result property="post_visible" column="POST_VISIBLE" />
+        <result property="post_replycnt" column="POST_REPLYCNT" />
+        <result property="post_ilikecnt" column="POST_ILIKECNT" />
+        <result property="post_viewcnt" column="POST_VIEWCNT" />
+        <collection property="postPhotoDetailList" javaType="ArrayList" column="POST_PHOTO" ofType="PostPhotoDetailVO" select="selectPostPhotoDetails" />
+    </resultMap>
+
+    <resultMap id="postPhotoDetailMap" type="PostPhotoDetailVO">
+        <id property="post_photo" column="POST_PHOTO" />
+        <id property="post_photo_sn" column="POST_PHOTO_SN" />
+        <result property="photo_stre_cours" column="PHOTO_STRE_COURS" />
+        <result property="photo_flie_nm" column="PHOTO_FILE_NM" />
+        <result property="org_photo_nm" column="ORG_PHOTO_NM" />
+        <result property="photo_extsn" column="PHOTO_EXTSN" />
+    </resultMap>
+
+    <select id="selectScrollPost" resultMap="postMap" parameterType="map">
+        SELECT *
+        FROM (
+                 SELECT ROWNUM AS rnum, c.*
+                 FROM (
+                          SELECT
+                              POST_INDEX,
+                              MEM_ID,
+                              POST_CON,
+                              POST_PHOTO,
+                              POST_DATE,
+                              POST_VISIBLE,
+                              POST_REPLYCNT,
+                              POST_ILIKECNT,
+                              POST_VIEWCNT
+                          FROM POST
+                          WHERE POST_VISIBLE = 'Y'
+                          ORDER BY POST_DATE DESC
+                      ) c
+             )
+        WHERE rnum BETWEEN #{start} AND #{end}
+    </select>
+
+    <select id="selectPostPhotoDetails" resultMap="postPhotoDetailMap">
+        SELECT
+            POST_PHOTO,
+            POST_PHOTO_SN,
+            PHOTO_STRE_COURS,
+            PHOTO_FILE_NM,
+            ORG_PHOTO_NM,
+            PHOTO_EXTSN
+        FROM POST_PHOTO_DETAIL
+        WHERE POST_PHOTO = #{POST_PHOTO}
+    </select>
 
 
-    <!--    게시글 전체 조회-->
+
+
+
+        <!--    게시글 전체 조회-->
 <!--    <select id="selectAllPost" resultType="PostVO">-->
 <!--        select * from post-->
 <!--    </select>-->
@@ -55,19 +117,18 @@
         select * from post where POST_INDEX = #{num}
     </select>
 
+
     <!--    게시글 수정-->
     <update id="updatePost" parameterType="kr.or.ddit.emam.vo.PostVO">
         update post set
             MEM_ID = #{mem_id},
             POST_CON = #{post_con},
-            POST_DATE = sysdate,
+--             POST_DATE = sysdate,
             POST_VISIBLE = #{post_visible}
         where POST_INDEX = #{post_index}
     </update>
-
 <!--    게시글 삭제-->
     <delete id="deletePost" parameterType="int">
         delete from post where POST_INDEX = #{post_index}
     </delete>
-
 </mapper>

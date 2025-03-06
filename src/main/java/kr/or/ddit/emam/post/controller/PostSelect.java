@@ -1,5 +1,6 @@
 package kr.or.ddit.emam.post.controller;
 
+import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,52 +19,70 @@ import kr.or.ddit.emam.vo.PostPhotoVO;
 import kr.or.ddit.emam.vo.PostVO;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 @WebServlet("/post/postList.do")
 public class PostSelect extends HttpServlet {
 
     @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/view/post/post.jsp").forward(req, resp);
+    }
 
+    @Override
+//    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html");
-
         //회원service 객체 얻기
         IMemberService service = MemberServiceImpl.getInstance();
-
         //세션 객체 가져오기
         HttpSession session = req.getSession();
         //세션에 로그인멤버가 있는지 확인한다
         MemberVO memcheck = (MemberVO) session.getAttribute("loginMember");
+
+        //페이지 번호 가져오기
+        String page = req.getParameter("page");
+        int pageNum = 0;
+        if(page == null){
+            pageNum =1;
+        }else {
+            pageNum = Integer.parseInt(page);
+        }
+
+        //한번에 보여줄 수
+        int setviewnum = 3;
         //회원이 없으면 로그인화면으로 이동
         if(memcheck == null){
             resp.sendRedirect("/");
         }else {
             //진짜 회원인지 확인한다
-
             //서비스 객체 얻기
             IMemberService memberService = MemberServiceImpl.getInstance();
             IPostService postService = PostServiceImpl.getInstance();
+            
+            //전체
+//            List<PostVO> postList = postService.selectAllPost();
 
-            List<PostVO> postList = postService.selectAllPost();
-
-//            System.out.println("postList->postList : " + postList);
-
+            //스크롤하면서 가져오기
+            List<PostVO> postList = postService.selectScrollPost(pageNum, setviewnum);
+            
+            
             for(PostVO postVO : postList){
                 MemberVO memVo = memberService.getMember(postVO.getMem_id());
-
-//                System.out.println("postList->memVo : " + memVo);
                 postVO.setMemVo(memVo);
-
             }
+//            req.setAttribute("postList", postList);
+//            req.getRequestDispatcher("/WEB-INF/view/post/post.jsp").forward(req, resp);
+            Gson gson = new Gson();
+            String jsonData = null;
 
-            req.setAttribute("postList", postList);
-            req.getRequestDispatcher("/WEB-INF/view/post/post.jsp").forward(req, resp);
+            jsonData = gson.toJson(postList);
+            PrintWriter out = resp.getWriter();
+            out.write(jsonData);
+            resp.flushBuffer();
         }
-        
-
     }
-
 }
