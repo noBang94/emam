@@ -142,4 +142,18 @@ public class MemberDaoImpl implements IMemberDao {
         }
         return cnt;
     }
+
+    @Override
+    public MemberVO getMemberByNickname(String nickname) {
+        SqlSession  session = MyBatisUtil.getSqlSession();
+        MemberVO  memVo = null;
+        try {
+            memVo = session.selectOne("member.getMemberByNickname", nickname);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return memVo;
+    }
 }

@@ -24,5 +24,8 @@ public interface IMemberDao {
 
     // 개인 정보 수정
     int updateMember(MemberVO member);
+
+    // 닉네임으로 회원정보 가져오기
+    public MemberVO getMemberByNickname(String nickname);
 }
 

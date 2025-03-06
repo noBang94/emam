@@ -6,8 +6,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kr.or.ddit.emam.member.service.IMemberService;
+import kr.or.ddit.emam.member.service.MemberServiceImpl;
 import kr.or.ddit.emam.report.service.IReportService;
 import kr.or.ddit.emam.report.service.ReportServiceImpl;
+import kr.or.ddit.emam.vo.MemberVO;
 import kr.or.ddit.emam.vo.ReportVO;
 
 import java.io.*;
@@ -25,6 +28,12 @@ public class ReportController extends HttpServlet {
         response.setContentType("application/json; charset=utf-8");
 
         String requestURI = request.getRequestURI();
+        String nickname = request.getParameter("nickname");
+
+
+        IMemberService memberService = MemberServiceImpl.getInstance();
+        MemberVO memVo = memberService.getMemberByNickname(nickname);
+        request.setAttribute("memVo", memVo);
 
         if (requestURI.endsWith("/initialReport.do")) {
             request.getRequestDispatcher("/WEB-INF/view/report/initial_report.jsp").forward(request, response);
@@ -46,9 +55,18 @@ public class ReportController extends HttpServlet {
 
         try {
             String fromId = request.getParameter("fromId");
+            if (fromId == null) {
+                String nickname = request.getParameter("nickname");
+                IMemberService memberService = MemberServiceImpl.getInstance();
+                MemberVO memVo = memberService.getMemberByNickname(nickname);
+                request.setAttribute("memVo", memVo);
+            }
             String toId = request.getParameter("toId");
             String reportType = request.getParameter("reportType");
             String content = request.getParameter("content");
+            if (content == null || content.equals("")) {
+                content = "";
+            }
 
             ReportVO vo = new ReportVO();
             vo.setFromId(fromId);

@@ -16,6 +16,11 @@
         select * from member where mem_id=#{mem_id}
     </select>
 
+<!--    닉네임으로 회원정보 가져오기-->
+    <select id="getMemberByNickname" resultType="memberVo" parameterType="String">
+        select * from member where MEM_NICKNAME=#{nickname}
+    </select>
+
     <!-- 가입 저장 하기  -->
     <insert id="insertMember" parameterType="memberVo" >
         insert into member (

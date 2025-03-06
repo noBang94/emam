@@ -49,7 +49,7 @@
             });
 
             //게시글 수정버튼클릭시
-            $(".update-btn").on('click', function () {
+            $(document).on('click',".update-btn", function () {
                 $(".post-update-modal").toggleClass("view");
                 let postindex = $(this).data("index");
 
@@ -76,14 +76,14 @@
             });
 
             //게시글 삭제 클릭시
-            $(".delete-btn").on('click', function () {
+            $(document).on('click',".delete-btn", function () {
                 $(".post-delete-modal").toggleClass("view");
                 let postindex = $(this).data("index")
                 $('.post-delete-modal input[name=postindex]').val(postindex);
             });
 
             //게시글 줄여보기 > 전체보이게
-            $(".a-c-bd").on('click', function () {
+            $(document).on('click',".a-c-bd", function () {
                 $(this).addClass("view");
             });
 
@@ -136,7 +136,7 @@
                                     htmlcode +='            </div>';
                                     htmlcode +='            <div class="rp-r-w-btn-warp">';
                                     htmlcode +='                <a class="btn s-btn re-re-btn" data-reindex='+v.reply_index+'>답글</a>';
-                                    htmlcode +='                <a class="btn s-btn re-report-btn" data-reindex='+v.reply_index+'>신고</a>';
+                                    htmlcode +='                <a class="btn s-btn re-report-btn" href="/report.do?nickname='+v.mem_nickname+'" data-reindex='+v.reply_index+'>신고</a>';
                                     htmlcode +='            </div>';
                                     htmlcode +='            <div class="rp-r-w-reply-warp"></div>';
                                     htmlcode +='        </div>';
@@ -174,7 +174,7 @@
 
                 $(this).parent().parent().children("div").eq(0).append(`
                     <span id="spn\${reindex}">
-                        <form action="<%=request.getContextPath() %>/reply/replyUpdate.do" method="get">
+                        <form action="<%=request.getContextPath() %>/reply/replyUpdate.do" method="post">
                             <input type="text" id="txtindex\${reindex}" name="replyindex" value="\${reindex}" hidden/>
                             <input type="text" id="txtCon\${reindex}" name="replycon" value="\${con}" />
                             <button type="submit" class="btnConfirm" data-index="\${postidex}" data-con="\${con}" data-reindex="\${reindex}">확인</button>
@@ -192,6 +192,8 @@
                 let replycon = $(this).parents("form").find("input[name=replycon]").val();
                 //대댓글인지 확인
                 let parentreindex = $(this).data("rereindex");
+
+                // 댓글 가져오기 수정후
                 $('form').submit(function(e) {
                     e.preventDefault();
                     $.ajax({
@@ -219,7 +221,7 @@
                                         if(parentreindex != 1){
                                             htmlcode +='<a class="btn s-btn re-re-btn" data-reindex='+v.reply_index+'>답글</a>';
                                         }
-                                        htmlcode +='                <a class="btn s-btn re-re-up-btn" data-reindex='+v.reply_index+'>수정</a>';
+                                        htmlcode +='                <a class="btn s-btn re-up-btn" data-reindex='+v.reply_index+'>수정</a>';
                                         htmlcode +='                <a class="btn s-btn re-del-btn" data-reindex='+v.reply_index+' href="<%=request.getContextPath() %>/reply/replyDelete.do?replyindex='+v.reply_index+'">삭제</a>';
                                         htmlcode +='            </div>';
                                         htmlcode +='            <div class="rp-r-w-reply-warp"></div>';
@@ -241,7 +243,7 @@
                                         if(parentreindex != 1){
                                             htmlcode +='<a class="btn s-btn re-re-btn" data-reindex='+v.reply_index+'>답글</a>';
                                         }
-                                        htmlcode +='                <a class="btn s-btn re-report-btn" data-reindex='+v.reply_index+'>신고</a>';
+                                        htmlcode +='                <a class="btn s-btn re-report-btn" href="/report.do?nickname='+v.mem_nickname+'" data-reindex='+v.reply_index+'>신고</a>';
                                         htmlcode +='            </div>';
                                         htmlcode +='            <div class="rp-r-w-reply-warp"></div>';
                                         htmlcode +='        </div>';
@@ -346,7 +348,7 @@
                                     htmlcode +='                <span class="rp-r-w-con">'+v.reply_con+'</span>';
                                     htmlcode +='            </div>';
                                     htmlcode +='            <div class="rp-r-w-btn-warp">';
-                                    htmlcode +='                <a class="btn s-btn re-report-btn" data-reindex='+v.reply_index+'>신고</a>';
+                                    htmlcode +='                <a class="btn s-btn re-report-btn" href="/report.do?nickname='+v.mem_nickname+'" data-reindex='+v.reply_index+'>신고</a>';
                                     htmlcode +='            </div>';
                                     htmlcode +='        </div>';
                                     htmlcode +='    </div>';
@@ -374,10 +376,10 @@
 
                 $(this).parent().parent().children("div").eq(0).append(`
                     <span id="spn\${reindex}">
-                        <form action="<%=request.getContextPath() %>/reply/replyUpdate.do" method="get">
+                        <form action="<%=request.getContextPath() %>/reply/replyreplyUpdate.do" method="post">
                             <input type="text" id="txtindex\${reindex}" name="replyindex" value="\${reindex}" hidden/>
                             <input type="text" id="txtCon\${reindex}" name="replycon" value="\${con}" />
-                            <button type="submit" class="rebtnConfirm" data-rereindex="1" data-index="\${postidex}" data-con="\${con}" data-reindex="\${reindex}">확인</button>
+                            <button type="submit" class="rebtnConfirm" data-index="\${postidex}" data-con="\${con}" data-reindex="\${reindex}">확인</button>
                             <button type="button" class="rebtnCancel" data-reindex="\${reindex}">취소</button>
                         </form>
                     </span>
@@ -391,6 +393,8 @@
                 let replycon = $(this).parents("form").find("input[name=replycon]").val();
                 //부모 댓글 확인
                 let parentreindex = $(this).parents(".rp-r-w-container").eq(1).data("reindex");
+
+                //대댓글(답글) 가져오기 수정후
                 $('form').submit(function(e) {
                     e.preventDefault();
                     $.ajax({
@@ -433,7 +437,7 @@
                                         htmlcode +='                <span class="rp-r-w-con">'+v.reply_con+'</span>';
                                         htmlcode +='            </div>';
                                         htmlcode +='            <div class="rp-r-w-btn-warp">';
-                                        htmlcode +='                <a class="btn s-btn re-report-btn" data-reindex='+v.reply_index+'>신고</a>';
+                                        htmlcode +='                <a class="btn s-btn re-report-btn" href="/report.do?nickname='+v.mem_nickname+'" data-reindex='+v.reply_index+'>신고</a>';
                                         htmlcode +='            </div>';
                                         htmlcode +='        </div>';
                                         htmlcode +='    </div>';
@@ -533,7 +537,7 @@
                                 htmlcode += '            </div>';
                                                     }else{
                                 htmlcode += '            <div class="btn-cover">';
-                                htmlcode += '                <div class="report-btn pointer" data-index='+pl.post_index+'>신고</div>';
+                                htmlcode += '                <a class="report-btn pointer" href="/report.do?nickname='+pl.memVo.mem_nickname+'" data-index='+pl.post_index+'>신고</a>';
                                 htmlcode += '            </div>';
                                                     }
                                 htmlcode += '        </div>';
@@ -545,11 +549,11 @@
                                 htmlcode += '            <div>공부</div>';
                                 htmlcode += '            <div>집가고싶다</div>';
                                 htmlcode += '        </div>';
-                                htmlcode += '        <div class="a-c-bd">'+pl.post_con+'</div>';
+                                htmlcode += '        <div class="a-c-bd">'+pl.post_con.replace("\r\n", "<br>").replace("\r", "<br>").replace("\n", "<br>")+'</div>';
                                 htmlcode += '        <div class="a-c-rp a-c-rp-w" data-index='+pl.post_index+'>';
                                 htmlcode += '            <form action="/reply/replyInsert.do" method="post">';
-                                htmlcode += '                <input type="hidden" name="post_index" value='+pl.post_index+'/>';
-                                htmlcode += '                <input type="hidden" name="mem_id" value="loginMember.getMem_id()"/>';
+                                htmlcode += '                <input type="hidden" name="post_index" value="'+pl.post_index+'"/>';
+                                htmlcode += '                <input type="hidden" name="mem_id" value="<%=loginMember.getMem_id()%>"/>';
                                 htmlcode += '                <input type="text" placeholder="댓글을 입력하세요" name="reply_con"/>';
                                 htmlcode += '                <input type="submit" value="댓글달기">';
                                 htmlcode += '            </form>';
@@ -592,6 +596,34 @@
                     }
                 }
             });
+
+            $('.post-ipt').on('change', function(e) {
+                const files = e.target.files; // 선택된 파일 목록 가져오기
+
+                if (files && files.length > 0) {
+                    for (let i = 0; i < files.length; i++) {
+                        const file = files[i];
+
+                        // 파일 타입 검사 (이미지 파일인지 확인)
+                        if (file.type.startsWith('image/')) {
+                            // 이미지 파일 처리 로직
+                            console.log('선택된 이미지 파일:', file.name);
+
+                            // 추가적인 이미지 처리 (미리보기, 업로드 등)
+                            const reader = new FileReader();
+                            reader.onload = function(event) {
+                                // 이미지 미리보기 예시
+                                const img = $('<img>').attr('src', event.target.result).width(100);
+                                $('.modal-l').append(img);
+                            };
+                            reader.readAsDataURL(file);
+                        } else {
+                            console.log('이미지 파일이 아닙니다:', file.name);
+                            // 이미지 파일이 아닌 경우 처리 로직
+                        }
+                    }
+                }
+            });
         });//제이쿼리 끝
     </script>
     <link rel="stylesheet" href="<%=request.getContextPath() %>/css/swiper-11.2.5.css" />
@@ -626,9 +658,15 @@
 
         /*토글 스위치(e)*/
 
-        .post-ipt{width: 100%;display: block;height: 100px;background: green;}
+        .post-ipt{width: 100%;display: block;height: 100px;background: green;opacity: 100%;overflow: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+
+        }
         .modal-body{display: flex;width: 100%;}
-        .modal-l{width: 50%;}
+        .modal-l{position: relative; width: 50%;}
         .modal-r{width: 50%;}
 
         /*공통으로 사용할만한것(e)*/
