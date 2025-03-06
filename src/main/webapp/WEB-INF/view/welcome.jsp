@@ -1,7 +1,6 @@
 <%@ page import="kr.or.ddit.emam.vo.MemberVO" %>
 <%@ page import="kr.or.ddit.emam.vo.NoticeVO" %>
 <%@ page import="java.util.List" %>
-<%@ page import="kr.or.ddit.emam.vo.WeatherVO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <jsp:include page="/WEB-INF/view/common/gnb.jsp" />
@@ -175,6 +174,7 @@
       border-bottom: none;
     }
 
+
     .profile-block p {
       margin-bottom: 10px;
       line-height: 1.5;
@@ -278,7 +278,6 @@
   </div>
   <div class="clock" id="time"></div>
   <div class="greeting" id="today"></div>
-  <img src="" id="weatherImg"><%=iT1h%>℃
 
 </div>
 
@@ -318,5 +317,55 @@
     <% } %>
   </div>
 </div>
+
+<script>
+  $(function () {
+    //날씨에 따른 날씨이미지 변경
+    switch (<%=iSky%>){
+      case 1 : //구름없음
+        switch (<%=iPty%>){
+          case 0 : //눈비없음
+            document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_1_0.png");
+            break;
+        }
+        break;
+      case 2 :
+      case 3 : //구름조금
+        switch (<%=iPty%>){
+          case 0 : //눈비없음
+            document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_2_0.png");
+            break;
+          case 1 : //비
+          case 5 : //약간 비
+          case 2 : //비/눈
+          case 6 : //약간 비/눈
+            document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_2_1.png");
+            break;
+          case 3 : //눈
+          case 7 : //약간 눈
+            document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_3_2.png");
+            break;
+        }
+        break;
+      case 4 : //구름많음
+        switch (<%=iPty%>){
+          case 0 : //눈비없음
+            document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_3_0.png");
+            break;
+          case 1 : //비
+          case 5 : //약간 비
+          case 2 : //비/눈
+          case 6 : //약간 비/눈
+            document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_3_1.png");
+            break;
+          case 3 : //눈
+          case 7 : //약간 눈
+            document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_3_2.png");
+            break;
+        }
+        break;
+    }
+  });
+</script>
 </body>
 </html>

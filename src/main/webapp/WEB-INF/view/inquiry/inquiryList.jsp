@@ -109,7 +109,7 @@
         }else {
             for(InquiryVO vo : inquiryList){
         %>
-        <tr class="row" data-num="<%=vo.getInquiry_index()%>">  //변경
+        <tr class="row" data-num="<%=vo.getInquiry_index()%>">
             <td><%=vo.getInquiry_index()%></td>
             <td><%=vo.getMem_id()%></td>
             <td><%=vo.getInquiry_title()%></td>

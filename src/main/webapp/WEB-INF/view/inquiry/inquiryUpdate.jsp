@@ -91,10 +91,6 @@
         </td>
       </tr>
       <tr>
-        <td>사진 첨부</td>
-        <td>사진 넣기...</td>
-      </tr>
-      <tr>
         <td colspan="2">
           <input type="radio" name="inquiry_ispublic" value="1">공개
           <input type="radio" name="inquiry_ispublic" value="0">비공개
