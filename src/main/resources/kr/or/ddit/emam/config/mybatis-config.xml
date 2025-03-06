@@ -27,7 +27,8 @@
         <typeAlias type="kr.or.ddit.emam.vo.ReplyVO" alias="ReplyVO"/>
         <typeAlias type="kr.or.ddit.emam.vo.WeatherVO" alias="WeatherVO"/>
         <typeAlias type="kr.or.ddit.emam.vo.FriendVO" alias="FriendVO"/>
-
+        <typeAlias type="kr.or.ddit.emam.vo.UsersettingsVO" alias="UsersettingsVO"/>
+        <typeAlias type="kr.or.ddit.emam.vo.ProfileVO" alias="ProfileVO"/>
 
     </typeAliases>
 
@@ -55,6 +56,8 @@
         <mapper resource="kr/or/ddit/emam/mapper/welcome-mapper.xml"/>
         <mapper resource="kr/or/ddit/emam/mapper/friend-mapper.xml"/>
         <mapper resource="kr/or/ddit/emam/mapper/notice-mapper.xml"/>
+        <mapper resource="kr/or/ddit/emam/mapper/usersettings-mapper.xml"/>
+        <mapper resource="kr/or/ddit/emam/mapper/profile-mapper.xml"/>
 
     </mappers>
 </configuration>

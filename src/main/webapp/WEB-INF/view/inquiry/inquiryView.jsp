@@ -70,8 +70,6 @@
 <body>
 <h3>문의</h3>
 
-<%--<jsp:include page="/"/>--%>
-
 <div id="result">
 <%
   if(inquiryVo==null){
@@ -82,8 +80,20 @@
   <table class="resultTable">
     <tr>
       <td><%=inquiryVo.getInquiry_index()%></td>
-      <td><%=inquiryVo.getInquiry_date()%>></td>
-      <td>문의처리여부...</td>
+      <td><%=inquiryVo.getInquiry_date()%></td>
+      <td>
+          <%
+              if(inquiryVo.getInquiry_comment()==null){
+          %>
+          <p>답변대기</p>
+          <%
+          }else{
+          %>
+          <p>답변완료</p>
+          <%
+              }
+          %>
+      </td>
     </tr>
     <tr>
       <td colspan="2"><%=inquiryVo.getInquiry_title()%></td>
@@ -91,9 +101,6 @@
     </tr>
     <tr>
       <td colspan="3"><%=inquiryVo.getInquiry_con()%></td>
-    </tr>
-    <tr>
-       <td colspan="3"><%=inquiryVo.getInquiry_photo()%></td>
     </tr>
     <tr>
       <td colspan="3" style="text-align: center;">

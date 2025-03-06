@@ -35,7 +35,6 @@
                 #{inquiry_con},
                 SYSDATE,
                 #{inquiry_ispublic},
-                #{inquiry_photo},
                 null,
                 null
             )
@@ -52,8 +51,7 @@
             set
                 inquiry_title = #{inquiry_title},
                 inquiry_con = #{inquiry_con},
-                inquiry_ispublic = #{inquiry_ispublic},
-                inquiry_photo = #{inquiry_photo}
+                inquiry_ispublic = #{inquiry_ispublic}
         where inquiry_index = #{inquiry_index}
     </update>
 

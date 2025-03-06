@@ -30,11 +30,9 @@ public class InquiryWrite extends HttpServlet {
         //작성 완료 시 데이터 받기
         String reqStr = StreamData.getJsonStream(request);
 
-
         //역직렬화 - InquiryVO객체로 변환
         Gson gson = new Gson();
         InquiryVO inquiryVo = gson.fromJson(reqStr, InquiryVO.class);
-
 
         //service객체 얻기
         IInquiryService service = InquiryServiceImpl.getInstance();
@@ -51,6 +49,5 @@ public class InquiryWrite extends HttpServlet {
         PrintWriter out = response.getWriter();
         out.write(jsonStr);
         response.flushBuffer();
-
     }
 }

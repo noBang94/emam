@@ -1,6 +1,5 @@
 package kr.or.ddit.emam.vo;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 public class InquiryVO {
@@ -10,7 +9,6 @@ public class InquiryVO {
     private String inquiry_con; //문의내용
     private String inquiry_date; //문의일시
     private int inquiry_ispublic;
-    private long inquiry_photo = -1; //문의사진
     private Date inquiry_comment_date;
     private String inquiry_comment;
     private MemberVO memberVo;
@@ -69,14 +67,6 @@ public class InquiryVO {
 
     public void setInquiry_ispublic(int inquiry_ispublic) {
         this.inquiry_ispublic = inquiry_ispublic;
-    }
-
-    public long getInquiry_photo() {
-        return inquiry_photo;
-    }
-
-    public void setInquiry_photo(long inquiry_photo) {
-        this.inquiry_photo = inquiry_photo;
     }
 
     public Date getInquiry_comment_date() {
