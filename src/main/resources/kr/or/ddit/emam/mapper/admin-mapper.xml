@@ -20,13 +20,11 @@
         <result property="inquiry_comment" column="INQUIRY_COMMENT"/>
     </resultMap>
 
-    <!-- 관리자 로그인 -->
     <select id="getLoginAdmin" resultType="kr.or.ddit.emam.vo.AdminVO" parameterType="kr.or.ddit.emam.vo.AdminVO">
         select * from admin
         where ADMIN_ID = #{admin_id} and ADMIN_PW = #{admin_pw}
     </select>
 
-    <!-- 관리자 회원관리 -->
     <select id="getMemberList" parameterType="map" resultMap="memberMap">
         SELECT MEM_ID, MEM_NAME, MEM_NICKNAME, MEM_JOINDATE
         FROM (
@@ -60,7 +58,6 @@
         delete from member where MEM_ID = #{mem_id}
     </delete>
 
-    <!-- 관리자 공지사항 -->
     <select id="getNotice" parameterType="int" resultType="NoticeVo">
         select NOTICE_INDEX, NOTICE_TITLE, NOTICE_CON, NOTICE_DATE
         from notice
@@ -89,7 +86,6 @@
         ORDER BY NOTICE_INDEX DESC
     </select>
 
-    <!-- 공지사항 제목 조회 -->
     <select id="searchTitle" parameterType="String" resultType="noticeVo">
         select NOTICE_INDEX, NOTICE_TITLE, NOTICE_CON, NOTICE_DATE
         from notice
@@ -102,7 +98,6 @@
         delete from notice where NOTICE_INDEX = #{notice_index}
     </delete>
 
-    <!-- 관리자 문의사항 -->
     <select id="getInquiryList" resultMap="inquiryMap">
         SELECT
             INQUIRY_INDEX,
@@ -146,4 +141,46 @@
         WHERE INQUIRY_TITLE LIKE '%' || #{value} || '%'
         ORDER BY INQUIRY_INDEX DESC
     </select>
+<!--
+    <select id="getTotalPosts" resultType="int">
+        SELECT COUNT(*) FROM POST
+    </select>
+
+    <select id="getTotalReports" resultType="int">
+        SELECT COUNT(*) FROM REPORT
+    </select>
+
+    -->
+    <select id="getNewMembersCount" resultType="int">
+        SELECT COUNT(*) FROM MEMBER
+    </select>
+
+    <select id="getNewPostsCount" resultType="int">
+        SELECT COUNT(*) FROM POST
+    </select>
+
+    <select id="getNewReportsCount" resultType="int">
+        SELECT COUNT(*) FROM REPORT
+    </select>
+
+    <select id="getNewInquiriesCount" resultType="int">
+        SELECT COUNT(*) FROM INQUIRY
+    </select>
+
+    <select id="getUnprocessedReportsCount" resultType="int">
+        SELECT COUNT(*) FROM REPORT
+    </select>
+
+    <select id="getUnprocessedInquiriesCount" resultType="int">
+        SELECT COUNT(*) FROM INQUIRY
+    </select>
+
+    <select id="getTotalPosts" resultType="int">
+        SELECT COUNT(*) FROM POST
+    </select>
+
+    <select id="getTotalReports" resultType="int">
+        SELECT COUNT(*) FROM REPORT
+    </select>
+
 </mapper>

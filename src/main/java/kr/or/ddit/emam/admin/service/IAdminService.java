@@ -24,11 +24,21 @@ public interface IAdminService {
     public List<NoticeVO> searchTitle(String searchTitle);
     public int deleteNotice(int noticeIndex);
 
-
     // 관리자 문의사항 관리
     public List<InquiryVO> getInquiryList();
     public InquiryVO getInquiryDetail(int inquiryIndex);
     public int updateInquiryComment(InquiryVO inquiry);
     public List<InquiryVO> searchInquiryList(String searchTitle);
+
+    //관리자 메인화면
+    public int getTotalPosts();
+    public int getTotalReports();
+    public int getUnprocessedReportsCount();
+    public int getUnprocessedInquiriesCount();
+
+    public int getNewMembersCount();
+    public int getNewPostsCount();
+    public int getNewReportsCount();
+    public int getNewInquiriesCount();
 }
 

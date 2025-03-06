@@ -9,15 +9,15 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
     <style>
-
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f4f4f4;
         }
         .top-bar {
-            background-color: #343a40; /* 다크 그레이 */
+            background-color: #343a40;
             color: white;
             padding: 15px 20px;
             display: flex;
@@ -30,7 +30,7 @@
             font-size: 24px;
         }
         .top-bar .logout-btn {
-            background-color: #dc3545; /* 레드 */
+            background-color: #dc3545;
             color: white;
             border: none;
             padding: 8px 15px;
@@ -77,6 +77,50 @@
             text-align: center;
             padding: 0 15px;
         }
+        /* 대시보드 스타일 추가 */
+        .dashboard {
+            width: 80%;
+            margin: 30px auto;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            padding: 30px;
+        }
+        .dashboard-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            color: #333;
+        }
+        .dashboard-items {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .dashboard-item {
+            width: 220px;
+            padding: 25px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            text-align: center;
+            margin: 15px;
+        }
+        .dashboard-item h3 {
+            margin-bottom: 15px;
+            font-size: 22px;
+            color: #333;
+        }
+        .dashboard-item p {
+            font-size: 28px;
+            font-weight: 600;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .dashboard-item i {
+            font-size: 36px;
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
     </style>
 
     <script>
@@ -118,6 +162,36 @@
     <div class="menu-item">
         <a href="<%=request.getContextPath() %>/admin/qnaList.do">문의 관리</a>
         <p>사용자 문의 답변 및 관리</p>
+    </div>
+</div>
+
+<div class="dashboard">
+    <div class="dashboard-title">
+        통계
+    </div>
+    <div class="dashboard-items">
+        <div class="dashboard-item">
+            <i class="fas fa-users"></i>
+            <h3>총 회원 수</h3>
+            <p>${totalUsers}</p>
+        </div>
+        <div class="dashboard-item">
+            <i class="fas fa-file-alt"></i>
+            <h3>총 게시글 수</h3>
+            <p>${totalPosts}</p>
+        </div>
+        <div class="dashboard-item">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>총 신고 건수</h3>
+            <p>${totalReports}</p>
+        </div>
+        <div class="dashboard-item">
+            <i class="fas fa-question-circle"></i>
+            <h3>총 문의 건수</h3>
+            <p>${totalQnas}</p>
+        </div>
+
+
     </div>
 </div>
 

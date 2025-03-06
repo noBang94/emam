@@ -39,6 +39,8 @@ public class WelcomeMain extends HttpServlet {
         HttpSession session = request.getSession();
         MemberVO loginMemberVo = (MemberVO) session.getAttribute("loginMember");
 
+
+
         //날씨 - 회원 거주지역 정보 가져오기
         String local_name = loginMemberVo.getMem_addr().trim();
         IWelcomeService welcomeService = WelcomeServiceImpl.getInstance();
@@ -106,7 +108,8 @@ public class WelcomeMain extends HttpServlet {
         String time = nowtime.format(formatterBaseTime); //조회할 시간
 
         String wSky = ""; //SKY 하늘상태코드 - 1(맑음) 2(구름조금) 3(구름많음) 4(흐림)
-        String wPop = ""; //POP 강수확률(%)
+        String wPty = ""; //PTY 강수형태코드 - 0(없음) 1(비) 2(비/눈) 3(눈) 5(빗방울) 6(빗방울눈날림) 7(눈날림)
+        String wT1h = ""; //T1H 기온
 
         for(int i = 0; i < jsonArray.length(); i++) {
             weather = jsonArray.getJSONObject(i);
@@ -117,25 +120,19 @@ public class WelcomeMain extends HttpServlet {
 
             //조회할 시간에 대한 날씨 정보 저장
             if (time.equals(fcstTime)&&category.equals("SKY")) {
-                switch (fcstValue) {
-                    case "1":
-                        wSky = "맑음";
-                        break;
-                    case "2":
-                        wSky = "구름조금";
-                        break;
-                    case "3":
-                        wSky = "구름많음";
-                        break;
-                    case "4":
-                        wSky = "흐림";
-                        break;
-                }
+                wSky = fcstValue;
             }
-
+            if (time.equals(fcstTime)&&category.equals("PTY")) {
+                wPty = fcstValue;
+            }
+            if (time.equals(fcstTime)&&category.equals("T1H")) {
+                wT1h = fcstValue;
+            }
         }
 
         request.setAttribute("wSky", wSky);
+        request.setAttribute("wPty", wPty);
+        request.setAttribute("wT1h", wT1h);
 
         //공지사항 정보 가져오기
         IAdminService adminService = AdminServiceImpl.getInstance();

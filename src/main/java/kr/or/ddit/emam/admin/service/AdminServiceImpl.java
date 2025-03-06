@@ -60,7 +60,6 @@ public class AdminServiceImpl implements IAdminService {
         return dao.deleteNotice(noticeIndex);
     }
 
-
     //관리자 문의사항
     public List<InquiryVO> getInquiryList() {
         return dao.getInquiryList();
@@ -73,5 +72,46 @@ public class AdminServiceImpl implements IAdminService {
     }
     public List<InquiryVO> searchInquiryList(String searchTitle) {
         return dao.searchInquiryList(searchTitle);
+    }
+
+    // 관리자 메인화면 (대시보드)
+    public int getTotalPosts() {
+        return dao.getTotalPosts();
+    }
+
+    public int getTotalReports() {
+        return dao.getTotalReports();
+    }
+
+    @Override
+    public int getUnprocessedReportsCount() {
+        return dao.getUnprocessedReportsCount();
+    }
+
+    @Override
+    public int getUnprocessedInquiriesCount() {
+        return dao.getUnprocessedInquiriesCount();
+    }
+
+    //
+
+    @Override
+    public int getNewMembersCount() {
+        return dao.getNewMembersCount();
+    }
+
+    @Override
+    public int getNewPostsCount() {
+        return dao.getNewPostsCount();
+    }
+
+    @Override
+    public int getNewReportsCount() {
+        return dao.getNewReportsCount();
+    }
+
+    @Override
+    public int getNewInquiriesCount() {
+        return dao.getNewInquiriesCount();
     }
 }

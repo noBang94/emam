@@ -160,7 +160,7 @@
 </script>
 <div class="gnb">
     <div class="gnb-inner">
-        <a href="<%=request.getContextPath() %>" alt="home">
+        <a href="<%=request.getContextPath() %>/welcome/welcomeMain.do" alt="home">
             <div class="gnb-left">
                 <div class="gnb-logo">
                     <img src="<%=request.getContextPath() %>/images/demo_logo.png" alt="으밀아밀 이에요잉">
@@ -170,7 +170,7 @@
         <div class="gnb-search">
             <form action="/search.do">
                 <div class="search-warp">
-                    <input type="text" placeholder="대충 만든 검색창이에요잉"/>
+                    <input type="text" name="id" placeholder="대충 만든 검색창이에요잉"/>
                     <input type="submit" class="btn" value="검색">
                 </div>
             </form>
@@ -185,8 +185,8 @@
             <ul class="dropdown-menu">
                 <li><a href="<%=request.getContextPath() %>/profile/profile.do">내 프로필</a></li>
                 <li><a href="<%=request.getContextPath() %>/member/memberset.do">개인정보 수정</a></li>
-                <li><a href="<%=request.getContextPath() %>/logout/logout.do">로그아웃</a></li>
-                <li><a href="<%=request.getContextPath() %>/inquiry/inquiry.do">문의 사항</a></li>
+                <li><a href="<%=request.getContextPath() %>/member/logoutMember.do">로그아웃</a></li>
+                <li><a href="<%=request.getContextPath() %>/inquiry/inquiryList.do">문의 사항</a></li>
                 <li><a href="<%=request.getContextPath() %>/notice/notice.do">공지사항</a></li>
                 <li>
                     <form>

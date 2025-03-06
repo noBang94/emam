@@ -51,4 +51,12 @@
         where MEM_NICKNAME=#{mem_nickname}
     </select>
 
+
+    <select id="getMemberListById" parameterType="String" resultType="kr.or.ddit.emam.vo.MemberVO">
+        SELECT mem_id, mem_name, mem_nickname, mem_joindate
+        FROM member
+        WHERE mem_id LIKE '%' || #{searchId} || '%'
+    </select>
+
+
 </mapper>
