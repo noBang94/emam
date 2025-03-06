@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.or.ddit.emam.member.service.IMemberService;
 import kr.or.ddit.emam.member.service.MemberServiceImpl;
+import kr.or.ddit.emam.usersettings.service.IUsersettingsService;
+import kr.or.ddit.emam.usersettings.service.UsersettingsServiceImpl;
 import kr.or.ddit.emam.vo.MemberVO;
 
 import java.io.IOException;
@@ -59,10 +61,11 @@ public class MemberInsert extends HttpServlet {
 
 
         //service 객체 얻기
-        IMemberService  service = MemberServiceImpl.getInstance();
+        IMemberService service = MemberServiceImpl.getInstance();
+        IUsersettingsService usersettingsService = UsersettingsServiceImpl.getInstance();
 
         //service메소드 호출 - 결과값 받기
-        int  insetCnt = service.insertMember(vo);
+        int insetCnt = service.insertMember(vo);
 
         String result = "";
         if(insetCnt > 0){
@@ -72,7 +75,7 @@ public class MemberInsert extends HttpServlet {
                                "flag"  : "%s님 가입을 축하합니다"
                              }
                     """.formatted(vo.getMem_name());
-
+            usersettingsService.insertUsersettings(vo.getMem_id());
         }else {
             result =
                     """	 	
