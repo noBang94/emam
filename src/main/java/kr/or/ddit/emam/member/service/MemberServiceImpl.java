@@ -58,4 +58,7 @@ public class MemberServiceImpl implements IMemberService {
     public int updateMember(MemberVO member) {
         return dao.updateMember(member);
     }
+
+    @Override
+    public MemberVO getMemberByNickname(String nickname) {return dao.getMemberByNickname(nickname);}
 }

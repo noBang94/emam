@@ -6,6 +6,7 @@
     if (reportVOForForm == null) {
         reportVOForForm = new ReportVO();
     }
+    MemberVO tmemVo = (MemberVO) request.getAttribute("memVo");
 %>
 <html>
 <head>
@@ -43,7 +44,7 @@
             </tr>
             <tr class="row">
                 <td class="col-md-3">신고대상</td>
-                <td class="col-md-9"><input type="text" class="form-control" name="toId" value="<%=reportVOForForm.getToId()%>" required/></td>
+                <td class="col-md-9"><input type="text" class="form-control" name="toId" value="<%=tmemVo.getMem_id()%>" required/></td>
             </tr>
             <tr class="row">
                 <td class="col-md-3">신고유형</td>
@@ -58,7 +59,7 @@
             </tr>
             <tr class="row">
                 <td class="col-md-3">신고내역</td>
-                <td class="col-md-9"><textarea class="form-control" name="content" rows="10"><%=reportVOForForm.getReportContent()%></textarea></td>
+                <td class="col-md-9"><textarea class="form-control" name="content" rows="10"></textarea></td>
             </tr>
             <tr class="row">
                 <td colspan="2" style="text-align: center"><button type="submit" class="btn btn-danger">신고하기</button></td>
