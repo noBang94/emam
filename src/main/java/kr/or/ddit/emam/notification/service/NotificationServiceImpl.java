@@ -41,4 +41,7 @@ public class NotificationServiceImpl implements INotificationService {
     //알림 확인
     @Override
     public int updateNotification(int num) { return dao.updateNotification(num); }
+
+    @Override
+    public int selectOneNotification(NotificationVO notificationVo) { return dao.selectOneNotification(notificationVo); }
 }

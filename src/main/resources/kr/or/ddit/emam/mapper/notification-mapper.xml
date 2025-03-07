@@ -48,4 +48,12 @@
         delete from notification where notification_index = #{notification_index}
     </delete>
 
+    <!-- 타겟과 타입으로 해당하는 알림 index 찾기 -->
+    <select id="selectOneNotification" parameterType="notificationVo">
+        select notification_index
+            from notificatin
+        where notification_target = #{notification_target}
+        and notification_type = #{notification_type}
+    </select>
+
 </mapper>

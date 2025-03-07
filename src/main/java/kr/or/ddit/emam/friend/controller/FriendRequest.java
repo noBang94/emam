@@ -35,22 +35,23 @@ public class FriendRequest extends HttpServlet {
         //신청하려는 대상의 계정정보 가져오기
         String toFriend = request.getParameter("toFriend");
 
-        //친구 컬럼 추가하기
+        //친구 테이블 행 추가하기
         FriendVO friendVo = new FriendVO();
         friendVo.setFriend_toid(toFriend);
         friendVo.setFriend_fromid(fromFriendVo.getMem_id());
         IFriendService friendService = FriendServiceImpl.getInstance();
         friendService.requestFriend(friendVo);
 
-        //알림 컬럼 데이터 넣기
-        int num = friendService.indexFriend(friendVo);
+        //알림 테이블 행 추가하기
+        int friendIndex = friendService.indexFriend(friendVo);
         NotificationVO notificationVo = new NotificationVO();
         notificationVo.setNotification_toId(toFriend);
         notificationVo.setNotification_fromId(fromFriendVo.getMem_id());
-        notificationVo.setNotification_target(num);
+        notificationVo.setNotification_target(friendIndex);
+        notificationVo.setNotification_type("friend");
         String notificationContent = fromFriendVo.getMem_nickname() + "님이 친구를 신청했습니다.";
         notificationVo.setNotification_con(notificationContent);
-        //신청 받는 유저의 유저세팅 확인
+            //신청 받는 유저의 유저세팅 확인
         IUsersettingsService usersettingsService = UsersettingsServiceImpl.getInstance();
         UsersettingsVO usersettingsVo = new UsersettingsVO();
         usersettingsVo = usersettingsService.checkUsersettings(toFriend);
@@ -59,8 +60,6 @@ public class FriendRequest extends HttpServlet {
         }else{
             notificationVo.setNotification_isread(1);
         }
-
-        //알림 컬럼 추가하기
         INotificationService notificationService = NotificationServiceImpl.getInstance();
         notificationService.insertNotification(notificationVo);
     }
