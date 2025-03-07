@@ -44,7 +44,7 @@
             </tr>
             <tr class="row">
                 <td class="col-md-3">신고대상</td>
-                <td class="col-md-9"><input type="text" class="form-control" name="toId" value="<%=tmemVo.getMem_id()%>" required/></td>
+                <td class="col-md-9"><input type="text" class="form-control" name="toId" required/></td>
             </tr>
             <tr class="row">
                 <td class="col-md-3">신고유형</td>

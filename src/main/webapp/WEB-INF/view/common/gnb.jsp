@@ -255,14 +255,14 @@
         <a href="<%=request.getContextPath() %>/welcome/welcomeMain.do" alt="home">
             <div class="gnb-left">
                 <div class="gnb-logo">
-                    <img src="<%=request.getContextPath() %>/images/demo_logo.png" alt="으밀아밀 이에요잉">
+                    <img src="<%=request.getContextPath() %>/images/emam.png" alt="으밀아밀">
                 </div>
             </div>
         </a>
         <div class="gnb-search">
             <form action="/search.do">
                 <div class="search-warp">
-                    <input type="text" name="id" placeholder="대충 만든 검색창이에요잉"/>
+                    <input type="text" name="id" placeholder="검색창"/>
                     <input type="submit" class="btn" value="검색">
                 </div>
             </form>

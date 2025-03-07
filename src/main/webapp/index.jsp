@@ -12,9 +12,14 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <style>
+        body {
+            padding-top: 70px; /* 전체 내용을 아래로 20px 내림 */
+        }
         h2 {
             text-align: center;
-            margin-top: 50px;
+            margin-top: 5px;
+            margin-bottom: 2px;
+            font-size: 45px;
         }
         .login-container {
             width: 50%;
@@ -120,7 +125,12 @@
 </head>
 <body>
 
+<div style="text-align: center;">
+    <img src="images/emam_white.png" alt="로고" width="280" height="280">
+</div>
+
 <h2>로그인</h2>
+
 
 <div class="login-container">
     <form onsubmit="return false;">
