@@ -4,12 +4,17 @@
 <%@ page import="kr.or.ddit.emam.vo.WeatherVO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
+<jsp:include page="/WEB-INF/view/common/gnb.jsp" />
+
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Welcom</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Charm:wght@400;700&display=swap" rel="stylesheet">
+  <title>Welcome</title>
   <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
   <script
           src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -19,7 +24,14 @@
   <%
     MemberVO loginMember = (MemberVO) session.getAttribute("loginMember");
     List<NoticeVO> noticeList = (List<NoticeVO>) request.getAttribute("noticeList");
+    String wSky = (String) request.getAttribute("wSky");
+    String wPty = (String) request.getAttribute("wPty");
+    String wT1h = (String) request.getAttribute("wT1h");
+    int iSky = Integer.parseInt(wSky);
+    int iPty = Integer.parseInt(wPty);
+    int iT1h = Integer.parseInt(wT1h);
   %>
+
 
   <script>
     function updateClock() {
@@ -53,13 +65,13 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    $(function() {
-      $(document).on('click', '.row', function() {
-        const num = $(this).data("num");
-        $("#viewNum").val(num);
-        $("#viewForm").submit();
-      });
-    });
+    function viewNotice(noticeIndex) {
+      location.href = "<%=request.getContextPath()%>/notice/noticeDetail.do?noticeIndex=" + noticeIndex;
+    }
+
+    function goToProfile() {
+      location.href = "<%=request.getContextPath()%>/profile/profile.do"; // 프로필 페이지 URL로 변경
+    }
   </script>
   <style>
     body {
@@ -75,57 +87,28 @@
       position: relative;
     }
 
-    .top-bar {
-      background-color: #343a40;
-      color: white;
-      width: 100%;
-      padding: 10px 20px;
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 10;
-      box-sizing: border-box;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .top-bar .welcome {
-      font-size: 18px;
-    }
-
-    .top-bar .logout-btn {
-      background-color: #dc3545;
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .top-bar .logout-btn:hover {
-      background-color: #c82333;
-    }
-
     .main-content {
       text-align: center;
       position: absolute;
-      top: 40%;
+      top: 35%;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 5;
     }
 
     .clock {
-      font-size: 80px;
+      font-size: 90px;
       font-weight: bold;
       position: relative;
+      display: inline-block;
+      white-space: nowrap; /* 추가 */
+      margin-top:40px;
     }
 
     .greeting {
       font-size: 30px;
-      margin-top: 20px;
+      display: inline-block;
+      margin: 30px 20px 0 20px;
     }
 
     .tasks {
@@ -148,22 +131,29 @@
       background-color: #0056b3;
     }
 
-    .notice-list {
+    .notice-profile-container {
       position: absolute;
-      top: 65%; /* 공지사항 위치 조정 */
+      top: 65%;
       left: 50%;
       transform: translate(-50%, -50%);
+      display: flex;
+      justify-content: center;
+      width: 960px; /* 세 블록의 너비를 합쳐서 설정 */
+    }
+
+    .notice-list, .profile-block, .additional-info-block {
       background-color: white;
       border: 1px solid #ddd;
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       text-align: center;
-      width: 300px;
+      width: 350px;
+      margin: 0 10px; /* 블록 사이 간격 */
       z-index: 4;
     }
 
-    .notice-list h2 {
+    .notice-list h2, .profile-block h2, .additional-info-block h2 {
       font-size: 24px;
       margin-bottom: 20px;
     }
@@ -184,56 +174,149 @@
     .notice-list li:last-child {
       border-bottom: none;
     }
+
+    .profile-block p {
+      margin-bottom: 10px;
+      line-height: 1.5;
+      cursor: pointer;
+    }
+
+    .profile-block {
+      border-left: 1px solid #ddd;
+      padding-left: 30px;
+      cursor: pointer;
+    }
+
+    .additional-info-block {
+      border-left: 1px solid #ddd;
+      padding-left: 30px;
+    }
+
+    img#weatherImg {
+      height: auto;
+      max-height: 40px; /* 최대 높이 조정 */
+      width: auto;
+      max-width: 40px; /* 최대 너비 조정 */
+      position: relative;
+      top: 5px; /* 이미지 위치 조정 */
+      margin-right: 5px;
+    }
+
+    .welcome-message {
+      font-size: 32px;
+      font-family: "Charm", cursive;
+      margin-top: 5px;
+      margin-bottom: 20px;
+      font-weight: bold;
+      color: #333;
+      display: block;
+      position: relative;
+      top: -5px;
+      letter-spacing: 2px;
+      white-space: nowrap; /* 추가 */
+    }
+
   </style>
 </head>
 <body>
-
-<div class="top-bar">
-  <div class="welcome">
+<script>
+  $(function () {
+    //날씨에 따른 날씨이미지 변경
+    switch (<%=iSky%>){
+      case 1 : //구름없음
+        switch (<%=iPty%>){
+          case 0 : //눈비없음
+            document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_1_0.png");
+            break;
+        }
+        break;
+      case 2 :
+      case 3 : //구름조금
+        switch (<%=iPty%>){
+          case 0 : //눈비없음
+            document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_2_0.png");
+            break;
+          case 1 : //비
+          case 5 : //약간 비
+          case 2 : //비/눈
+          case 6 : //약간 비/눈
+            document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_2_1.png");
+            break;
+          case 3 : //눈
+          case 7 : //약간 눈
+            document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_3_2.png");
+            break;
+        }
+        break;
+      case 4 : //구름많음
+        switch (<%=iPty%>){
+          case 0 : //눈비없음
+            document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_3_0.png");
+            break;
+          case 1 : //비
+          case 5 : //약간 비
+          case 2 : //비/눈
+          case 6 : //약간 비/눈
+            document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_3_1.png");
+            break;
+          case 3 : //눈
+          case 7 : //약간 눈
+            document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_3_2.png");
+            break;
+        }
+        break;
+    }
+  });
+</script>
+<div class="main-content">
+  <div class="welcome-message">
     <% if (loginMember != null) { %>
-    <%= loginMember.getMem_id() %>님, 환영합니다!
+    <%= loginMember.getMem_id() %>, Welcome to our page!
     <% } else { %>
-    로그인이 필요합니다.
+    환영합니다!
     <% } %>
   </div>
-  <button class="logout-btn"
-          onclick="location.href='<%=request.getContextPath()%>/member/logout.do'">
-    로그아웃
-  </button>
-</div>
-
-<div class="main-content">
   <div class="clock" id="time"></div>
   <div class="greeting" id="today"></div>
+  <img src="" id="weatherImg"><%=iT1h%>℃
+
 </div>
 
 <div class="tasks">
-  <input type="button" value="문의"
-         onclick="location.href='<%=request.getContextPath()%>/inquiry/inquiryList.do'">
-  <input type="button" value=신고"
+  <input type="button" value="신고"
          onclick="location.href='<%=request.getContextPath()%>/report.do'">
-  <input type="button" value="친구목록"
-         onclick="location.href='<%=request.getContextPath()%>/friend/friendList.do'">
 </div>
 
-<div class="notice-list">
-  <h2>공지사항</h2>
-  <ul>
-    <% if (noticeList != null && !noticeList.isEmpty()) { %>
-    <% for (NoticeVO notice : noticeList) { %>
-    <li class="row" data-num="<%= notice.getNotice_index() %>">
-      <%= notice.getNotice_title() %>
-    </li>
-    <% } %>
+<div class="notice-profile-container">
+  <div class="notice-list">
+    <h2>공지사항</h2>
+    <ul>
+      <% if (noticeList != null && !noticeList.isEmpty()) { %>
+      <% for (NoticeVO notice : noticeList) { %>
+      <li onclick="viewNotice('<%= notice.getNotice_index() %>')">
+        <%= notice.getNotice_title() %>
+      </li>
+      <% } %>
+      <% } else { %>
+      <li>등록된 공지사항이 없습니다.</li>
+      <% } %>
+    </ul>
+  </div>
+  <div class="additional-info-block">
+    <h2>추가 정보</h2>
+    <p>여기에 추가 정보를 표시합니다.</p>
+    <p></p>
+  </div>
+  <div class="profile-block" onclick="goToProfile()">
+    <h2>내 프로필</h2>
+    <% if (loginMember != null) { %>
+    <p>아이디: <%= loginMember.getMem_id() %></p>
+    <p>이름: <%= loginMember.getMem_name() %></p>
+    <p>닉네임: <%= loginMember.getMem_nickname() %></p>
     <% } else { %>
-    <li>등록된 공지사항이 없습니다.</li>
+    <p>로그인이 필요합니다.</p>
     <% } %>
-  </ul>
+  </div>
 </div>
-
-<form action="<%=request.getContextPath()%>/notice/noticeView.do" method="get"
-      id="viewForm">
-  <input type="hidden" name="num" id="viewNum">
-</form>
 </body>
 </html>

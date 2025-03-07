@@ -4,79 +4,88 @@ import java.util.Date;
 import java.util.List;
 
 public class ProfileVO {
-    private String memId; // 회원 ID (MEMBER 테이블 PK, PROFILE 테이블 PK & FK)
-    private String profileIntro; // 자기소개
-    private String profileHeaderphoto; // 배경 사진 파일 경로
-    private String profilePhoto; // 프로필 사진 파일 경로
-    private int profileFriendcnt; // 친구 수
-    private int profilePostcnt; // 게시글 수
-    private String profileUrl; // URL 소개
+    private String mem_id; // 회원 ID (MEMBER 테이블 PK, PROFILE 테이블 PK & FK)
+    private String mem_nickname;
+    private String mem_bir;
+    private String profile_intro; // 자기소개
+    private String profile_headerphoto; // 배경 사진 파일 경로
+    private String profile_photo; // 프로필 사진 파일 경로
+    private int profile_friendcnt; // 친구 수
+    private int profile_postcnt; // 게시글 수
+    private String profile_url; // URL 소개
 
-    public Date getMemBir() {
-        return memBir;
+    public String getMem_id() {
+        return mem_id;
     }
 
-    public void setMemBir(Date memBir) {
-        this.memBir = memBir;
+    public void setMem_id(String mem_id) {
+        this.mem_id = mem_id;
     }
 
-    public String getProfileUrl() {
-        return profileUrl;
+    public String getMem_nickname() {
+        return mem_nickname;
     }
 
-    public void setProfileUrl(String profileUrl) {
-        this.profileUrl = profileUrl;
+    public void setMem_nickname(String mem_name) {
+        this.mem_nickname = mem_name;
     }
 
-    public int getProfilePostcnt() {
-        return profilePostcnt;
+    public String getMem_bir() {
+        return mem_bir;
     }
 
-    public void setProfilePostcnt(int profilePostcnt) {
-        this.profilePostcnt = profilePostcnt;
+    public void setMem_bir(String mem_bir) {
+        this.mem_bir = mem_bir;
     }
 
-    public int getProfileFriendcnt() {
-        return profileFriendcnt;
+    public String getProfile_intro() {
+        return profile_intro;
     }
 
-    public void setProfileFriendcnt(int profileFriendcnt) {
-        this.profileFriendcnt = profileFriendcnt;
+    public void setProfile_intro(String profile_intro) {
+        this.profile_intro = profile_intro;
     }
 
-    public String getProfilePhoto() {
-        return profilePhoto;
+    public String getProfile_headerphoto() {
+        return profile_headerphoto;
     }
 
-    public void setProfilePhoto(String profilePhoto) {
-        this.profilePhoto = profilePhoto;
+    public void setProfile_headerphoto(String profile_headerphoto) {
+        this.profile_headerphoto = profile_headerphoto;
     }
 
-    public String getProfileHeaderphoto() {
-        return profileHeaderphoto;
+    public String getProfile_photo() {
+        return profile_photo;
     }
 
-    public void setProfileHeaderphoto(String profileHeaderphoto) {
-        this.profileHeaderphoto = profileHeaderphoto;
+    public void setProfile_photo(String profile_photo) {
+        this.profile_photo = profile_photo;
     }
 
-    public String getProfileIntro() {
-        return profileIntro;
+    public int getProfile_friendcnt() {
+        return profile_friendcnt;
     }
 
-    public void setProfileIntro(String profileIntro) {
-        this.profileIntro = profileIntro;
+    public void setProfile_friendcnt(int profile_friendcnt) {
+        this.profile_friendcnt = profile_friendcnt;
     }
 
-    public String getMemId() {
-        return memId;
+    public int getProfile_postcnt() {
+        return profile_postcnt;
     }
 
-    public void setMemId(String memId) {
-        this.memId = memId;
+    public void setProfile_postcnt(int profile_postcnt) {
+        this.profile_postcnt = profile_postcnt;
     }
 
-    private Date memBir; // 생일 (MEMBER 테이블 MEM_BIR 컬럼 값 가져와서 사용, Date 타입으로 변경)
+    public String getProfile_url() {
+        return profile_url;
+    }
+
+    public void setProfile_url(String profile_url) {
+        this.profile_url = profile_url;
+    }
+
 
 
     private MemberVO memberVO; // 회원 정보 (MemberVO 객체 포함, 닉네임, 프로필 사진 등 `PROFILE.JSP` 에 직접 바인딩)
@@ -106,19 +115,4 @@ public class ProfileVO {
     }
 
 
-    @Override
-    public String toString() {
-        return "ProfileVO{" +
-                "memId='" + memId + '\'' +
-                ", profileIntro='" + profileIntro + '\'' +
-                ", profileHeaderphoto='" + profileHeaderphoto + '\'' +
-                ", profilePhoto='" + profilePhoto + '\'' +
-                ", profileFriendcnt=" + profileFriendcnt +
-                ", profilePostcnt=" + profilePostcnt +
-                ", profileUrl='" + profileUrl + '\'' +
-                ", memBir=" + memBir +
-                ", memberVO=" + memberVO +
-                ", postList=" + postList +
-                '}';
-    }
 }

@@ -1,7 +1,9 @@
 package kr.or.ddit.emam.profile.service;
 
+import java.util.Collection;
 import java.util.List;
 
+import jakarta.servlet.http.Part;
 import kr.or.ddit.emam.profile.dao.IProfileDao;
 import kr.or.ddit.emam.profile.dao.ProfileDaoImpl;
 import kr.or.ddit.emam.vo.PostVO;
@@ -36,4 +38,34 @@ public class ProfileServiceImpl implements IProfileService { // @Service 어노�
     public List<PostVO> getPostList(String memId) {
         return profileDao.selectPostList(memId); // profileDao 싱글톤 instance 사용
     }
+
+    @Override
+    public ProfileVO selectProfile(String memId) {
+        return profileDao.selectProfile(memId);
+    }
+
+    @Override
+    public int updateProfile(ProfileVO profileVO) {
+        return profileDao.updateProfile(profileVO);
+    }
+
+    @Override
+    public void updateProfileImg(Collection<Part> parts, String memId) {
+
+    }
+    @Override
+    public int updatePostCount(String memId) {
+        // 1. 해당 회원 ID의 실제 게시글 수를 DB에서 조회 (COUNT 쿼리 사용)
+        int postCount = profileDao.selectPostCount(memId);
+
+        // 2. ProfileVO 객체 생성 및 게시글 수 설정
+        ProfileVO profileVO = new ProfileVO();
+        profileVO.setMem_id(memId);
+        profileVO.setProfile_postcnt(postCount);
+
+        // 3. ProfileDao 를 통해 DB 업데이트
+        return profileDao.updateProfilePostCount(profileVO);
+    }
+
+
 }

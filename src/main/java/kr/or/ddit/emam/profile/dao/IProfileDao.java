@@ -23,4 +23,11 @@ public interface IProfileDao {
      * @return List<PostVO> 게시글 목록, 게시글이 없을 경우 빈 List 반환
      */
     public List<PostVO> selectPostList(String memId);
+
+    public int updateProfile(ProfileVO profileVO);
+
+    int selectPostCount(String memId); // 게시글 수 조회 메서드 추가
+    int updateProfilePostCount(ProfileVO profileVO); // 게시글 수 업데이트 메서드 추가
+
+
 }

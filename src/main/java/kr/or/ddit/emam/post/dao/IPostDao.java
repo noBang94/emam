@@ -23,4 +23,6 @@ public interface IPostDao {
 
     //게시글에 정보 가져오기
     public PostVO getPost(int num);
+
+    PostVO selectOnePost(int num);
 }
