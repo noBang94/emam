@@ -70,6 +70,17 @@
 
     <script>
         // ... 스크립트 코드 ...
+        $(function () {
+            //친구 신청 버튼 클릭 시 신청 데이터 받기
+            $(".friendBtn").on("click", function () {
+                console.log("여기" + $(this).data("value"));
+                $.ajax({
+                    url: "<%=request.getContextPath() %>/friend/friendRequest.do",
+                    type: "get",
+                    data: "toFriend="+$(this).data("value")
+                });
+            });
+        });
     </script>
 </head>
 <body>
@@ -98,8 +109,8 @@
             <td>
                 <a href="<%=request.getContextPath() %>/profile.do?memId=<%= member.getMem_id() %>" class="btn btn-info btn-sm">프로필</a>
             </td>
-            <td>
-                <a href="<%=request.getContextPath() %>/friend.do?friend_fromid=<%=loginMember.getMem_id() %>&friend_toid=<%=member.getMem_id() %>" class="btn btn-info btn-sm">친구 신청</a>
+            <td class="btn btn-info btn-sm friendBtn" data-value="<%=member.getMem_id() %>">
+                친구 신청
             </td>
         </tr>
         <%
