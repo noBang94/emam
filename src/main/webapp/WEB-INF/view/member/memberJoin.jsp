@@ -373,6 +373,7 @@
                     $('#emailAuthBtn').prop('disabled', true); // 인증 버튼 비활성화
                     $('#authCodeCheckBtn').prop('disabled', true); // 인증 번호 확인 버튼 비활성화
                     $('#authCode').prop('disabled', true); // 인증 번호 입력 필드 비활성화
+                    $('#mem_id').prop('disabled', true);
                   } else {
                     $('#authCodeMsg').html("이메일 인증에 실패했습니다. 다시 입력해주세요.").css('color', 'red');
                   }
