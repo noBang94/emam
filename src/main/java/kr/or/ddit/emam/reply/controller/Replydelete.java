@@ -30,7 +30,7 @@ public class Replydelete extends HttpServlet {
         int cnt = replyService.deleteReply(ReplyindexInt);
         String msg=null;
         if (cnt > 0) {
-//            resp.sendRedirect(req.getContextPath() + "/post/postList.do");
+            resp.sendRedirect(req.getContextPath() + "/post/postList.do");
             msg="success";
         }else{
             msg="fail";

@@ -87,8 +87,7 @@
                 $(this).addClass("view");
             });
 
-
-            //댓글 가져오기 ajax
+            //댓글 가져오기
             $(document).on('click',".replybtn",function(){
                 let postindex = $(this).data("index");
                 $('.a-c-rp[data-index='+postindex+']').toggleClass("view");
@@ -155,6 +154,91 @@
                         $('.a-c-rp[data-index='+postindex+'] .a-c-rp-r ul').html(htmlcode);
                     },
                     dataType : "json"
+                });
+
+            });
+
+            //댓글 작성 후 가져오기
+            $(document).on('click',".reply-insert-btn",function(e){
+                e.preventDefault();
+                let postindex = $(this).data("index");
+                let memid = $(this).parent().find("input[name=mem_id]").val();
+                let replycon = $(this).parent().find("input[name=reply_con]").val();
+
+                if(replycon == ""|| replycon ==null){
+                    alert("댓글써라 이?")
+                    $(this).parent().find("input[name=reply_con]").focus;
+                    return
+                }
+
+                $.ajax({
+                    url:"/reply/replyInsert.do",
+                    type:"post",
+                    data:{
+                        "postindex": postindex,
+                        "memid":memid,
+                        "replycon":replycon
+                    },
+                    contentType : "application/x-www-form-urlencoded", //content-type 설정 (생략가능)
+                    dataType : "json",
+                    success:function(result){
+                        console.log(result)
+                        let htmlcode= "";
+                        if(result.length>0){
+                            $.each(result , function(i,v){
+                                if(v.mem_id=="<%=loginMember.getMem_id()%>"){
+                                    htmlcode +='<li>';
+                                    htmlcode +='    <div class="rp-r-wrap">';
+                                    htmlcode +='        <div class="rp-r-w-prf">';
+                                    htmlcode +='            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                    htmlcode +='        </div>';
+                                    htmlcode +='        <div class="rp-r-w-container" data-reindex='+v.reply_index+'>';
+                                    htmlcode +='            <div class="rp-r-w-con-warp">';
+                                    htmlcode +='                <span class="rp-r-w-nick">'+v.mem_nickname+'</span>';
+                                    htmlcode +='                <span class="rp-r-w-con">'+v.reply_con+'</span>';
+                                    htmlcode +='            </div>';
+                                    htmlcode +='            <div class="rp-r-w-btn-warp">';
+                                    htmlcode +='                <a class="btn s-btn re-re-btn" data-reindex='+v.reply_index+'>답글</a>';
+                                    htmlcode +='                <a class="btn s-btn re-up-btn" data-reindex='+v.reply_index+'>수정</a>';
+                                    htmlcode +='                <a class="btn s-btn re-del-btn" data-reindex='+v.reply_index+' href="<%=request.getContextPath() %>/reply/replyDelete.do?replyindex='+v.reply_index+'">삭제</a>';
+                                    htmlcode +='            </div>';
+                                    htmlcode +='            <div class="rp-r-w-reply-warp"></div>';
+                                    htmlcode +='        </div>';
+                                    htmlcode +='    </div>';
+                                    htmlcode +='</li>';
+                                }else{
+                                    htmlcode +='<li>';
+                                    htmlcode +='    <div class="rp-r-wrap">';
+                                    htmlcode +='        <div class="rp-r-w-prf">';
+                                    htmlcode +='            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                    htmlcode +='        </div>';
+                                    htmlcode +='        <div class="rp-r-w-container" data-reindex='+v.reply_index+'>';
+                                    htmlcode +='            <div class="rp-r-w-con-warp">';
+                                    htmlcode +='                <span class="rp-r-w-nick">'+v.mem_nickname+'</span>';
+                                    htmlcode +='                <span class="rp-r-w-con">'+v.reply_con+'</span>';
+                                    htmlcode +='            </div>';
+                                    htmlcode +='            <div class="rp-r-w-btn-warp">';
+                                    htmlcode +='                <a class="btn s-btn re-re-btn" data-reindex='+v.reply_index+'>답글</a>';
+                                    htmlcode +='                <a class="btn s-btn re-report-btn" href="/report.do?nickname='+v.mem_nickname+'" data-reindex='+v.reply_index+'>신고</a>';
+                                    htmlcode +='            </div>';
+                                    htmlcode +='            <div class="rp-r-w-reply-warp"></div>';
+                                    htmlcode +='        </div>';
+                                    htmlcode +='    </div>';
+                                    htmlcode +='</li>';
+                                }
+                            });
+                        }else {
+                            htmlcode +='<li>';
+                            htmlcode +='    <div class="rp-r-wrap">';
+                            htmlcode +='        <div class="rp-r-w-prf"><img src="<%=request.getContextPath() %>/upload/demo_logo.png"></div>';
+                            htmlcode +='        <div class="rp-r-w-con">댓글이 없습니다.</div>';
+                            htmlcode +='    </div>';
+                            htmlcode +='</li>';
+                        }
+                        $('.a-c-rp[data-index='+postindex+'] .a-c-rp-r ul').html(htmlcode);
+                        $("input[name=reply_con]").val("");
+                    }
+
                 });
 
             });
@@ -289,6 +373,13 @@
                 $(".rp-r-w-btn-warp .re-up-btn[data-reindex="+reindex+"]").removeClass("unvis");
             });
 
+            //답글 삭제
+
+            /***************************************************************************************
+             *********************************       답글         ***********************************
+             ***************************************************************************************
+             */
+
             //답글 쓰기 클릭시
             $(document).on("click",".re-re-btn",function(){
                 let reindex = $(this).data("reindex");
@@ -302,7 +393,7 @@
                             <input type="text" id="rindex\${reindex}" name="Replyindex" value="\${reindex}" hidden/>
                             <input type="text" name="mem_id" value="<%=loginMember.getMem_id()%>" hidden/>
                             <input type="text" id="txtCon\${reindex}" name="reply_con" value="" />
-                            <button type="submit" class="rerebtnConfirm" data-reindex="\${reindex}">답글달기</button>
+                            <button type="submit" class="rereply-insert-btn" data-reindex="\${reindex}">답글달기</button>
                         </form>
                     </span>
                 `);
@@ -363,7 +454,82 @@
 
             });
 
-            //대댓글 수정 폼
+            //답글 작성 후 가져오기
+            $(document).on('click',".rereply-insert-btn",function(e){
+                e.preventDefault();
+                let postindex = $(this).parent().find("input[name=post_index]").val();
+                let memid = $(this).parent().find("input[name=mem_id]").val();
+                let replycon = $(this).parent().find("input[name=reply_con]").val();
+                let Replyindex = $(this).parents(".rp-r-w-container").data("reindex");
+                if(replycon == ""|| replycon ==null){
+                    alert("댓글써라 이?")
+                    $(this).parent().find("input[name=reply_con]").focus;
+                    return
+                }
+
+                //답글 작성 후 가져오기
+                $.ajax({
+                    url:"/reply/replyreplyInsert.do",
+                    type:"post",
+                    data:{
+                        "postindex": postindex,
+                        "memid":memid,
+                        "replycon":replycon,
+                        "Replyindex":Replyindex
+                    },
+                    contentType : "application/x-www-form-urlencoded", //content-type 설정 (생략가능)
+                    success:function(result){
+                        console.log(result)
+                        let htmlcode= "";
+                        if(result.length>0){
+                            $.each(result , function(i,v){
+                                if(v.mem_id=="<%=loginMember.getMem_id()%>"){
+                                    htmlcode +='<li>';
+                                    htmlcode +='    <div class="rp-r-wrap">';
+                                    htmlcode +='        <div class="rp-r-w-prf">';
+                                    htmlcode +='            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                    htmlcode +='        </div>';
+                                    htmlcode +='        <div class="rp-r-w-container" data-reindex='+v.reply_index+'>';
+                                    htmlcode +='            <div class="rp-r-w-con-warp">';
+                                    htmlcode +='                <span class="rp-r-w-nick">'+v.mem_nickname+'</span>';
+                                    htmlcode +='                <span class="rp-r-w-con">'+v.reply_con+'</span>';
+                                    htmlcode +='            </div>';
+                                    htmlcode +='            <div class="rp-r-w-btn-warp">';
+                                    htmlcode +='                <a class="btn s-btn re-re-up-btn" data-reindex='+v.reply_index+'>수정</a>';
+                                    htmlcode +='                <a class="btn s-btn re-del-btn" data-reindex='+v.reply_index+' href="<%=request.getContextPath() %>/reply/replyDelete.do?replyindex='+v.reply_index+'">삭제</a>';
+                                    htmlcode +='            </div>';
+                                    htmlcode +='        </div>';
+                                    htmlcode +='    </div>';
+                                    htmlcode +='</li>';
+                                }else{
+                                    htmlcode +='<li>';
+                                    htmlcode +='    <div class="rp-r-wrap">';
+                                    htmlcode +='        <div class="rp-r-w-prf">';
+                                    htmlcode +='            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                    htmlcode +='        </div>';
+                                    htmlcode +='        <div class="rp-r-w-container" data-reindex='+v.reply_index+'>';
+                                    htmlcode +='            <div class="rp-r-w-con-warp">';
+                                    htmlcode +='                <span class="rp-r-w-nick">'+v.mem_nickname+'</span>';
+                                    htmlcode +='                <span class="rp-r-w-con">'+v.reply_con+'</span>';
+                                    htmlcode +='            </div>';
+                                    htmlcode +='            <div class="rp-r-w-btn-warp">';
+                                    htmlcode +='                <a class="btn s-btn re-report-btn" href="/report.do?nickname='+v.mem_nickname+'" data-reindex='+v.reply_index+'>신고</a>';
+                                    htmlcode +='            </div>';
+                                    htmlcode +='        </div>';
+                                    htmlcode +='    </div>';
+                                    htmlcode +='</li>';
+                                }
+                            });
+                        }
+                        $('.a-c-rp[data-index='+postindex+'] .a-c-rp-r ul .rp-r-w-container[data-reindex='+Replyindex+'] .rp-r-w-reply-warp').html(htmlcode);
+                        $("input[name=reply_con]").val("");
+                    },
+                    dataType : "json"
+                });
+
+            });
+
+            //답글 수정 폼
             $(document).on("click",".re-re-up-btn",function(){
                 $(this).addClass("unvis");
 
@@ -386,7 +552,7 @@
                     `);
             });
 
-            //대댓글(답글) 수정 확인 실행
+            //답글 수정 확인 실행
             $(document).on("click",".rebtnConfirm",function(){
                 let reindex = $(this).data("reindex");
                 let postindex = $(this).parents(".a-c-rp-w").data("index");
@@ -400,7 +566,11 @@
                     $.ajax({
                         type: 'POST',
                         url: '/reply/replyreplyUpdate.do',
-                        data: "postindex="+postindex+"&replyindex="+reindex+"&replycon="+replycon+"&parentreindex="+parentreindex,
+                        data: {"postindex":postindex,
+                                "replyindex":reindex,
+                                "replycon":replycon,
+                                "parentreindex":parentreindex
+                        },
                         contentType : "application/x-www-form-urlencoded", //content-type 설정 (생략가능)
                         success:function(result){
                             console.log(result)
@@ -457,6 +627,7 @@
 
             });
 
+            //답글 취소
             $(document).on("click",".rebtnCancel",function(){
                 let reindex = $(this).data("reindex");
                 $(this).parents(".rp-r-w-con-warp").eq(0).find(".rp-r-w-con").css("display","inline");
@@ -465,10 +636,13 @@
                 $(".rp-r-w-btn-warp .re-re-up-btn[data-reindex="+reindex+"]").removeClass("unvis");
             });
 
+            //답글 삭제
+
             let page = 1; // 현재 페이지 번호
             let loading = false; // 로딩 상태
             let stoploading = false; //더 불러올 데이터 없는지 체크
 
+            //게시글 가져오기
             function loadData() {
                 if (loading) return; // 로딩 중이면 중복 요청 방지
                 loading = true;
@@ -555,7 +729,7 @@
                                 htmlcode += '                <input type="hidden" name="post_index" value="'+pl.post_index+'"/>';
                                 htmlcode += '                <input type="hidden" name="mem_id" value="<%=loginMember.getMem_id()%>"/>';
                                 htmlcode += '                <input type="text" placeholder="댓글을 입력하세요" name="reply_con"/>';
-                                htmlcode += '                <input type="submit" value="댓글달기">';
+                                htmlcode += '                <input type="submit" class="reply-insert-btn" data-index='+pl.post_index+' value="댓글달기">';
                                 htmlcode += '            </form>';
                                 htmlcode += '            <div class="a-c-rp-r">';
                                 htmlcode += '                <ul>';
@@ -633,7 +807,7 @@
         .pointer{cursor: pointer}
 
         /*공통으로 사용할만한것(s)*/
-        .modal{display: none;width: 100%; height: 100%; position: fixed; top: 0; left: 0; background: rgba(0, 0, 0, 0.5); }
+        .modal{display: none;width: 100%; height: 100%; position: fixed; top: 0; left: 0; background: rgba(0, 0, 0, 0.5); z-index: 3;}
         .modal-i-warp{position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; width: 1000px; height: auto;}
         .modal.view{display: block}
         /*버튼(s)*/

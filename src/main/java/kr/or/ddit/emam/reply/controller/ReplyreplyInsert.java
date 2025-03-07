@@ -6,8 +6,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import kr.or.ddit.emam.post.service.IPostService;
-import kr.or.ddit.emam.post.service.PostServiceImpl;
 import kr.or.ddit.emam.reply.service.IReplyService;
 import kr.or.ddit.emam.reply.service.ReplyServiceImpl;
 import kr.or.ddit.emam.vo.ReplyVO;
@@ -16,8 +14,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet("/reply/replyInsert.do")
-public class ReplyInsert extends HttpServlet {
+@WebServlet("/reply/replyreplyInsert.do")
+public class ReplyreplyInsert extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -47,14 +45,14 @@ public class ReplyInsert extends HttpServlet {
         //댓글 내용
         String replycon = req.getParameter("replycon");
 
-
-
         ReplyVO replyVO = new ReplyVO(postindexInt,replyindexInt,memid,replycon);
 
         int cnt = replyService.insertReply(replyVO);
         if (cnt > 0) {
 //            resp.sendRedirect(req.getContextPath() + "/post/postList.do");
-            List<ReplyVO> ReplyList = replyService.selectReplyListByPostIndex(postindexInt);
+            ReplyVO replyVO2 = new ReplyVO(replyindexInt,postindexInt);
+
+            List<ReplyVO> ReplyList = replyService.selectReplyReplyList(replyVO2);
 
             Gson gson = new Gson();
             String jsonData = null; //변환된 Json문자열이 저장될 변수
