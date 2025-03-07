@@ -2,267 +2,435 @@
 <%@ page import="kr.or.ddit.emam.vo.NoticeVO" %>
 <%@ page import="java.util.List" %>
 <%@ page import="kr.or.ddit.emam.vo.WeatherVO" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
-<jsp:include page="/WEB-INF/view/common/gnb.jsp" />
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<jsp:include page="/WEB-INF/view/common/gnb.jsp"/>
 
+<%
+  MemberVO loginMember = (MemberVO) session.getAttribute("loginMember");
+  List<NoticeVO> noticeList = (List<NoticeVO>) request.getAttribute("noticeList");
+  String wSky = (String) request.getAttribute("wSky");
+  String wPty = (String) request.getAttribute("wPty");
+  String wT1h = (String) request.getAttribute("wT1h");
+  int iSky = Integer.parseInt(wSky);
+  int iPty = Integer.parseInt(wPty);
+  int iT1h = Integer.parseInt(wT1h);
+  List<String> realtimeKeywords = (List<String>) request.getAttribute("realtimeKeywords");
+%>
 
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Charm:wght@400;700&display=swap" rel="stylesheet">
-  <title>Welcome</title>
+  <link href="https://fonts.googleapis.com/css2?family=Charm:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
   <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
-  <script
-          src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <script
-          src="<%=request.getContextPath() %>/js/jquery.serializejson.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="<%=request.getContextPath() %>/js/jquery.serializejson.min.js"></script>
 
-  <%
-    MemberVO loginMember = (MemberVO) session.getAttribute("loginMember");
-    List<NoticeVO> noticeList = (List<NoticeVO>) request.getAttribute("noticeList");
-    String wSky = (String) request.getAttribute("wSky");
-    String wPty = (String) request.getAttribute("wPty");
-    String wT1h = (String) request.getAttribute("wT1h");
-    int iSky = Integer.parseInt(wSky);
-    int iPty = Integer.parseInt(wPty);
-    int iT1h = Integer.parseInt(wT1h);
-    List<String> realtimeKeywords = (List<String>) request.getAttribute("realtimeKeywords");
-  %>
-
-
-  <script>
-    function updateClock() {
-      const now = new Date();
-      const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
-      const dayOfWeek = daysOfWeek[now.getDay()];
-      const year = now.getFullYear();
-      const month = (now.getMonth() + 1).toString().padStart(2, '0');
-      const day = now.getDate().toString().padStart(2, '0');
-      const hours = now.getHours();
-      const minutes = now.getMinutes().toString().padStart(2, '0');
-      const seconds = now.getSeconds().toString().padStart(2, '0');
-
-      let ampm = 'AM';
-      let displayHours = hours;
-
-      if (hours >= 12) {
-        ampm = 'PM';
-        displayHours = hours % 12;
-        if (displayHours === 0) {
-          displayHours = 12;
-        }
-      }
-
-      const todayString = year + "년 " + month + "월 " + day + "일 " + dayOfWeek + "요일";
-      const timeString = displayHours + " : " + minutes + " : " + seconds + " " + ampm;
-      document.getElementById('today').textContent = todayString;
-      document.getElementById('time').textContent = timeString;
-    }
-
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    function viewNotice(noticeIndex) {
-      location.href = "<%=request.getContextPath()%>/notice/noticeDetail.do?noticeIndex=" + noticeIndex;
-    }
-
-    function goToProfile() {
-      location.href = "<%=request.getContextPath()%>/profile/profile.do"; // 프로필 페이지 URL로 변경
-    }
-  </script>
   <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: white;
+    :root {
+      --primary-color: #64B5F6;
+      --primary-hover: #90CAF9;
+      --text-color: #333;
+      --text-light: #666;
+      --background-color: #f8fafc;
+      --card-background: #fff;
+      --border-color: #e2e8f0;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --radius: 0.5rem;
+      --transition: all 0.2s ease;
+    }
+
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: linear-gradient(to bottom, #e0f2fe, #ffffff);
+      color: var(--text-color);
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
+      padding: 1.5rem;
+    }
+
+    .main-container {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       min-height: 100vh;
-      position: relative;
     }
 
     .main-content {
       text-align: center;
-      position: absolute;
-      top: 35%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 5;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      margin-bottom: 4rem;
+      width: 100%;
+
+    }
+
+    .welcome-message {
+      font-family: 'Charm', cursive;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.05em;
     }
 
     .clock {
-      font-size: 90px;
-      font-weight: bold;
-      position: relative;
-      display: inline-block;
-      white-space: nowrap; /* 추가 */
-      margin-top:40px;
+      font-size: 4.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
     }
 
-    .greeting {
-      font-size: 30px;
-      display: inline-block;
-      margin: 30px 20px 0 20px;
+    .date {
+      font-size: 1.25rem;
+      color: var(--text-light);
+      margin-bottom: 2rem;
     }
 
-    .tasks {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-    }
-
-    .tasks button {
-      margin-left: 10px;
-      padding: 8px 15px;
-      border-radius: 5px;
-      border: none;
-      background-color: #007bff;
-      color: white;
-      cursor: pointer;
-    }
-
-    .tasks button:hover {
-      background-color: #0056b3;
-    }
-
-    .notice-profile-container {
-      position: absolute;
-      top: 65%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: flex;
+    .weather-container {
+      display: inline-flex;
+      align-items: center;
       justify-content: center;
-      width: 960px; /* 세 블록의 너비를 합쳐서 설정 */
+      background-color: var(--card-background);
+      border-radius: 9999px;
+      padding: 0.75rem 1.5rem;
+      box-shadow: var(--shadow-md);
     }
 
-    .notice-list, .profile-block, .additional-info-block {
-      background-color: white;
-      border: 1px solid #ddd;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      width: 350px;
-      margin: 0 10px; /* 블록 사이 간격 */
-      z-index: 4;
+    .weather-container img {
+      width: 40px;
+      height: 40px;
+      margin-right: 0.75rem;
     }
 
-    .notice-list h2, .profile-block h2, .additional-info-block h2 {
-      font-size: 24px;
-      margin-bottom: 20px;
+    .temperature {
+      font-size: 1.25rem;
+      font-weight: 500;
+    }
+
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 1.5rem;
+      width: 100%;
+      margin-bottom: 2.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .cards-container {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .card {
+      background-color: var(--card-background);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .card-header h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    .card-content {
+      padding: 1rem 1.5rem;
     }
 
     .notice-list ul {
       list-style: none;
-      padding: 0;
-      margin: 0;
+      max-height: 130px;
+      overflow-y: auto;
+      padding: 3px;
     }
 
     .notice-list li {
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
+      padding: 0.75rem 0.5rem;
+      border-bottom: 1px solid var(--border-color);
       cursor: pointer;
-      font-size: 16px;
+      transition: var(--transition);
+      font-size: 0.875rem;
     }
 
     .notice-list li:last-child {
       border-bottom: none;
     }
 
-    .profile-block p {
-      margin-bottom: 10px;
-      line-height: 1.5;
-      cursor: pointer;
+    .notice-list li:hover {
+      background-color: rgba(0, 0, 0, 0.03);
     }
 
     .profile-block {
-      border-left: 1px solid #ddd;
-      padding-left: 30px;
       cursor: pointer;
     }
 
-    .additional-info-block {
-      border-left: 1px solid #ddd;
-      padding-left: 30px;
+    .profile-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      font-size: 0.875rem;
     }
 
-    img#weatherImg {
-      height: auto;
-      max-height: 40px; /* 최대 높이 조정 */
-      width: auto;
-      max-width: 40px; /* 최대 너비 조정 */
-      position: relative;
-      top: 5px; /* 이미지 위치 조정 */
-      margin-right: 5px;
+    .profile-info-label {
+      font-weight: 500;
     }
 
-    .welcome-message {
-      font-size: 32px;
-      font-family: "Charm", cursive;
-      margin-top: 5px;
-      margin-bottom: 20px;
-      font-weight: bold;
-      color: #333;
-      display: block;
-      position: relative;
-      top: -5px;
-      letter-spacing: 2px;
-      white-space: nowrap; /* 추가 */
+    .action-buttons {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      display: flex;
+      gap: 0.5rem;
     }
 
+    .btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+
+    .btn:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-icon {
+      font-size: 1rem;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
   </style>
 </head>
 <body>
+<div class="main-container">
+  <div class="main-content">
+    <h1 class="welcome-message" id="welcomeMessage">
+      <% if (loginMember != null) { %>
+      <%= loginMember.getMem_id() %>, Welcome to our page!
+      <% } else { %>
+      환영합니다!
+      <% } %>
+    </h1>
+
+    <div class="clock" id="time"></div>
+
+    <div class="date" id="today"></div>
+
+    <div class="weather-container">
+      <img src="../.././images/weather_1_0.png" id="weatherImg" alt="Weather">
+      <span class="temperature"><%=iT1h%>℃</span>
+    </div>
+  </div>
+
+  <div class="cards-container">
+    <div class="card notice-list">
+      <div class="card-header">
+        <h2>공지사항</h2>
+      </div>
+      <div class="card-content">
+        <ul id="noticeList">
+          <% if (noticeList != null && !noticeList.isEmpty()) { %>
+          <% for (NoticeVO notice : noticeList) { %>
+          <li onclick="viewNotice('<%= notice.getNotice_index() %>')">
+            <%= notice.getNotice_title() %>
+          </li>
+          <% } %>
+          <% } else { %>
+          <li>등록된 공지사항이 없습니다.</li>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card additional-info-block">
+      <div class="card-header">
+        <h2>추가 정보</h2>
+      </div>
+      <div class="card-content">
+        <ul>
+          <li>가져올 수 없습니다.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card profile-block" onclick="goToProfile()">
+      <div class="card-header">
+        <h2>내 프로필</h2>
+      </div>
+      <div class="card-content">
+        <% if (loginMember != null) { %>
+        <div class="profile-info">
+          <span class="profile-info-label">아이디:</span>
+          <span><%= loginMember.getMem_id() %></span>
+        </div>
+        <div class="profile-info">
+          <span class="profile-info-label">이름:</span>
+          <span><%= loginMember.getMem_name() %></span>
+        </div>
+        <div class="profile-info">
+          <span class="profile-info-label">닉네임:</span>
+          <span><%= loginMember.getMem_nickname() %></span>
+        </div>
+        <% } else { %>
+        <p class="text-center">로그인이 필요합니다.</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <div class="action-buttons">
+    <button onclick="location.href='<%=request.getContextPath()%>/report.do'" class="btn btn-report">
+      <span class="btn-icon">⚠️</span>
+      <span>신고</span>
+    </button>
+    <button onclick="location.href='<%=request.getContextPath()%>/chat'" class="btn btn-chat">
+      <span class="btn-icon">💬</span>
+      <span>채팅</span>
+    </button>
+  </div>
+</div>
+
 <script>
+  function updateClock() {
+    const now = new Date();
+    const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
+    const dayOfWeek = daysOfWeek[now.getDay()];
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+    const hours = now.getHours();
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+
+    let ampm = 'AM';
+    let displayHours = hours;
+
+    if (hours >= 12) {
+      ampm = 'PM';
+      displayHours = hours % 12;
+      if (displayHours === 0) {
+        displayHours = 12;
+      }
+    }
+
+    const todayString = year + '년 ' + month + '월 ' + day + '일 ' + dayOfWeek + '요일';
+    const timeString = displayHours + ' : ' + minutes + ' : ' + seconds + ' ' + ampm;
+
+    document.getElementById('today').textContent = todayString;
+    document.getElementById('time').textContent = timeString;
+  }
+
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  function viewNotice(noticeIndex) {
+    location.href = "<%=request.getContextPath()%>/notice/noticeDetail.do?noticeIndex=" + noticeIndex;
+  }
+
+  function goToProfile() {
+    location.href = "<%=request.getContextPath()%>/profile/profile.do";
+  }
+
   $(function () {
-    //날씨에 따른 날씨이미지 변경
-    switch (<%=iSky%>){
-      case 1 : //구름없음
-        switch (<%=iPty%>){
-          case 0 : //눈비없음
+    if ($('.notice-list ul li').length <= 5) {
+      $('.notice-list ul').css('overflow-y', 'hidden');
+    }
+
+    switch (<%=iSky%>) {
+      case 1 :
+        switch (<%=iPty%>) {
+          case 0 :
             document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_1_0.png");
             break;
         }
         break;
       case 2 :
-      case 3 : //구름조금
-        switch (<%=iPty%>){
-          case 0 : //눈비없음
+      case 3 :
+        switch (<%=iPty%>) {
+          case 0 :
             document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_2_0.png");
             break;
-          case 1 : //비
-          case 5 : //약간 비
-          case 2 : //비/눈
-          case 6 : //약간 비/눈
+          case 1 :
+          case 5 :
+          case 2 :
+          case 6 :
             document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_2_1.png");
             break;
-          case 3 : //눈
-          case 7 : //약간 눈
+          case 3 :
+          case 7 :
             document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_3_2.png");
             break;
         }
         break;
-      case 4 : //구름많음
-        switch (<%=iPty%>){
-          case 0 : //눈비없음
+      case 4 :
+        switch (<%=iPty%>) {
+          case 0 :
             document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_3_0.png");
             break;
-          case 1 : //비
-          case 5 : //약간 비
-          case 2 : //비/눈
-          case 6 : //약간 비/눈
+          case 1 :
+          case 5 :
+          case 2 :
+          case 6 :
             document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_3_1.png");
             break;
-          case 3 : //눈
-          case 7 : //약간 눈
+          case 3 :
+          case 7 :
             document.getElementById("weatherImg").setAttribute("src", "../.././images/weather_3_2.png");
             break;
         }
@@ -270,59 +438,5 @@
     }
   });
 </script>
-<div class="main-content">
-  <div class="welcome-message">
-    <% if (loginMember != null) { %>
-    <%= loginMember.getMem_id() %>, Welcome to our page!
-    <% } else { %>
-    환영합니다!
-    <% } %>
-  </div>
-  <div class="clock" id="time"></div>
-  <div class="greeting" id="today"></div>
-  <img src="" id="weatherImg"><%=iT1h%>℃
-
-</div>
-
-<div class="tasks">
-  <input type="button" value="신고"
-         onclick="location.href='<%=request.getContextPath()%>/report.do'">
-  <input type="button" value="채팅"
-         onclick="location.href='<%=request.getContextPath()%>/chat'">
-</div>
-
-<div class="notice-profile-container">
-  <div class="notice-list">
-    <h2>공지사항</h2>
-    <ul>
-      <% if (noticeList != null && !noticeList.isEmpty()) { %>
-      <% for (NoticeVO notice : noticeList) { %>
-      <li onclick="viewNotice('<%= notice.getNotice_index() %>')">
-        <%= notice.getNotice_title() %>
-      </li>
-      <% } %>
-      <% } else { %>
-      <li>등록된 공지사항이 없습니다.</li>
-      <% } %>
-    </ul>
-  </div>
-  <div class="additional-info-block">
-    <h2>추가 정보</h2>
-    <ul>
-      <li>가져올 수 없습니다.</li>
-
-    </ul>
-  </div>
-  <div class="profile-block" onclick="goToProfile()">
-    <h2>내 프로필</h2>
-    <% if (loginMember != null) { %>
-    <p>아이디: <%= loginMember.getMem_id() %></p>
-    <p>이름: <%= loginMember.getMem_name() %></p>
-    <p>닉네임: <%= loginMember.getMem_nickname() %></p>
-    <% } else { %>
-    <p>로그인이 필요합니다.</p>
-    <% } %>
-  </div>
-</div>
 </body>
 </html>

@@ -54,10 +54,10 @@
 
     /*토글 스위치(s)*/
     .toggleSwitch {width: 50px;height: 20px;display: block;position: relative;border-radius: 30px;background-color: #fff;box-shadow: 0 0 16px 3px rgba(0 0 0 / 15%);cursor: pointer;margin: 10px;}
-    .toggleSwitch .toggleButton {width: 16px;height: 16px;position: absolute;top: 50%;left: 4px;transform: translateY(-50%);border-radius: 50%;background: #f03d3d;}
-    [id*="toggles"]:checked ~ .toggleSwitch {background: #f03d3d;}
+    .toggleSwitch .toggleButton {width: 16px;height: 16px;position: absolute;top: 50%;left: 4px;transform: translateY(-50%);border-radius: 50%;background: #64B5F6;}
+    [id*="toggles"]:checked ~ .toggleSwitch {background: #64B5F6;}
     [id*="toggles"]:checked ~ .toggleSwitch .toggleButton {left: calc(100% - 18px);background: #fff;}
-    #updatetoggles:checked ~ .toggleSwitch {background: #f03d3d;}
+    #updatetoggles:checked ~ .toggleSwitch {background: #64B5F6;}
     #updatetoggles:checked ~ .toggleSwitch .toggleButton {left: calc(100% - 18px);background: #fff;}
     .toggleSwitch, .toggleButton {transition: all 0.2s ease-in;}
 
@@ -73,7 +73,7 @@
         left: 0;
     }
     .gnb-inner{
-        background-color: #282828; /* 유튜브 GNB 배경색 */
+        background-color: #282828;
         color: white;
         display: flex;
         justify-content: space-between;
@@ -90,7 +90,7 @@
     .gnb input{color: black;}
 
     .gnb-logo img {
-        height: 40px; /* 로고 높이 */
+        height: 40px;
         margin-right: 20px;
     }
 
@@ -114,42 +114,40 @@
     }
 
     .gnb-button {
-        background-color: #383838; /* 버튼 배경색 */
+        background-color: #64B5F6;
         color: white;
         border: none;
         padding: 8px 15px;
-        margin-left: 10px;
         border-radius: 3px;
         cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        transition: background-color 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.875rem;
+        margin-left: 10px;
     }
-    .gnb-dropdown-menu{
-        position: fixed;
-        right: 0;
-        top: 62px;
-        color:black;
+
+    .gnb-button:hover { /* 호버 시 스타일 */
+        background-color: #90CAF9;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     }
-    .dropdown-menu{
-        right: 0;
-        left: initial;
-        width: 180px;
-    }
+
     .dropdown-menu li{padding: 10px 10px;}
-    .dropdown-menu.view{
-        display: block;
-    }
     .noti-set{display: flex;
         align-items: center;
     }
     .friend-dropdown-menu, .noti-dropdown-menu, .my-dropdown-menu {
         position: absolute;
         right: 0;
-        top: 60px; /* 적절한 위치 조정 */
+        top: 60px;
         background-color: #fff;
         border: 1px solid #ccc;
         padding: 10px;
-        width: 200px; /* 드롭다운 메뉴 너비 설정 */
-        display: none; /* 초기 숨김 */
-        z-index: 1000; /* 다른 요소보다 위에 표시 */
+        width: 200px;
+        display: none;
+        z-index: 1000;
         color: #000000;
     }
     .friend-dropdown-menu ul, .noti-dropdown-menu ul, .my-dropdown-menu ul {
@@ -184,6 +182,26 @@
         background-color: #ddd; /* 프로필 이미지 배경색 */
         margin-left: 10px;
     }
+    .gnb-search .btn { /* 검색 버튼 스타일 */
+        background-color: #64B5F6; /* 밝은 파란색 배경 */
+        color: white; /* 글자색 */
+        border: none;
+        padding: 8px 15px;
+        border-radius: 3px;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        transition: background-color 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.875rem;
+    }
+
+    .gnb-search .btn:hover { /* 호버 시 스타일 */
+        background-color: #90CAF9; /* 더 밝은 파란색 호버 효과 */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 호버 시 그림자 효과 강화 */
+    }
+
 </style>
 <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
