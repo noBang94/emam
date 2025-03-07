@@ -33,7 +33,7 @@
         display: block;
     }
     body {
-        margin-top: 70px;
+        margin-top: 60px;
         line-height: 1;
     }
     ol, ul {
@@ -85,13 +85,34 @@
     .gnb-left {
         display: flex;
         align-items: center;
+        flex: 1;
     }
-    .gnb .search-warp{display: flex;gap: 10px;}
-    .gnb input{color: black;}
+
+    .gnb-search {
+        margin-left: 15px;
+        flex: 1.2;
+        max-width: 300px;
+    }
+
+    .gnb .search-warp {
+        display: flex;
+        gap: 5px;
+        width: 100%;
+    }
+
+    .gnb .search-warp input[type="text"] {
+        flex: 1;
+        height: 34px;
+        padding: 5px 10px;
+        border-radius: 4px;
+        border: none;
+        font-size: 13px;
+        color: black;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
 
     .gnb-logo img {
-        height: 40px;
-        margin-right: 20px;
+        height: 38px;
     }
 
     .gnb-menu ul {
@@ -100,7 +121,7 @@
     }
 
     .gnb-menu li {
-        margin-right: 20px;
+        margin-right: 15px;
     }
 
     .gnb-menu a {
@@ -111,27 +132,30 @@
     .gnb-right {
         display: flex;
         align-items: center;
+        justify-content: flex-end;
+        flex: 1;
     }
 
-    .gnb-button {
+    .gnb-button, .gnb-search .btn {
         background-color: #64B5F6;
         color: white;
         border: none;
-        padding: 8px 15px;
+        padding: 9px 15px;
         border-radius: 3px;
         cursor: pointer;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         transition: background-color 0.3s ease;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.875rem;
+        font-size: 0.9rem;
         margin-left: 10px;
+        height: 38px;
     }
 
-    .gnb-button:hover { /* 호버 시 스타일 */
+    .gnb-button:hover, .gnb-search .btn:hover { /* 호버 시 스타일 */
         background-color: #90CAF9;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     }
 
     .dropdown-menu li{padding: 10px 10px;}
@@ -141,7 +165,7 @@
     .friend-dropdown-menu, .noti-dropdown-menu, .my-dropdown-menu {
         position: absolute;
         right: 0;
-        top: 60px;
+        top: 50px;
         background-color: #fff;
         border: 1px solid #ccc;
         padding: 10px;
@@ -171,37 +195,39 @@
     .noti-set span {
         flex-grow: 1;
     }
-    .gnb-right {
-        display: flex;
-        align-items: center;
-    }
     .profile-img {
-        width: 30px;
-        height: 30px;
+        width: 35px;
+        height: 35px;
         border-radius: 50%;
         background-color: #ddd; /* 프로필 이미지 배경색 */
-        margin-left: 10px;
-    }
-    .gnb-search .btn { /* 검색 버튼 스타일 */
-        background-color: #64B5F6; /* 밝은 파란색 배경 */
-        color: white; /* 글자색 */
-        border: none;
-        padding: 8px 15px;
-        border-radius: 3px;
-        cursor: pointer;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        transition: background-color 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.875rem;
+        margin-left: 15px;
     }
 
-    .gnb-search .btn:hover { /* 호버 시 스타일 */
-        background-color: #90CAF9; /* 더 밝은 파란색 호버 효과 */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 호버 시 그림자 효과 강화 */
-    }
+    /* 반응형 스타일 */
+    @media (max-width: 768px) {
+        .gnb-inner {
+            flex-wrap: wrap;
+        }
 
+        .gnb-left {
+            flex: 0 0 100%;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .gnb-search {
+            flex: 0 0 100%;
+            margin-left: 0;
+            margin-bottom: 8px;
+            order: 3;
+            max-width: none;
+        }
+
+        .gnb-right {
+            flex: 0 0 100%;
+            justify-content: center;
+        }
+    }
 </style>
 <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -270,21 +296,22 @@
 </script>
 <div class="gnb">
     <div class="gnb-inner">
-        <a href="<%=request.getContextPath() %>/welcome/welcomeMain.do" alt="home">
-            <div class="gnb-left">
+        <div class="gnb-left">
+            <a href="<%=request.getContextPath() %>/welcome/welcomeMain.do" alt="home">
                 <div class="gnb-logo">
                     <img src="<%=request.getContextPath() %>/images/emam.png" alt="으밀아밀">
                 </div>
+            </a>
+            <div class="gnb-search">
+                <form action="/search.do">
+                    <div class="search-warp">
+                        <input type="text" name="id" placeholder="검색어를 입력하세요"/>
+                        <input type="submit" class="btn" value="검색">
+                    </div>
+                </form>
             </div>
-        </a>
-        <div class="gnb-search">
-            <form action="/search.do">
-                <div class="search-warp">
-                    <input type="text" name="id" placeholder="검색창"/>
-                    <input type="submit" class="btn" value="검색">
-                </div>
-            </form>
         </div>
+
         <div class="gnb-right">
             <button class="gnb-button friend-btn">친구</button>
             <button class="gnb-button noti-btn">알림</button>

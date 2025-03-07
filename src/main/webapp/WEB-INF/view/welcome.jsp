@@ -72,6 +72,7 @@
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
+      flex: 1;
     }
 
     .main-content {
@@ -95,7 +96,7 @@
     .clock {
       font-size: 4.5rem;
       font-weight: 700;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
       color: var(--text-color);
     }
 
