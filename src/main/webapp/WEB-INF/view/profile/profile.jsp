@@ -1,7 +1,19 @@
 <%@ page import="kr.or.ddit.emam.vo.PostVO" %>
 <%@ page import="java.util.List" %>
 <%@ page import="kr.or.ddit.emam.vo.MemberVO" %>
+<%@ page import="kr.or.ddit.emam.vo.ProfileVO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<%
+  MemberVO loginMember = (MemberVO)session.getAttribute("loginMember");
+
+  MemberVO memberVO = (MemberVO) session.getAttribute("memberVO");
+
+  ProfileVO pv = (ProfileVO) request.getAttribute("pv");
+  MemberVO mv = (MemberVO) request.getAttribute("mv");
+
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -64,6 +76,7 @@
       grid-template-columns: 1fr;
       gap: 2rem;
       margin-bottom: 2.5rem;
+      background: url("<%=request.getContextPath()%>/<%=pv.getProfile_headerphoto()%>");
     }
 
     @media (min-width: 768px) {
@@ -299,7 +312,26 @@
       font-weight: 500;
       text-align: center;
     }
+
+    .modal{display: none;width: 100%; height: 100%; position: fixed; top: 0; left: 0; background: rgba(0, 0, 0, 0.5); }
+    .modal-i-warp{position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; width: 1000px; height: auto;}
+    .modal.view{display: block}
   </style>
+
+  <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
+  <script>
+    $(function () {
+      //게시글 작성 버튼클릭시
+      $(".post_write_btn").on('click', function (e) {
+        $('form').submit(function(e) {
+          e.preventDefault();
+          $(".post-insert-modal").toggleClass("view");
+        })
+
+
+      });
+    })
+  </script>
 </head>
 <body>
 <div class="container">
@@ -327,24 +359,27 @@
   <div class="profile-section">
     <!-- Profile Picture -->
     <div class="profile-picture-container">
+
       <div class="profile-picture">
-        <img src="placeholder.jpg" alt="Profile">
+        <img src="<%=request.getContextPath()%>/<%=pv.getProfile_photo()%>" alt="Profile">
       </div>
-      <button class="edit-profile-btn">프로필 편집</button>
+      <form action="/profile/editProfile.do" method="get">
+        <button type="submit" class="edit-profile-btn">프로필 편집</button>
+      </form>
     </div>
 
     <!-- Profile Info -->
     <div class="profile-info">
-      <h2 class="profile-name">닉네임</h2>
-      <p class="profile-username">@username</p>
+      <h2 class="profile-name"><%=mv.getMem_nickname()%></h2>
+      <p class="profile-username"><%=mv.getMem_id()%></p>
 
       <div class="profile-stats">
         <div class="stat-item">
-          <div class="stat-value">99</div>
+          <div class="stat-value"><%=pv.getProfile_postcnt()%></div>
           <div class="stat-label">게시글 수</div>
         </div>
         <div class="stat-item">
-          <div class="stat-value">99</div>
+          <div class="stat-value"><%=pv.getProfile_friendcnt()%></div>
           <div class="stat-label">친구 수</div>
         </div>
       </div>
@@ -352,14 +387,22 @@
       <div class="profile-bio">
         <h3>자기소개</h3>
         <p>
-          자기소개 텍스트가 여기에 표시됩니다. 프로필 소개글 영역입니다.
-          여러 줄의 텍스트를 입력할 수 있으며, 사용자에 대한 정보를 제공합니다.
+          <%=pv.getProfile_intro()%>
         </p>
       </div>
 
       <div class="profile-link">
         <h3>링크</h3>
-        <a href="https://example.com" target="_blank">https://example.com</a>
+        <p>
+          <%if(pv.getProfile_url()==null){%>
+          <h1>링크가 없습니다</h1>
+          <%}else {%>
+            <a href="<%=pv.getProfile_url()%>" target="_blank"><%=pv.getProfile_url()%></a>
+
+          <%}%>
+
+        </p>
+
       </div>
     </div>
   </div>
@@ -368,13 +411,17 @@
   <div class="posts-section">
     <div class="section-header">
       <h2 class="section-title">게시글</h2>
-      <button class="add-button">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 12h14"></path>
-          <path d="M12 5v14"></path>
-        </svg>
-        새 게시글
-      </button>
+
+      <form action="/post/postList.do" method="get" class="post_write_btn">
+        <button type="submit" class="add-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"></path>
+            <path d="M12 5v14"></path>
+          </svg>
+          새 게시글
+        </button>
+      </form>
+
     </div>
 
     <div class="posts-grid">
@@ -383,13 +430,23 @@
         if (postList != null && !postList.isEmpty()) {
           for (PostVO post : postList) {
       %>
-      <div class="post-card">
+      <div class="post-card" data-index="<%=post.getPost_index()%>">
         <div class="post-image">
-          <img src="placeholder.jpg" alt="Post 제목"> <%-- ${post.postTitle} 대신 "Post 제목" 과 같이 임시 텍스트로 변경 --%>
+          <img src="<%=request.getContextPath()%>/<%=post.getPost_photo()%>" alt=> <%-- ${post.postTitle} 대신 "Post 제목" 과 같이 임시 텍스트로 변경 --%>
         </div>
         <div class="post-content">
-          <h3 class="post-title">게시글 제목</h3> <%-- ${post.postTitle} 대신 "게시글 제목" 과 같이 임시 텍스트로 변경 --%>
-          <p class="post-date">날짜</p> <%-- ${post.postDate} 대신 "날짜" 와 같이 임시 텍스트로 변경 --%>
+          <h3 class="post-content">${post.post_con}</h3> <%--  수정:  임시 텍스트 -> 실제 게시글 내용 --%>
+          <p class="post-date">${post.post_date}</p> <%--  수정:  임시 텍스트 -> 실제 게시글 날짜 --%>
+          <div class="post-actions">  <%-- 게시글 액션 버튼 div 추가 시작 --%>
+            <form action="<%=request.getContextPath()%>/post/updatePostForm.do" method="get" style="display:inline;"> <%-- 수정 폼 요청 --%>
+              <input type="hidden" name="post_index" value="${post.post_index}">
+              <button type="submit" class="edit-button">수정</button>
+            </form>
+            <form action="<%=request.getContextPath()%>/post/deletePost.do" method="post" style="display:inline;"> <%-- 삭제 요청 --%>
+              <input type="hidden" name="post_index" value="${post.post_index}">
+              <button type="submit" class="delete-button">삭제</button>
+            </form>
+          </div> <%-- 게시글 액션 버튼 div 추가 끝 --%>
         </div>
       </div>
       <%
@@ -406,6 +463,12 @@
   <div class="friends-section">
     <div class="section-header">
       <h2 class="section-title">친구</h2>
+      <%if(loginMember.getMem_id().equals(pv.getMem_id())){%>
+
+      <p>
+        <%=pv.getMem_nickname()%> 님의 친구 목록
+      </p></h1>
+      <%}else{%>
       <button class="add-button">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M5 12h14"></path>
@@ -413,13 +476,14 @@
         </svg>
         친구 추가
       </button>
+      <% }%>
     </div>
 
     <div class="friends-grid">
       <%
         List<MemberVO> friendList = (List<MemberVO>) request.getAttribute("friendList"); // 친구 목록을 request 속성에서 가져온다고 가정 (실제 속성명에 맞게 수정 필요)
         if (friendList != null && !friendList.isEmpty()) {
-          for (MemberVO friend : friendList) {
+         for (MemberVO friend : friendList) {
       %>
       <div class="friend-item">
         <div class="friend-avatar">
@@ -427,16 +491,59 @@
         </div>
         <span class="friend-name">친구 닉네임</span> <%-- ${friend.memNickname} 대신 "친구 닉네임" 과 같이 임시 텍스트로 변경 --%>
       </div>
+
+
       <%
         }
+
       } else {
       %>
       <p>친구가 없습니다.</p> <%-- 친구 목록 없을 때 메시지 표시 --%>
       <%
         }
       %>
+
     </div>
   </div>
 </div>
+
+<div class="post-insert-modal modal">
+  <div class="modal-i-warp">
+    <form action="/post/insertpost.do" method="post" enctype="multipart/form-data">
+      <div class="modal-body">
+        <div class="modal-l">
+          <input type="file" class="post-ipt" multiple="multiple" name="postphoto">
+        </div>
+        <div class="modal-r">
+          <div>
+            프로필이 올자리 입니당
+            <input type="text" name="postwriter" value="aaaaa" hidden="hidden">
+
+            <div>
+              <textarea name="postcon"></textarea>
+            </div>
+
+          </div>
+          <div class="toggleSwitch-warp">
+            <input type="checkbox" name="postvis" id="inserttoggles" value="Y">
+            <label for="inserttoggles" class="toggleSwitch">
+              <span class="toggleButton"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="btn_2th">
+          <a href="javascript:void(0);" class="btn close-btn">닫기</a>
+
+          <input type="submit" class="btn" value="등록하기">
+
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
 </body>
 </html>

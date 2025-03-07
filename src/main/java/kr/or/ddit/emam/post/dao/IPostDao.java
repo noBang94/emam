@@ -26,4 +26,7 @@ public interface IPostDao {
 
     //게시글 1번에 3개씩 조회
     public List<PostVO> selectScrollPost(int page, int num);
+
+    PostVO selectOnePost(int num);
+
 }

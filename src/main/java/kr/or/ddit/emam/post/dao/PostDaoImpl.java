@@ -123,7 +123,6 @@ public class PostDaoImpl implements IPostDao {
 
         return pv;
     }
-
     @Override
     public List<PostVO> selectScrollPost(int page, int num) {
         List<PostVO> pList = new ArrayList<PostVO>();
@@ -141,5 +140,10 @@ public class PostDaoImpl implements IPostDao {
         }
 
         return pList;
+    }
+    @Override
+    public PostVO selectOnePost(int num) { // **이 부분을 추가해 주세요!**  //** 변경점 2 **//
+        SqlSession session = MyBatisUtil.getSqlSession();
+        return session.selectOne("post.selectOnePost", num);
     }
 }

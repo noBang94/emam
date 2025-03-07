@@ -21,26 +21,36 @@ public class ProfileDaoImpl implements IProfileDao {
     @Override
     public ProfileVO selectProfile(String memId) {
         SqlSession session = MyBatisUtil.getSqlSession();
-        try {
-            return session.selectOne("kr.or.ddit.emam.profile.dao.IProfileDao.selectProfile", memId);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            if (session != null) session.close();
-        }
+
+        return session.selectOne("profile.selectProfile", memId);
     }
 
     @Override
     public List<PostVO> selectPostList(String memId) {
         SqlSession session = MyBatisUtil.getSqlSession();
-        try {
-            return session.selectList("kr.or.ddit.emam.profile.dao.IProfileDao.selectPostList", memId);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return List.of();
-        } finally {
-            if (session != null) session.close();
-        }
+        return session.selectList("profile.selectPostList", memId);
+    }
+
+    @Override
+    public int updateProfile(ProfileVO profileVO) {
+        SqlSession session = MyBatisUtil.getSqlSession();
+        int result = session.update("profile.updateProfile", profileVO);
+        session.commit();
+        return result;
+
+    }
+
+    @Override
+    public int selectPostCount(String memId) {
+        SqlSession session = MyBatisUtil.getSqlSession();
+        return session.selectOne("profile.selectPostCount", memId); // 새로운 쿼리 ID 사용
+    }
+
+    @Override
+    public int updateProfilePostCount(ProfileVO profileVO) {
+        SqlSession session = MyBatisUtil.getSqlSession();
+        int result = session.update("profile.updateProfilePostCount", profileVO); // 새로운 쿼리 ID 사용
+        session.commit();
+        return result;
     }
 }

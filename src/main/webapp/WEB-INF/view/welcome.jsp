@@ -70,7 +70,7 @@
     }
 
     function goToProfile() {
-      location.href = "<%=request.getContextPath()%>/profile.do"; // 프로필 페이지 URL로 변경
+      location.href = "<%=request.getContextPath()%>/profile/profile.do"; // 프로필 페이지 URL로 변경
     }
   </script>
   <style>

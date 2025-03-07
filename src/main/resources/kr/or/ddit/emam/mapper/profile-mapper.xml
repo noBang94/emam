@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kr.or.ddit.emam.profile.dao.IProfileDao">
+<mapper namespace="profile">
 
-    <select id="selectProfile" parameterType="String" resultType="kr.or.ddit.emam.vo.ProfileVO">
+
+<select id="selectProfile" parameterType="String" resultType="ProfileVO">
         SELECT
             P.MEM_ID,
             M.MEM_NICKNAME,
@@ -21,19 +22,44 @@
             P.MEM_ID = #{memId}
     </select>
 
-    <select id="selectPostList" parameterType="String" resultType="kr.or.ddit.emam.vo.PostVO">
+    <select id="selectPostList" parameterType="String" resultType="PostVO">
         SELECT
             POST_INDEX,
             MEM_ID,
-            POST_CN,
+            POST_CON,
             POST_PHOTO,
-            POST_REG_DT
+            POST_DATE
         FROM
             POST
         WHERE
             MEM_ID = #{memId}
         ORDER BY
-            POST_REG_DT DESC
+            POST_DATE DESC
     </select>
+
+    <update id="updateProfile" parameterType="ProfileVO">
+    UPDATE PROFILE
+    SET
+    PROFILE_INTRO = #{profile_intro},
+    PROFILE_URL = #{profile_url},
+    PROFILE_PHOTO = #{profile_photo},
+    PROFILE_HEADERPHOTO = #{profile_headerphoto}
+    WHERE
+    MEM_ID = #{mem_id}
+    </update>
+
+    <select id="selectPostCount" parameterType="string" resultType="int">
+        SELECT COUNT(*)
+        FROM POST
+        WHERE MEM_ID = #{memId}
+    </select>
+
+    <update id="updateProfilePostCount" parameterType="ProfileVO">
+        UPDATE PROFILE
+        SET
+            PROFILE_POSTCNT = #{profile_postcnt}
+        WHERE
+            MEM_ID = #{mem_id}
+    </update>
 
 </mapper>

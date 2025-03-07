@@ -1,7 +1,9 @@
 package kr.or.ddit.emam.profile.service;
 
+import java.util.Collection;
 import java.util.List;
 
+import jakarta.servlet.http.Part;
 import kr.or.ddit.emam.vo.PostVO;
 import kr.or.ddit.emam.vo.ProfileVO;
 
@@ -22,4 +24,11 @@ public interface IProfileService {
     public List<PostVO> getPostList(String memId);
 
 
+    ProfileVO selectProfile(String memId);
+
+    int updatePostCount(String memId);
+
+    public int updateProfile(ProfileVO profileVO);
+
+    void updateProfileImg(Collection<Part> parts, String memId);
 }
