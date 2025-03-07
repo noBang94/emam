@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="kr.or.ddit.emam.vo.MemberVO" %>
 <%@ page import="kr.or.ddit.emam.vo.ProfileVO" %>
+<%@ page import="kr.or.ddit.emam.vo.PostPhotoDetailVO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%
@@ -11,6 +12,8 @@
 
   ProfileVO pv = (ProfileVO) request.getAttribute("pv");
   MemberVO mv = (MemberVO) request.getAttribute("mv");
+  List<PostVO> postList = (List<PostVO>) request.getAttribute("postList");
+
 
 %>
 
@@ -322,18 +325,37 @@
   <script>
     $(function () {
       //게시글 작성 버튼클릭시
-      $(".post_write_btn").on('click', function (e) {
+      $(".post_write_btn").on('click', function () {
+        $(".post-insert-modal").toggleClass("view");
         $('form').submit(function(e) {
           e.preventDefault();
-          $(".post-insert-modal").toggleClass("view");
-        })
-
-
+        });
       });
+
+      //게시글 수정 버튼클릭시
+      $(".post_modi_btn").on('click', function () {
+        $(".post-update-modal").toggleClass("view");
+        $('form').submit(function(e) {
+          e.preventDefault();
+        });
+      });
+
+      //모달 닫기 클릭
+      $(".close-btn").on('click', function () {
+        $(".modal").removeClass("view");
+      });
+
+      $(".modal").on('click', function (e) {
+        if (!$(e.target).closest('.modal-i-warp').length) {
+          $(this).removeClass("view");
+        }
+      });
+
     })
   </script>
 </head>
 <body>
+<jsp:include page="/WEB-INF/view/common/gnb.jsp" />
 <div class="container">
   <!-- Header -->
   <header>
@@ -426,19 +448,22 @@
 
     <div class="posts-grid">
       <%
-        List<PostVO> postList = (List<PostVO>) request.getAttribute("postList");
+
         if (postList != null && !postList.isEmpty()) {
           for (PostVO post : postList) {
       %>
       <div class="post-card" data-index="<%=post.getPost_index()%>">
         <div class="post-image">
-          <img src="<%=request.getContextPath()%>/<%=post.getPost_photo()%>" alt=> <%-- ${post.postTitle} 대신 "Post 제목" 과 같이 임시 텍스트로 변경 --%>
+          <%if (post.getPostPhotoDetailList().getFirst() != null) {%>
+            <img src="<%=request.getContextPath()%>/post/postview.do?postphoto=<%=post.getPostPhotoDetailList().getFirst().getPost_photo()%>&postphotosn=<%=post.getPostPhotoDetailList().getFirst().getPost_photo_sn()%>" alt=> <%-- ${post.postTitle} 대신 "Post 제목" 과 같이 임시 텍스트로 변경 --%>
+          <%}%>
+
         </div>
         <div class="post-content">
           <h3 class="post-content">${post.post_con}</h3> <%--  수정:  임시 텍스트 -> 실제 게시글 내용 --%>
           <p class="post-date">${post.post_date}</p> <%--  수정:  임시 텍스트 -> 실제 게시글 날짜 --%>
           <div class="post-actions">  <%-- 게시글 액션 버튼 div 추가 시작 --%>
-            <form action="<%=request.getContextPath()%>/post/updatePostForm.do" method="get" style="display:inline;"> <%-- 수정 폼 요청 --%>
+            <form action="<%=request.getContextPath()%>/post/updatePostForm.do" class="post_modi_btn" method="get" style="display:inline;"> <%-- 수정 폼 요청 --%>
               <input type="hidden" name="post_index" value="${post.post_index}">
               <button type="submit" class="edit-button">수정</button>
             </form>
@@ -538,6 +563,43 @@
           <a href="javascript:void(0);" class="btn close-btn">닫기</a>
 
           <input type="submit" class="btn" value="등록하기">
+
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="post-update-modal modal">
+  <div class="modal-i-warp">
+    <form action="<%=request.getContextPath() %>/post/updatepost.do" method="post" enctype="multipart/form-data">
+      <div class="modal-body">
+        <div class="modal-l">
+          수정할때 사진 못넣습니다~
+        </div>
+        <div class="modal-r">
+          <div>
+            프로필이 올자리 입니당
+            <input type="text" name="postindex" hidden="hidden"/>
+            <input type="text" name="postwriter" value="<%=loginMember.getMem_id()%>" hidden="hidden"/>
+
+            <div>
+              <textarea name="postcon"></textarea>
+            </div>
+
+          </div>
+          <div class="toggleSwitch-warp">
+            <input type="checkbox" name="postvis" id="updatetoggles" value="Y" />
+            <label for="updatetoggles" class="toggleSwitch">
+              <span class="toggleButton"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="btn_2th">
+          <a href="javascript:void(0);" class="btn close-btn">닫기</a>
+          <input type="submit" class="btn" value="수정하기">
 
         </div>
       </div>
