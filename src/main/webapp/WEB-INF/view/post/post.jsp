@@ -32,6 +32,8 @@
 <%--            <%}%>--%>
 
 
+
+
             //게시글 작성 버튼클릭시
             $(".post_write_btn").on('click', function () {
                 $(".post-insert-modal").toggleClass("view");
@@ -836,7 +838,6 @@
             position: absolute;
             top: 0;
             left: 0;
-            z-index: -1;
 
         }
         .modal-body{display: flex;width: 100%;}
