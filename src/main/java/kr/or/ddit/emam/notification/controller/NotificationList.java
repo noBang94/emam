@@ -1,6 +1,7 @@
 package kr.or.ddit.emam.notification.controller;
 
 
+import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,6 +16,7 @@ import kr.or.ddit.emam.vo.MemberVO;
 import kr.or.ddit.emam.vo.NotificationVO;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 @WebServlet("/notification/notificationList.do")
@@ -35,12 +37,14 @@ public class NotificationList extends HttpServlet {
 
         String mem_id = loginMemberVo.getMem_id();
         List<NotificationVO> notificationList = notificationService.selectNotification(mem_id);
-        request.setAttribute("notificationList", notificationList);
 
-        int totalNotification = notificationService.totalCount(mem_id);
-        request.setAttribute("totalNotification", totalNotification);
+        // JSON으로 변환하여 응답
+        Gson gson = new Gson();
+        String json = gson.toJson(notificationList);
 
-        request.getRequestDispatcher("").forward(request, response);
+        PrintWriter out = response.getWriter();
+        out.write(json);
+        out.flush();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

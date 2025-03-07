@@ -2,6 +2,7 @@
 <%@ page import="kr.or.ddit.emam.usersettings.service.IUsersettingsService" %>
 <%@ page import="kr.or.ddit.emam.usersettings.service.UsersettingsServiceImpl" %>
 <%@ page import="kr.or.ddit.emam.vo.UsersettingsVO" %>
+<%@ page import="kr.or.ddit.emam.vo.ProfileVO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <style>
@@ -137,7 +138,52 @@
         display: block;
     }
     .noti-set{display: flex;
-        align-items: center;}
+        align-items: center;
+    }
+    .friend-dropdown-menu, .noti-dropdown-menu, .my-dropdown-menu {
+        position: absolute;
+        right: 0;
+        top: 60px; /* 적절한 위치 조정 */
+        background-color: #fff;
+        border: 1px solid #ccc;
+        padding: 10px;
+        width: 200px; /* 드롭다운 메뉴 너비 설정 */
+        display: none; /* 초기 숨김 */
+        z-index: 1000; /* 다른 요소보다 위에 표시 */
+        color: #000000;
+    }
+    .friend-dropdown-menu ul, .noti-dropdown-menu ul, .my-dropdown-menu ul {
+        padding: 0;
+        margin: 0;
+    }
+    .friend-dropdown-menu li, .noti-dropdown-menu li, .my-dropdown-menu li {
+        padding: 8px 10px;
+        border-bottom: 1px solid #eee;
+        color: #000000;
+    }
+    .friend-dropdown-menu li:last-child, .noti-dropdown-menu li:last-child, .my-dropdown-menu li:last-child {
+        border-bottom: none;
+    }
+    .noti-set {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 5px;
+    }
+    .noti-set span {
+        flex-grow: 1;
+    }
+    .gnb-right {
+        display: flex;
+        align-items: center;
+    }
+    .profile-img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: #ddd; /* 프로필 이미지 배경색 */
+        margin-left: 10px;
+    }
 </style>
 <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -151,21 +197,21 @@
 <script>
     $(function(){
         $(".gnb-button").on("click", function(){
-            $(".dropdown-menu").toggleClass("view")
+            $(".friend-dropdown-menu, .noti-dropdown-menu, .my-dropdown-menu").hide();
+            if ($(this).hasClass("friend-btn")) {
+                $(".friend-dropdown-menu").show();
+            } else if ($(this).hasClass("noti-btn")) {
+                $(".noti-dropdown-menu").show();
+            } else if ($(this).hasClass("my-btn")) {
+                $(".my-dropdown-menu").show();
+            }
         });
-        // $("html").on('click', function(e){
-        //     if(!$(e.target).closest('.dropdown-menu').length) {
-        //         $(this).removeClass("view");
-        //     }
-        // });
-        //
-        // $(document).click(function(event) {
-        //     if($(".dropdown-menu.view").length>0){
-        //         if (!$(event.target).closest(".dropdown-menu").length) {
-        //             $(".dropdown-menu.view").removeClass("view");
-        //         }
-        //     }
-        // });
+
+        $(document).on("click", function(event) {
+            if (!$(event.target).closest(".gnb-button, .friend-dropdown-menu, .noti-dropdown-menu, .my-dropdown-menu").length) {
+                $(".friend-dropdown-menu, .noti-dropdown-menu, .my-dropdown-menu").hide();
+            }
+        });
 
         //토글버튼을 DB값대로 on/off 표기하기
         <% if(usersettingsVo.getSet_friend()==1) { %> $("#friendtoggles").attr("checked", true); <% } %>
@@ -181,8 +227,28 @@
                 data: togglesFormData
             });
         });
-    });
 
+        // 알림 버튼 클릭 시 알림 목록 불러오기
+        $(".noti-btn").on("click", function(){
+            $.ajax({
+                url: "<%=request.getContextPath() %>/notification/notificationList.do",
+                type: "get",
+                dataType: "json",
+                success: function(data) {
+                    // 알림 목록을 HTML로 변환하여 noti-dropdown-menu에 추가
+                    var notiHtml = "";
+                    $.each(data, function(index, noti) {
+                        notiHtml += "<li>" + noti.notification_con + "</li>";
+                    });
+                    $(".noti-dropdown-menu ul").html(notiHtml);
+                },
+                error: function(xhr) {
+                    alert("알림 목록을 불러오는 데 실패했습니다.");
+                }
+            });
+        });
+
+    });
 </script>
 <div class="gnb">
     <div class="gnb-inner">
@@ -202,13 +268,35 @@
             </form>
         </div>
         <div class="gnb-right">
-            <button class="gnb-button">친구</button>
-            <button class="gnb-button">알림</button>
-            <button class="gnb-button">내 메뉴</button>
+            <button class="gnb-button friend-btn">친구</button>
+            <button class="gnb-button noti-btn">알림</button>
+            <button class="gnb-button my-btn">내 메뉴</button>
+            <div class="profile-img">
+            </div>
         </div>
 
-        <div class="gnb-dropdown-menu">
-            <ul class="dropdown-menu">
+        <div class="friend-dropdown-menu">
+            <ul>
+                <li>프사 닉네임 채팅</li>
+                <li>프사 닉네임 채팅</li>
+                <li>프사 닉네임 채팅</li>
+                <li>프사 닉네임 채팅</li>
+                <li>프사 닉네임 채팅</li>
+            </ul>
+        </div>
+
+        <div class="noti-dropdown-menu">
+            <ul>
+                <li>*(핀) 공지사항: 블라블라...</li>
+                <li>*(알림) 누구님이 친구를 신청하였습니다.</li>
+                <li>(수락/거절)</li>
+                <li>누구님이 댓글을 남겼습니다.</li>
+                <li>누구님이 게시글에 좋아요를 눌렀습니다.</li>
+            </ul>
+        </div>
+
+        <div class="my-dropdown-menu">
+            <ul>
                 <li><a href="<%=request.getContextPath() %>/profile/profile.do">내 프로필</a></li>
                 <li><a href="<%=request.getContextPath() %>/member/memberset.do">개인정보 수정</a></li>
                 <li><a href="<%=request.getContextPath() %>/member/logoutMember.do">로그아웃</a></li>
@@ -250,5 +338,4 @@
             </ul>
         </div>
     </div>
-
 </div>

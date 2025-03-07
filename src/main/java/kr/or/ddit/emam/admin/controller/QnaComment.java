@@ -39,8 +39,8 @@ public class QnaComment extends HttpServlet {
                 InquiryVO inquiryVo = inquiryService.getInquiry(inquiryIndex);
                 INotificationService notificationService = NotificationServiceImpl.getInstance();
                 NotificationVO notificationVo = new NotificationVO();
-                notificationVo.setTo_id(inquiryVo.getMem_id());
-                notificationVo.setFrom_id(null);
+                notificationVo.setNotification_toId(inquiryVo.getMem_id());
+                notificationVo.setNotification_fromId(null);
                 notificationVo.setNotification_target(inquiryVo.getInquiry_index());
                 notificationVo.setNotification_type("inquiry");
                 String notificationContent = "문의글 " + inquiryVo.getInquiry_title() + "에 대한 답변이 완료되었습니다.";
