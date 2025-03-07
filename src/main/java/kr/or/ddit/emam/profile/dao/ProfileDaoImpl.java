@@ -2,6 +2,7 @@ package kr.or.ddit.emam.profile.dao;
 
 import java.util.List;
 import kr.or.ddit.emam.util.MyBatisUtil;
+import kr.or.ddit.emam.vo.MemberVO;
 import org.apache.ibatis.session.SqlSession;
 import kr.or.ddit.emam.vo.PostVO;
 import kr.or.ddit.emam.vo.ProfileVO;
@@ -16,6 +17,21 @@ public class ProfileDaoImpl implements IProfileDao {
     }
 
     private ProfileDaoImpl() {
+    }
+
+    @Override
+    public int insertProfile(MemberVO memberVo) {
+        int res = 0;
+        SqlSession session = MyBatisUtil.getSqlSession();
+        try {
+            res = session.insert("profile.insertProfile", memberVo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.commit();
+            session.close();
+        }
+        return res;
     }
 
     @Override

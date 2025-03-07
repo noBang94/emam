@@ -4,10 +4,13 @@ import java.util.Collection;
 import java.util.List;
 
 import jakarta.servlet.http.Part;
+import kr.or.ddit.emam.vo.MemberVO;
 import kr.or.ddit.emam.vo.PostVO;
 import kr.or.ddit.emam.vo.ProfileVO;
 
 public interface IProfileService {
+
+    public int insertProfile(MemberVO memberVo);
 
     /**
      * 회원 ID를 이용하여 프로필 정보 (ProfileVO) 를 조회하는 메소드

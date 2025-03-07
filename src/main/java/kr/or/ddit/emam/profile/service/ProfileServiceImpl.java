@@ -6,6 +6,7 @@ import java.util.List;
 import jakarta.servlet.http.Part;
 import kr.or.ddit.emam.profile.dao.IProfileDao;
 import kr.or.ddit.emam.profile.dao.ProfileDaoImpl;
+import kr.or.ddit.emam.vo.MemberVO;
 import kr.or.ddit.emam.vo.PostVO;
 import kr.or.ddit.emam.vo.ProfileVO;
 
@@ -30,6 +31,9 @@ public class ProfileServiceImpl implements IProfileService { // @Service 어노�
 
 
     @Override
+    public int insertProfile(MemberVO memberVo) { return profileDao.insertProfile(memberVo); }
+
+    @Override
     public ProfileVO getProfile(String memId) {
         return profileDao.selectProfile(memId); // profileDao 싱글톤 instance 사용
     }
@@ -38,6 +42,8 @@ public class ProfileServiceImpl implements IProfileService { // @Service 어노�
     public List<PostVO> getPostList(String memId) {
         return profileDao.selectPostList(memId); // profileDao 싱글톤 instance 사용
     }
+
+
 
     @Override
     public ProfileVO selectProfile(String memId) {

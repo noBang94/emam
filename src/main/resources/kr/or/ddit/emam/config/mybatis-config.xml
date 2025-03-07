@@ -30,7 +30,6 @@
         <typeAlias type="kr.or.ddit.emam.vo.UsersettingsVO" alias="UsersettingsVO"/>
         <typeAlias type="kr.or.ddit.emam.vo.ProfileVO" alias="ProfileVO"/>
         <typeAlias type="kr.or.ddit.emam.vo.NotificationVO" alias="NotificationVO"/>
-        <typeAlias type="kr.or.ddit.emam.vo.ProfileVO" alias="ProfileVO"/>
     </typeAliases>
 
     <environments default="dev">
@@ -60,6 +59,5 @@
         <mapper resource="kr/or/ddit/emam/mapper/usersettings-mapper.xml"/>
         <mapper resource="kr/or/ddit/emam/mapper/profile-mapper.xml"/>
         <mapper resource="kr/or/ddit/emam/mapper/notification-mapper.xml"/>
-        <mapper resource="kr/or/ddit/emam/mapper/profile-mapper.xml"/>
     </mappers>
 </configuration>

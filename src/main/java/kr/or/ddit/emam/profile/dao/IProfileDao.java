@@ -2,6 +2,7 @@ package kr.or.ddit.emam.profile.dao;
 
 import java.util.List;
 
+import kr.or.ddit.emam.vo.MemberVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.or.ddit.emam.vo.PostVO;
@@ -9,6 +10,9 @@ import kr.or.ddit.emam.vo.ProfileVO;
 
 
 public interface IProfileDao {
+
+    //회원가입 시 프로필 행 추가
+    public int insertProfile(MemberVO memberVo);
 
     /**
      * 회원 ID를 이용하여 프로필 정보 (ProfileVO) 를 DB에서 조회하는 메소드
