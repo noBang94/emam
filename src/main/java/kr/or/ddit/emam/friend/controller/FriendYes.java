@@ -14,7 +14,7 @@ import kr.or.ddit.emam.vo.MemberVO;
 import java.io.IOException;
 
 //친구 신청 승인
-@WebServlet("friend/friendYes.do")
+@WebServlet("/friend/friendYes.do")
 public class FriendYes extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
