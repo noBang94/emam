@@ -3,14 +3,14 @@ package kr.or.ddit.emam.chat;
 import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @ServerEndpoint("/chat-ws")
 public class ChatWebSocketServer {
 
     private static Set<Session> sessions = Collections.synchronizedSet(new HashSet<>());
+    private static Map<Session, String> userNicknames = new ConcurrentHashMap<>();
 
     @OnOpen
     public void onOpen(Session session) {
@@ -21,13 +21,22 @@ public class ChatWebSocketServer {
     @OnMessage
     public void onMessage(String message, Session session) {
         System.out.println("메시지 받음: " + message);
-        broadcast(message, session);
+
+        if (message.startsWith("JOIN:")) {
+            String nickname = message.substring(5); // "JOIN:" 제거 후 닉네임 저장
+            userNicknames.put(session, nickname);
+            broadcastUserList();
+        } else {
+            broadcast(message, session);
+        }
     }
 
     @OnClose
     public void onClose(Session session) {
         sessions.remove(session);
+        userNicknames.remove(session);
         System.out.println("세션 종료: " + session.getId());
+        broadcastUserList();
     }
 
     @OnError
@@ -37,9 +46,23 @@ public class ChatWebSocketServer {
 
     private void broadcast(String message, Session senderSession) {
         for (Session session : sessions) {
-            if (session.isOpen() && !session.getId().equals(senderSession.getId())) {
+            if (session.isOpen()) {
                 try {
                     session.getBasicRemote().sendText(message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void broadcastUserList() {
+        String userList = "USERLIST:" + String.join(",", userNicknames.values());
+
+        for (Session session : sessions) {
+            if (session.isOpen()) {
+                try {
+                    session.getBasicRemote().sendText(userList);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
