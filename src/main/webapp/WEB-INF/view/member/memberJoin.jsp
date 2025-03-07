@@ -215,12 +215,6 @@
       let replaceNotKorean = /[^가-힣]/gi; // 한글이 아닌 정규식
       let replaceNotKorean2 = /[^ㄱ-ㅎㅏ-ㅣ가-힣]/gi;
 
-      // input 입력값 제한
-      // 인증번호 - 숫자만 입력하도록 제한
-      $("#authCode").on("keyup", function () {
-        $(this).val($(this).val().replace(replaceNotInt,""));
-      });
-
       // 비밀번호 - 숫자와 영어만 입력하도록 제한
       $("#mem_pw").on("keyup", function () {
         $(this).val($(this).val().replace(replaceNotIntEng,""));
