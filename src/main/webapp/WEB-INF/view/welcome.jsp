@@ -6,6 +6,7 @@
          pageEncoding="UTF-8"%>
 <jsp:include page="/WEB-INF/view/common/gnb.jsp" />
 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,6 +31,7 @@
     int iSky = Integer.parseInt(wSky);
     int iPty = Integer.parseInt(wPty);
     int iT1h = Integer.parseInt(wT1h);
+    List<String> realtimeKeywords = (List<String>) request.getAttribute("realtimeKeywords");
   %>
 
 
@@ -285,6 +287,8 @@
 <div class="tasks">
   <input type="button" value="신고"
          onclick="location.href='<%=request.getContextPath()%>/report.do'">
+  <input type="button" value="채팅"
+         onclick="location.href='<%=request.getContextPath()%>/chat'">
 </div>
 
 <div class="notice-profile-container">
@@ -304,8 +308,10 @@
   </div>
   <div class="additional-info-block">
     <h2>추가 정보</h2>
-    <p>여기에 추가 정보를 표시합니다.</p>
-    <p></p>
+    <ul>
+      <li>가져올 수 없습니다.</li>
+
+    </ul>
   </div>
   <div class="profile-block" onclick="goToProfile()">
     <h2>내 프로필</h2>
