@@ -25,13 +25,19 @@ public class searchMember extends HttpServlet {
 
         System.out.println("검색어: " + searchQuery);
 
-        // 2. 서비스에서 회원 목록 조회 (getMemberListById 사용)
-        List<MemberVO> memberList = service.getMemberListById(searchQuery);
+        // 2. 검색어가 null이거나 공백인지 확인
+        if (searchQuery == null || searchQuery.trim().isEmpty()) {
+            // 검색어가 없거나 공백이면 빈 목록을 request 속성에 저장
+            request.setAttribute("memberList", List.of()); // 빈 목록 생성
+        } else {
+            // 3. 서비스에서 회원 목록 조회 (getMemberListById 사용)
+            List<MemberVO> memberList = service.getMemberListById(searchQuery);
 
-        // 3. 조회된 회원 목록을 request 속성에 저장
-        request.setAttribute("memberList", memberList);
+            // 4. 조회된 회원 목록을 request 속성에 저장
+            request.setAttribute("memberList", memberList);
+        }
 
-        // 4. 검색 결과 페이지로 포워딩 (SearchList.jsp 사용)
+        // 5. 검색 결과 페이지로 포워딩 (SearchList.jsp 사용)
         request.getRequestDispatcher("/WEB-INF/view/search/Search.jsp").forward(request, response);
     }
 }
