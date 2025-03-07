@@ -32,26 +32,21 @@ public class PostDetailAjax extends HttpServlet {
         //서비스 객체 얻기
         IMemberService memberService = MemberServiceImpl.getInstance();
         IPostService postService = PostServiceImpl.getInstance();
-
         String postindex = request.getParameter("postindex");
-
         int postindexInt = Integer.parseInt(postindex);
-
-//        System.out.println("postindex : " + postindex);
 
         Gson gson = new Gson();
         String jsonData = null; //변환된 Json문자열이 저장될 변수
 
         PostVO postVo = postService.getPost(postindexInt);
-//        System.out.println("PostDetailAjax->postVo" + postVo);
-
         MemberVO memVo = memberService.getMember(postVo.getMem_id());
+
+
+
         postVo.setMemVo(memVo);
 
         jsonData = gson.toJson(postVo);
-//		jsonData += "{}";//오류확인하기위해 추가
 
-//        System.out.println("jsonData = " + jsonData);
         //Json문자열을 응답으로 보내기
         PrintWriter out = response.getWriter();
         out.write(jsonData);
