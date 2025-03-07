@@ -47,13 +47,29 @@ public class UsersettingsDaoImpl implements IUsersettingsDao {
         return usersettingsVO;
     }
 
-    //유저세팅 변경
+    //유저세팅(생일 외) 변경
     @Override
-    public int updateUsersettings(String mem_id) {
+    public int updateUsersettings(UsersettingsVO usersettingsVo) {
         int res = 0;
         SqlSession session = MyBatisUtil.getSqlSession();
         try {
-            res = session.update("usersettings.updateUsersettings", mem_id);
+            res = session.update("usersettings.updateUsersettings", usersettingsVo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.commit();
+            session.close();
+        }
+        return res;
+    }
+
+    //유저세팅(생일 외) 변경
+    @Override
+    public int updateUsersettingBir(UsersettingsVO usersettingsVo) {
+        int res = 0;
+        SqlSession session = MyBatisUtil.getSqlSession();
+        try {
+            res = session.update("usersettings.updateUsersettingBir", usersettingsVo);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

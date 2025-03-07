@@ -27,15 +27,22 @@
         where mem_id = #{mem_id}
     </select>
 
-    <!-- 유저세팅 변경 -->
+    <!-- 유저세팅(생일 외) 변경 -->
     <update id="updateUsersettings" parameterType="usersettingsVo">
         update usersettings
             set
                 set_friend = #{set_friend},
                 set_ilike = #{set_ilike},
                 set_reply = #{set_reply},
-                set_chat = #{set_chat},
-                set_bir = #{set_bir}
+                set_chat = #{set_chat}
+        where mem_id = #{mem_id}
+    </update>
+
+    <!-- 유저세팅(생일만) 변경 -->
+    <update id="updateUsersettingBir" parameterType="usersettingsVo">
+        update usersettings
+        set
+            set_bir = #{set_bir}
         where mem_id = #{mem_id}
     </update>
 

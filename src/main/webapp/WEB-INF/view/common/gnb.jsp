@@ -172,6 +172,15 @@
         <% if(usersettingsVo.getSet_reply()==1) { %> $("#replytoggles").attr("checked", true); <% } %>
         <% if(usersettingsVo.getSet_ilike()==1) { %> $("#iliketoggles").attr("checked", true); <% } %>
         <% if(usersettingsVo.getSet_chat()==1) { %> $("#chattoggles").attr("checked", true); <% } %>
+        //토글버튼 변경 시 데이터 전송하기
+        $(".toggles").on("click", function(){
+            let togglesFormData = $("#toggliesForm").serialize();
+            $.ajax({
+                url: "<%=request.getContextPath() %>/usersettings/usersettings.do",
+                type: "get",
+                data: togglesFormData
+            });
+        });
     });
 
 </script>
@@ -203,10 +212,10 @@
                 <li><a href="<%=request.getContextPath() %>/profile/profile.do">내 프로필</a></li>
                 <li><a href="<%=request.getContextPath() %>/member/memberset.do">개인정보 수정</a></li>
                 <li><a href="<%=request.getContextPath() %>/member/logoutMember.do">로그아웃</a></li>
-                <li><a href="<%=request.getContextPath() %>/inquiry/inquiryList.do">문의 사항</a></li>
+                <li><a href="<%=request.getContextPath() %>/inquiry/inquiryList.do">문의사항</a></li>
                 <li><a href="<%=request.getContextPath() %>/notice/notice.do">공지사항</a></li>
                 <li>
-                    <form id="toggliesForm">
+                    <form id="toggliesForm" method="get">
                         <div>설정</div>
                         <div class="noti-set">
                             <span>친구 알람</span>

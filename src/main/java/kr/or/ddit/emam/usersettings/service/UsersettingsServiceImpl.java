@@ -28,7 +28,11 @@ public class UsersettingsServiceImpl implements IUsersettingsService {
     @Override
     public UsersettingsVO checkUsersettings(String mem_id) { return dao.checkUsersettings(mem_id); }
 
-    //유저세팅 변경
+    //유저세팅(생일 외) 변경
     @Override
-    public int updateUsersettings(String mem_id) { return dao.updateUsersettings(mem_id); }
+    public int updateUsersettings(UsersettingsVO usersettingsVo) { return dao.updateUsersettings(usersettingsVo); }
+
+    //유저세팅(생일만) 변경
+    @Override
+    public int updateUsersettingBir(UsersettingsVO usersettingsVo) { return dao.updateUsersettingBir(usersettingsVo); }
 }
