@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
 <%@ page import="kr.or.ddit.emam.vo.MemberVO" %>
+<%
+    MemberVO loginMember = (MemberVO)session.getAttribute("loginMember");
+%>
+
 <jsp:include page="/WEB-INF/view/common/gnb.jsp" />
 <!DOCTYPE html>
 <html>
@@ -78,6 +82,7 @@
             <th>이름</th>
             <th>닉네임</th>
             <th>프로필 보기</th>
+            <th>친구 신청</th>
         </tr>
         </thead>
         <tbody>
@@ -92,6 +97,9 @@
             <td><%= member.getMem_nickname() %></td>
             <td>
                 <a href="<%=request.getContextPath() %>/profile.do?memId=<%= member.getMem_id() %>" class="btn btn-info btn-sm">프로필</a>
+            </td>
+            <td>
+                <a href="<%=request.getContextPath() %>/friend.do?friend_fromid=<%=loginMember.getMem_id() %>&friend_toid=<%=member.getMem_id() %>" class="btn btn-info btn-sm">친구 신청</a>
             </td>
         </tr>
         <%
