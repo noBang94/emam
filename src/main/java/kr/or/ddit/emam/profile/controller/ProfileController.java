@@ -1,8 +1,11 @@
 package kr.or.ddit.emam.profile.controller;
 
+import kr.or.ddit.emam.post.service.IPostPhotoService;
+import kr.or.ddit.emam.post.service.PostPhotoServiceImpl;
 import kr.or.ddit.emam.profile.service.IProfileService;
 import kr.or.ddit.emam.profile.service.ProfileServiceImpl;
 import kr.or.ddit.emam.vo.MemberVO;
+import kr.or.ddit.emam.vo.PostPhotoDetailVO;
 import kr.or.ddit.emam.vo.PostVO;
 import kr.or.ddit.emam.vo.ProfileVO;
 import jakarta.servlet.ServletException;
@@ -11,7 +14,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 
 @WebServlet("/profile/profile.do")
@@ -27,6 +35,14 @@ public class ProfileController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
 
+        /// 가죠옴
+        long postPhoto = request.getParameter("postphoto") == null ?
+                -1 : Long.parseLong(request.getParameter("postphoto"));
+        int postPhotoSn = request.getParameter("postphotosn") == null ?
+                1 : Integer.parseInt(request.getParameter("postphotosn"));
+/// 가죠옴
+
+
         String uri = request.getRequestURI();
         HttpSession session = request.getSession();
         MemberVO memberVO = (MemberVO) session.getAttribute("loginMember");
@@ -35,9 +51,6 @@ public class ProfileController extends HttpServlet {
 
         IProfileService profileService = ProfileServiceImpl.getInstance();
         ProfileVO pv = profileService.selectProfile(memId);
-
-
-
 
 
         if (memberVO == null) {

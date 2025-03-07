@@ -35,6 +35,8 @@
             P.MEM_ID = #{memId}
     </select>
 
+
+<!--    기존 게시글
     <select id="selectPostList" parameterType="String" resultType="PostVO">
         SELECT
             POST_INDEX,
@@ -49,6 +51,39 @@
         ORDER BY
             POST_DATE DESC
     </select>
+-->
+
+    <resultMap id="postMap" type="PostVO">
+        <id property="post_index" column="POST_INDEX" />
+        <result property="mem_id" column="MEM_ID"></result>
+        <result property="post_con" column="POST_CON"></result>
+        <result property="post_photo" column="POST_PHOTO"></result>
+        <result property="post_date" column="POST_DATE"></result>
+        <result property="post_visible" column="POST_VISIBLE"></result>
+        <result property="post_replycnt" column="POST_REPLYCNT"></result>
+        <result property="post_ilikecnt" column="POST_ILIKECNT"></result>
+        <result property="post_viewcnt" column="POST_VIEWCNT"></result>
+        <collection property="postPhotoDetailList" resultMap="postPhotoDetailMap" />
+    </resultMap>
+
+    <resultMap id="postPhotoDetailMap" type="PostPhotoDetailVO">
+        <id property="post_photo" column="POST_PHOTO"/>
+        <id property="post_photo_sn" column="POST_PHOTO_SN"/>
+        <result property="photo_stre_cours" column="PHOTO_STRE_COURS"></result>
+        <result property="photo_flie_nm" column="PHOTO_FILE_NM"></result>
+        <result property="org_photo_nm" column="ORG_PHOTO_NM"></result>
+        <result property="photo_extsn" column="PHOTO_EXTSN"></result>
+    </resultMap>
+
+    <select id="selectPostList" resultMap="postMap">
+        SELECT *
+        FROM POST a
+                 INNER JOIN POST_PHOTO_DETAIL b ON(a.POST_PHOTO = b.POST_PHOTO)
+        WHERE MEM_ID = #{memId}
+        order by POST_DATE desc
+    </select>
+
+
 
     <update id="updateProfile" parameterType="ProfileVO">
     UPDATE PROFILE
