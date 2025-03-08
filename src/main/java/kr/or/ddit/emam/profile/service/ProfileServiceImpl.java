@@ -10,7 +10,7 @@ import kr.or.ddit.emam.vo.MemberVO;
 import kr.or.ddit.emam.vo.PostVO;
 import kr.or.ddit.emam.vo.ProfileVO;
 
-public class ProfileServiceImpl implements IProfileService { // @Service 어노테이션 제거
+public class ProfileServiceImpl implements IProfileService {
 
     private static IProfileService instance; // 싱글톤 instance
     private IProfileDao profileDao; // DAO 인터페이스
@@ -24,11 +24,7 @@ public class ProfileServiceImpl implements IProfileService { // @Service 어노�
         return instance;
     }
 
-    // 수동 의존성 주입 (setter 메소드 또는 생성자 주입 방식 선택 가능)
-    public void setProfileDao(IProfileDao profileDao) {
-        this.profileDao = profileDao;
-    }
-
+    // 수동 의존성 주입 (setter 메소드 또는 생성자 주입 방식 선택 가능
 
     @Override
     public int insertProfile(MemberVO memberVo) { return profileDao.insertProfile(memberVo); }
@@ -72,6 +68,14 @@ public class ProfileServiceImpl implements IProfileService { // @Service 어노�
         // 3. ProfileDao 를 통해 DB 업데이트
         return profileDao.updateProfilePostCount(profileVO);
     }
+    @Override
+    public List<MemberVO> getFriend(String memId) {
+        return profileDao.selectFriend(memId);
+    }
 
+    @Override
+    public boolean isFriend(String loginMemberId, String profileOwnerId) {
+        return profileDao.isFriend(loginMemberId, profileOwnerId);
+    }
 
-}
+    }

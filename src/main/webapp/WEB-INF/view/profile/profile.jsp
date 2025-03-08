@@ -7,14 +7,13 @@
 
 <%
   MemberVO loginMember = (MemberVO)session.getAttribute("loginMember");
-
   MemberVO memberVO = (MemberVO) session.getAttribute("memberVO");
-
   ProfileVO pv = (ProfileVO) request.getAttribute("pv");
-  MemberVO mv = (MemberVO) request.getAttribute("mv");
+  ProfileVO mv = (ProfileVO) request.getAttribute("mv");
   List<PostVO> postList = (List<PostVO>) request.getAttribute("postList");
-
-
+  boolean isMyProfile = (Boolean) request.getAttribute("isMyProfile");
+  List<MemberVO> friendList = (List<MemberVO>) request.getAttribute("friendList");
+  boolean isFriend = (Boolean) request.getAttribute("isFriend"); // ⭐ 친구 여부 정보 추가됨 ⭐
 %>
 
 <!DOCTYPE html>
@@ -271,6 +270,13 @@
       margin-top: 0.25rem;
     }
 
+    .post-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
     .friends-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -319,6 +325,38 @@
     .modal{display: none;width: 100%; height: 100%; position: fixed; top: 0; left: 0; background: rgba(0, 0, 0, 0.5); }
     .modal-i-warp{position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; width: 1000px; height: auto;}
     .modal.view{display: block}
+
+    .friend-profile-buttons {
+      display: flex;
+      justify-content: center; /* 가운데 정렬 */
+      gap: 1rem;
+      margin-top: 1.5rem; /* 프로필 정보 섹션과의 간격 */
+      margin-bottom: 2rem; /* 게시글 섹션과의 간격 */
+    }
+
+    .friend-profile-buttons button {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    .friend-profile-buttons .btn-primary {
+      background-color: #2563eb; /* Blue */
+      color: white;
+      border: none;
+    }
+    .friend-profile-buttons .btn-secondary {
+      background-color: #6b7280; /* Gray */
+      color: white;
+      border: none;
+    }
+    .friend-profile-buttons .btn-danger {
+      background-color: #dc2626; /* Red */
+      color: white;
+      border: none;
+    }
+
+
   </style>
 
   <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
@@ -357,9 +395,8 @@
 <body>
 <jsp:include page="/WEB-INF/view/common/gnb.jsp" />
 <div class="container">
-  <!-- Header -->
   <header>
-    <h1>배경사진</h1>
+    <h1>프로필</h1>
     <div class="header-actions">
       <button class="icon-button">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -377,20 +414,20 @@
     </div>
   </header>
 
-  <!-- Profile Section -->
   <div class="profile-section">
-    <!-- Profile Picture -->
     <div class="profile-picture-container">
 
       <div class="profile-picture">
-        <img src="<%=request.getContextPath()%>/<%=pv.getProfile_photo()%>" alt="Profile">
+        <img src="<%=request.getContextPath()%>/<%=pv.getProfile_photo()%>" alt="프로필 사진">
       </div>
+      <% if (isMyProfile) { %>
       <form action="/profile/editProfile.do" method="get">
         <button type="submit" class="edit-profile-btn">프로필 편집</button>
       </form>
+      <% } %>
     </div>
 
-    <!-- Profile Info -->
+
     <div class="profile-info">
       <h2 class="profile-name"><%=mv.getMem_nickname()%></h2>
       <p class="profile-username"><%=mv.getMem_id()%></p>
@@ -416,24 +453,36 @@
       <div class="profile-link">
         <h3>링크</h3>
         <p>
-          <%if(pv.getProfile_url()==null){%>
-          <h1>링크가 없습니다</h1>
-          <%}else {%>
-            <a href="<%=pv.getProfile_url()%>" target="_blank"><%=pv.getProfile_url()%></a>
+            <%if(pv.getProfile_url()==null){%>
+        <h1>링크가 없습니다</h1>
+        <%}else {%>
+        <a href="<%=pv.getProfile_url()%>" target="_blank"><%=pv.getProfile_url()%></a>
 
-          <%}%>
+        <%}%>
 
         </p>
 
       </div>
+
+      <% if (!isMyProfile) { %> <%-- [⭐ 조건부 렌더링: 친구 프로필일 때만 표시 ⭐] --%>
+      <div class="friend-profile-buttons">
+        <%-- 🚩 [조건부 렌더링]: 친구 여부에 따라 다른 버튼 표시 --%>
+        <% if (isFriend) { %> <%-- [⭐ isFriend 값이 true (친구) 이면 "친구 삭제" 버튼 표시 --%>
+        <button class="btn btn-secondary" type="button">친구 삭제</button>
+        <% } else { %> <%-- [⭐ isFriend 값이 false (친구 아님) 이면 "친구 신청" 버튼 표시 --%>
+        <button class="btn btn-primary" type="button">친구 신청</button>
+        <% } %> <%-- [⭐ 조건부 렌더링 종료 --%>
+        <button type="button" class="btn btn-danger">계정 신고</button>
+      </div>
+      <% } %> <%-- [⭐ 조건부 렌더링 종료: 친구 프로필일 때만 표시 ⭐] --%>
+
     </div>
   </div>
 
-  <!-- Posts Section -->
   <div class="posts-section">
     <div class="section-header">
       <h2 class="section-title">게시글</h2>
-
+      <% if (isMyProfile) { %>
       <form action="/post/postList.do" method="get" class="post_write_btn">
         <button type="submit" class="add-button">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -443,7 +492,7 @@
           새 게시글
         </button>
       </form>
-
+      <% } %>
     </div>
 
     <div class="posts-grid">
@@ -455,30 +504,32 @@
       <div class="post-card" data-index="<%=post.getPost_index()%>">
         <div class="post-image">
           <%if (post.getPostPhotoDetailList().getFirst() != null) {%>
-            <img src="<%=request.getContextPath()%>/post/postview.do?postphoto=<%=post.getPostPhotoDetailList().getFirst().getPost_photo()%>&postphotosn=<%=post.getPostPhotoDetailList().getFirst().getPost_photo_sn()%>" alt=> <%-- ${post.postTitle} 대신 "Post 제목" 과 같이 임시 텍스트로 변경 --%>
+          <img src="<%=request.getContextPath()%>/post/postview.do?postphoto=<%=post.getPostPhotoDetailList().getFirst().getPost_photo()%>&postphotosn=<%=post.getPostPhotoDetailList().getFirst().getPost_photo_sn()%>" alt=>
           <%}%>
 
         </div>
         <div class="post-content">
-          <h3 class="post-content">${post.post_con}</h3> <%--  수정:  임시 텍스트 -> 실제 게시글 내용 --%>
-          <p class="post-date">${post.post_date}</p> <%--  수정:  임시 텍스트 -> 실제 게시글 날짜 --%>
-          <div class="post-actions">  <%-- 게시글 액션 버튼 div 추가 시작 --%>
-            <form action="<%=request.getContextPath()%>/post/updatePostForm.do" class="post_modi_btn" method="get" style="display:inline;"> <%-- 수정 폼 요청 --%>
-              <input type="hidden" name="post_index" value="${post.post_index}">
+          <h3 class="post-content">${post.post_con}</h3>
+          <p class="post-date">${post.post_date}</p>
+          <% if (isMyProfile) { %>
+          <div class="post-actions">
+            <form action="<%=request.getContextPath()%>/post/updatePostForm.do" class="post_modi_btn" method="get" style="display:inline;">
+              <input type="hidden" name="post_index" value="${post.getPost_index()}">
               <button type="submit" class="edit-button">수정</button>
             </form>
-            <form action="<%=request.getContextPath()%>/post/deletePost.do" method="post" style="display:inline;"> <%-- 삭제 요청 --%>
-              <input type="hidden" name="post_index" value="${post.post_index}">
+            <form action="<%=request.getContextPath()%>/post/deletePost.do" method="post" style="display:inline;">
+              <input type="hidden" name="post_index" value="${post.getPost_index()}">
               <button type="submit" class="delete-button">삭제</button>
             </form>
-          </div> <%-- 게시글 액션 버튼 div 추가 끝 --%>
+          </div>
+          <% } %>
         </div>
       </div>
       <%
         }
       } else {
       %>
-      <p>게시글이 없습니다.</p> <%-- 게시글 없을 때 메시지 표시 --%>
+      <p>게시글이 없습니다.</p>
       <%
         }
       %>
@@ -488,46 +539,45 @@
   <div class="friends-section">
     <div class="section-header">
       <h2 class="section-title">친구</h2>
-      <%if(loginMember.getMem_id().equals(pv.getMem_id())){%>
-
+      <% if (isMyProfile) { %>
       <p>
-        <%=pv.getMem_nickname()%> 님의 친구 목록
-      </p></h1>
+        <%=mv.getMem_nickname()%> 님의 친구 목록
+      </p>
       <%}else{%>
-      <button class="add-button">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 12h14"></path>
-          <path d="M12 5v14"></path>
-        </svg>
-        친구 추가
+      <%-- [조건부 렌더링]: 친구 여부에 따라 다른 버튼 표시 --%>
+      <% if (isFriend) { %> <%-- isFriend 값이 true (친구) 이면 "친구 삭제" 버튼 표시 --%>
+      <button class="add-button btn-danger" type="button"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        친구 삭제
       </button>
+      <% } else { %> <%-- isFriend 값이 false (친구 아님) 이면 "친구 신청" 버튼 표시 --%>
+      <button class="add-button btn-primary" type="button"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+        친구 신청
+      </button>
+      <% } %> <%-- 조건부 렌더링 종료 --%>
       <% }%>
     </div>
 
     <div class="friends-grid">
       <%
-        List<MemberVO> friendList = (List<MemberVO>) request.getAttribute("friendList"); // 친구 목록을 request 속성에서 가져온다고 가정 (실제 속성명에 맞게 수정 필요)
         if (friendList != null && !friendList.isEmpty()) {
-         for (MemberVO friend : friendList) {
+          for (MemberVO friend : friendList) {
       %>
-      <div class="friend-item">
-        <div class="friend-avatar">
-          <img src="placeholder.jpg" alt="Friend 닉네임"> <%-- ${friend.memNickname} 대신 "Friend 닉네임" 과 같이 임시 텍스트로 변경 --%>
+      <a href="<%=request.getContextPath()%>/profile/profile.do?memId=<%=friend.getMem_id()%>" style="text-decoration: none; color: inherit;">
+        <div class="friend-item">
+          <div class="friend-avatar">
+            <img src="<%=request.getContextPath()%>/<%=friend.getProfile_photo() != null ? friend.getProfile_photo() : "images/default_profile.png"%>" alt="친구 프로필 사진">
+          </div>
+          <span class="friend-name"><%=friend.getMem_nickname()%></span>
         </div>
-        <span class="friend-name">친구 닉네임</span> <%-- ${friend.memNickname} 대신 "친구 닉네임" 과 같이 임시 텍스트로 변경 --%>
-      </div>
-
-
+      </a>
       <%
         }
-
       } else {
       %>
-      <p>친구가 없습니다.</p> <%-- 친구 목록 없을 때 메시지 표시 --%>
+      <p>친구가 없습니다.</p>
       <%
         }
       %>
-
     </div>
   </div>
 </div>

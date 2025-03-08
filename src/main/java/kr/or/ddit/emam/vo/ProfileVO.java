@@ -5,8 +5,8 @@ import java.util.List;
 
 public class ProfileVO {
     private String mem_id; // 회원 ID (MEMBER 테이블 PK, PROFILE 테이블 PK & FK)
-    private String mem_nickname;
-    private String mem_bir;
+    private String mem_nickname; // 회원 닉네임
+    private String mem_bir; // 회원 생일
     private String profile_intro; // 자기소개
     private String profile_headerphoto; // 배경 사진 파일 경로
     private String profile_photo; // 프로필 사진 파일 경로
@@ -26,8 +26,8 @@ public class ProfileVO {
         return mem_nickname;
     }
 
-    public void setMem_nickname(String mem_name) {
-        this.mem_nickname = mem_name;
+    public void setMem_nickname(String mem_nickname) {
+        this.mem_nickname = mem_nickname;
     }
 
     public String getMem_bir() {
@@ -86,17 +86,9 @@ public class ProfileVO {
         this.profile_url = profile_url;
     }
 
+    private MemberVO memberVO; // 회원 정보 (MemberVO 객체 포함)
+    private List<PostVO> postList; // 게시글 목록
 
-
-    private MemberVO memberVO; // 회원 정보 (MemberVO 객체 포함, 닉네임, 프로필 사진 등 `PROFILE.JSP` 에 직접 바인딩)
-    private List<PostVO> postList; // 게시글 목록 (프로필 페이지 게시글 목록 표시)
-
-
-    // 기본 생성자
-    public ProfileVO() {}
-
-
-    // MemberVO getter, setter 추가
     public MemberVO getMemberVO() {
         return memberVO;
     }
@@ -105,7 +97,6 @@ public class ProfileVO {
         this.memberVO = memberVO;
     }
 
-    // PostVO List getter, setter 추가
     public List<PostVO> getPostList() {
         return postList;
     }
@@ -114,5 +105,20 @@ public class ProfileVO {
         this.postList = postList;
     }
 
-
+    @Override
+    public String toString() {
+        return "ProfileVO{" +
+                "mem_id='" + mem_id + '\'' +
+                ", mem_nickname='" + mem_nickname + '\'' +
+                ", mem_bir='" + mem_bir + '\'' +
+                ", profile_intro='" + profile_intro + '\'' +
+                ", profile_headerphoto='" + profile_headerphoto + '\'' +
+                ", profile_photo='" + profile_photo + '\'' +
+                ", profile_friendcnt=" + profile_friendcnt +
+                ", profile_postcnt=" + profile_postcnt +
+                ", profile_url='" + profile_url + '\'' +
+                ", memberVO=" + memberVO +
+                ", postList=" + postList +
+                '}';
+    }
 }

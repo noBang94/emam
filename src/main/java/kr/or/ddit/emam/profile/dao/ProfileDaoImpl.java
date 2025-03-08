@@ -1,6 +1,8 @@
 package kr.or.ddit.emam.profile.dao;
 
 import java.util.List;
+import java.util.Map;
+
 import kr.or.ddit.emam.util.MyBatisUtil;
 import kr.or.ddit.emam.vo.MemberVO;
 import org.apache.ibatis.session.SqlSession;
@@ -68,5 +70,27 @@ public class ProfileDaoImpl implements IProfileDao {
         int result = session.update("profile.updateProfilePostCount", profileVO); // 새로운 쿼리 ID 사용
         session.commit();
         return result;
+    }
+    @Override
+    public List<MemberVO> selectFriend(String memId) {
+        SqlSession session = MyBatisUtil.getSqlSession();
+        List<MemberVO> friendList = null;
+        try {
+            friendList = session.selectList("friend.selectFriend", memId); // 쿼리 호출: "friend.selectFriend"
+        } finally {
+            session.close();
+        }
+        return friendList;
+    }
+    @Override
+    public boolean isFriend(String loginMemberId, String profileOwnerId) {
+        SqlSession session = MyBatisUtil.getSqlSession(); // MyBatisUtil.getSqlSession() 사용
+        try {
+            // 🚩 [핵심]: 친구 관계를 확인하는 SQL 쿼리 실행 (profile 네임스페이스 사용)
+            int count = session.selectOne("profile.isFriendCheck", Map.of("loginMemberId", loginMemberId, "profileOwnerId", profileOwnerId));
+            return count > 0; // 조회 결과가 1개 이상이면 친구, 아니면 친구 아님
+        } finally {
+            session.close();
+        }
     }
 }
