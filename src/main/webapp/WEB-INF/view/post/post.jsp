@@ -661,11 +661,18 @@
             justify-content: flex-end;
         }
 
-        .swiper-horizontal>.swiper-pagination-bullets, .swiper-pagination-bullets.swiper-pagination-horizontal, .swiper-pagination-custom, .swiper-pagination-fraction{
-            bottom: var(--swiper-pagination-bottom, 50px);
+        .swiper-pagination{
+            bottom: 50px !important;
         }
-        .post-update-modal .swiper-horizontal>.swiper-pagination-bullets, .swiper-pagination-bullets.swiper-pagination-horizontal, .swiper-pagination-custom, .swiper-pagination-fraction{
-            bottom: var(--swiper-pagination-bottom, 0px);
+        .modal .swiper-pagination{
+            bottom: 0px;
+        }
+        .swiper-pagination-bullet{transition: all 0.3s ease;}
+        .swiper-pagination-bullet-active{
+            width: 30px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+
         }
     </style>
 </head>
@@ -1579,18 +1586,7 @@
                 if (typeof swiper !== 'undefined') {
                     swiper.update(); // Swiper가 이미 초기화된 경우 업데이트
                 } else {
-                    swiper = new Swiper('.post-photo-swiper', {
-                        cssMode: true,
-                        navigation: {
-                            nextEl: '.swiper-button-next',
-                            prevEl: '.swiper-button-prev',
-                        },
-                        pagination: {
-                            el: '.swiper-pagination',
-                        },
-                        mousewheel: true,
-                        keyboard: true,
-                    });
+                    setseiper()
                 }
             }
         });
@@ -1598,18 +1594,22 @@
 
     // Swiper 초기화 함수
     function setseiper() {
-        var swiper = new Swiper(".post-photo-swiper", {
-            cssMode: true,
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
-            pagination: {
-                el: ".swiper-pagination",
-            },
-            mousewheel: true,
-            keyboard: true,
-        });
+        if (typeof swiper !== 'undefined') {
+            swiper.update(); // Swiper가 이미 초기화된 경우 업데이트
+        }else {
+            let swiper = new Swiper(".post-photo-swiper", {
+                cssMode: true,
+                navigation: {
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                },
+                pagination: {
+                    el: ".swiper-pagination",
+                },
+                mousewheel: true,
+                keyboard: true,
+            });
+        }
     }
 
 
