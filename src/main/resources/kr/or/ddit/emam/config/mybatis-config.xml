@@ -59,5 +59,6 @@
         <mapper resource="kr/or/ddit/emam/mapper/usersettings-mapper.xml"/>
         <mapper resource="kr/or/ddit/emam/mapper/profile-mapper.xml"/>
         <mapper resource="kr/or/ddit/emam/mapper/notification-mapper.xml"/>
+        <mapper resource="kr/or/ddit/emam/mapper/like-mapper.xml"/>
     </mappers>
 </configuration>
