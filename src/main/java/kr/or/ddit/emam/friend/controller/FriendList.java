@@ -31,7 +31,6 @@ public class FriendList extends HttpServlet {
 
         //service객체 구하기
         IFriendService friendService = FriendServiceImpl.getInstance();
-        IMemberService memberService = MemberServiceImpl.getInstance();
 
         String mem_id = loginMemberVo.getMem_id();
         List<MemberVO> friendList = friendService.selectFriend(mem_id);

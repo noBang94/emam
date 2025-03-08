@@ -263,7 +263,7 @@
   <div class="main-content">
     <h1 class="welcome-message" id="welcomeMessage">
       <% if (loginMember != null) { %>
-      <%= loginMember.getMem_id() %>, Welcome to our page!
+      <%= loginMember.getMem_nickname() %>, Welcome to our page!
       <% } else { %>
       환영합니다!
       <% } %>

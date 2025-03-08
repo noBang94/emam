@@ -324,8 +324,8 @@
 
                 <div class="button-group">
                     <button id="loginBtn" type="button" class="btn">로그인</button>
-                    <button id="joinBtn" type="button" class="btn">회원가입</button>
                     <button id="findPwdBtn" type="button" class="btn">비밀번호 찾기</button>
+                    <button id="joinBtn" type="button" class="btn">회원가입</button>
                 </div>
 
                 <p id="loginResult"></p>

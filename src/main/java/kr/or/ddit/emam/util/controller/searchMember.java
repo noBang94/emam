@@ -1,15 +1,23 @@
 package kr.or.ddit.emam.util.controller;
 
+import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import kr.or.ddit.emam.friend.service.FriendServiceImpl;
+import kr.or.ddit.emam.friend.service.IFriendService;
 import kr.or.ddit.emam.util.service.ISearchService;
 import kr.or.ddit.emam.util.service.SearchServiceImpl;
+import kr.or.ddit.emam.vo.FriendVO;
 import kr.or.ddit.emam.vo.MemberVO;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/search.do")
@@ -35,6 +43,28 @@ public class searchMember extends HttpServlet {
 
             // 4. 조회된 회원 목록을 request 속성에 저장
             request.setAttribute("memberList", memberList);
+
+            // 로그인한 회원과 상대 회원에 대하여 친구상태 구하여 목록 만들기(status값이 null이면 상호작용 없음, 0이면 신청중, 1이면 친구)
+            // 로그인한 계정정보 가져오기
+            HttpSession session = request.getSession();
+            MemberVO loginMemberVo = (MemberVO) session.getAttribute("loginMember");
+            // service객체 구하기
+            IFriendService friendService = FriendServiceImpl.getInstance();
+            List<FriendVO> friendCheckList = new ArrayList();
+            for(MemberVO memberVo : memberList) {
+                FriendVO friendVo = new FriendVO();
+                friendVo.setFriend_fromid(loginMemberVo.getMem_id());
+                friendVo.setFriend_toid(memberVo.getMem_id());
+                if(friendService.checkFriend(friendVo)==0){
+                    friendVo.setFriend_status("null");
+                }else if(friendService.statusFriend(friendVo)==0){
+                    friendVo.setFriend_status("0");
+                }else {
+                    friendVo.setFriend_status("1");
+                }
+                friendCheckList.add(friendVo);
+            }
+            request.setAttribute("friendCheckList", friendCheckList);
         }
 
         // 5. 검색 결과 페이지로 포워딩 (SearchList.jsp 사용)

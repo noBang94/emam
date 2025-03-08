@@ -195,7 +195,7 @@
           $('#mem_id').val(member.mem_id);
           $('#mem_pw').val(member.mem_pw);
           $('#mem_nickname').val(member.mem_nickname);
-          $('#mem_name').val(member.mem_nickname);
+          $('#mem_name').val(member.mem_name);
           $('#mem_addr').val(member.mem_addr);
           $('#mem_phone').val(member.mem_phone);
           if (member.mem_bir) {

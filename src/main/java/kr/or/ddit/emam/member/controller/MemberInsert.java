@@ -56,7 +56,7 @@ public class MemberInsert extends HttpServlet {
                 usersettingsService.insertUsersettings(vo.getMem_id());
                 profileService.insertProfile(vo);
             } else {
-                result = "{\"flag\": \"이미 존재하는 회원입니다.\"}";
+                result = "{\"flag\": \"가입에 실패했습니다. 입력사항을 검토해주세요.\"}";
             }
 
             PrintWriter out = response.getWriter();
