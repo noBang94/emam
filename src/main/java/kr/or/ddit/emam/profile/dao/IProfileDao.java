@@ -32,6 +32,7 @@ public interface IProfileDao {
 
     int selectPostCount(String memId); // 게시글 수 조회 메서드 추가
     int updateProfilePostCount(ProfileVO profileVO); // 게시글 수 업데이트 메서드 추가
-
+    List<MemberVO> selectFriend(String memId);
+    public boolean isFriend(String loginMemberId, String profileOwnerId);
 
 }

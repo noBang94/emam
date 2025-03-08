@@ -16,17 +16,28 @@
             )
     </insert>
 
+
     <select id="selectProfile" parameterType="String" resultType="ProfileVO">
         SELECT
             P.MEM_ID,
             M.MEM_NICKNAME,
+            M.MEM_ID,
             M.MEM_BIR,
             P.PROFILE_PHOTO,
             P.PROFILE_HEADERPHOTO,
             P.PROFILE_INTRO,
             P.PROFILE_URL,
-            P.PROFILE_POSTCNT,
-            P.PROFILE_FRIENDCNT
+            (SELECT count(*)
+             FROM POST
+             WHERE MEM_ID = #{memId}) AS profile_postcnt,
+            (SELECT count(*)  FROM (SELECT FRIEND_FROMID AS TOID, FRIEND_STATUS
+                                    FROM FRIEND
+                                    WHERE FRIEND_TOID = #{memId}
+                                    UNION ALL
+                                    SELECT FRIEND_TOID AS TOID, FRIEND_STATUS
+                                    FROM FRIEND
+                                    WHERE FRIEND_FROMID = #{memId}) B
+             WHERE B.FRIEND_STATUS = 1) AS profile_friendcnt
         FROM
             PROFILE P
                 JOIN
@@ -109,5 +120,12 @@
         WHERE
             MEM_ID = #{mem_id}
     </update>
+
+    <select id="isFriendCheck" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM FRIEND
+        WHERE (FRIEND_FROMID = #{loginMemberId} AND FRIEND_TOID = #{profileOwnerId})
+           OR (FRIEND_FROMID = #{profileOwnerId} AND FRIEND_TOID = #{loginMemberId})
+    </select>
 
 </mapper>

@@ -158,6 +158,7 @@ public class MemberVO {
     private String mem_bir;
     private String mem_gen;
     private String mem_joindate;
+    private String profile_photo;
 
     public String getMem_id() {
         return mem_id;
@@ -226,6 +227,14 @@ public class MemberVO {
     public String getMem_joindate() { return mem_joindate; }
 
     public void setMem_joindate(String mem_joindate) { this.mem_joindate = mem_joindate; }
+
+    public String getProfile_photo() { //  <<<<====  getter 메소드 추가
+        return profile_photo;
+    }
+
+    public void setProfile_photo(String profile_photo) { //  <<<<====  setter 메소드 추가
+        this.profile_photo = profile_photo;
+    }
 
     @Override
     public String toString() {

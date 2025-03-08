@@ -66,19 +66,32 @@
     </delete>
 
     <!-- 친구 목록 조회 -->
-    <select id="selectFriend" parameterType="String" resultType="memberVo">
-        SELECT D.*
-        FROM MEMBER D,
-             (SELECT B.TOID as MEM_ID
-              FROM (SELECT FRIEND_FROMID AS TOID, FRIEND_STATUS
-                    FROM FRIEND
-                    WHERE FRIEND_TOID = #{mem_id}
-                    UNION ALL
-                    SELECT FRIEND_TOID AS TOID, FRIEND_STATUS
-                    FROM FRIEND
-                    WHERE FRIEND_FROMID = #{mem_id})B
-              WHERE B.FRIEND_STATUS = 1)C
-        WHERE D.MEM_ID = C.MEM_ID
+    <select id="selectFriend" parameterType="String" resultType="kr.or.ddit.emam.vo.MemberVO">
+        SELECT
+            M.mem_id,
+            M.mem_nickname,
+            M.mem_name,
+            M.mem_addr,
+            M.mem_phone,
+            M.mem_bir,
+            M.mem_gen,
+            M.mem_joindate,
+            P.profile_photo AS profile_photo
+        FROM MEMBER M
+                 INNER JOIN PROFILE P ON M.mem_id = P.mem_id
+                 INNER JOIN (
+            SELECT B.TOID AS MEM_ID
+            FROM (
+                     SELECT FRIEND_FROMID AS TOID, FRIEND_STATUS
+                     FROM FRIEND
+                     WHERE FRIEND_TOID = #{mem_id}
+                     UNION ALL
+                     SELECT FRIEND_TOID AS TOID, FRIEND_STATUS
+                     FROM FRIEND
+                     WHERE FRIEND_FROMID = #{mem_id}
+                 ) B
+            WHERE B.FRIEND_STATUS = 1
+        ) C ON M.mem_id = C.MEM_ID
     </select>
 
     <!-- 친구 수 조회 -->
