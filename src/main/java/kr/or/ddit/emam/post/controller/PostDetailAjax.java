@@ -38,7 +38,8 @@ public class PostDetailAjax extends HttpServlet {
         Gson gson = new Gson();
         String jsonData = null; //변환된 Json문자열이 저장될 변수
 
-        PostVO postVo = postService.getPost(postindexInt);
+//        PostVO postVo = postService.getPost(postindexInt);//게시글 정보만
+        PostVO postVo = postService.getPostPhotoList(postindexInt);
         MemberVO memVo = memberService.getMember(postVo.getMem_id());
 
 

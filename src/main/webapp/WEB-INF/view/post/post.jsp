@@ -20,7 +20,7 @@
         /* 모달 스타일 */
         .modal {display: none;position: fixed;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0,0,0,0.5);z-index: 1000}
         .modal.view {display: block;}
-        .modal-body {display: flex;width: 100%;min-height: 300px;}
+        .modal-body {display: flex;width: 100%;min-height: 300px; max-height: 400px;}
         .modal-l { position: relative;width: 100%;background-color: #f5f5f5;border-radius: 8px;display: flex;flex-wrap: wrap;align-items: center;justify-content: center;overflow: hidden}
         .modal-l.view{width: 50%;transition: all 0.3s ease;margin-right: 15px;}
         .modal-l img {margin: 5px;border-radius: 4px;z-index: 2;}
@@ -28,8 +28,9 @@
         .modal-r.view{width: 50%;transition: all 0.3s ease;}
 
         .modal.view {display: flex;align-items: center;justify-content: center;}
-        .modal-i-warp {background: white;border-radius: 15px;padding: 25px;width: 90%;max-width: 600px;max-height: 90vh;overflow-y: auto}
+        .modal-i-warp {background: white;border-radius: 15px;padding: 25px;width: 90%;max-width: 600px;max-height: 70vh;overflow-y: auto}
         .modal-i-warp {position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: #fff;width: 90%;max-width: 1000px;border-radius: 10px;padding: 20px;box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);}
+        .modal-i-warp from {}
         .post-insert-modal .modal-l::before {content: "이미지를 업로드하려면 클릭하세요";position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);color: #888;z-index: 1;}
         .post-update-modal .modal-l{width: 50%; margin-right: 15px;}
         .post-update-modal .modal-r{width: 50%;}
@@ -156,6 +157,12 @@
             z-index: 2;
             cursor: pointer;
         }
+        .post-ipt-label{
+            cursor: pointer;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+        }
 
         /* 게시글 작성 버튼 */
         .post_write_btn {
@@ -275,11 +282,23 @@
             overflow: hidden;
             margin-bottom: 15px;
             line-height: 1.5;
+            position: relative;
+            transition: all 0.3s ease;
         }
 
         .a-c-bd.view {
             display: block;
-            transition: all 0.2s ease-in;
+            transition: all 0.3s ease;
+        }
+        .read-more {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: transparent;
+            border: none;
+            color: blue;
+            cursor: pointer;
+            display: none;
         }
 
         .a-c-rp {
@@ -378,37 +397,15 @@
             object-fit: contain;
         }
 
-        /* 스와이퍼 스타일 */
-        .swiper {
-            width: 100%;
-            height: 50%;
-        }
-
-        .swiper-slide {
-            text-align: center;
-            font-size: 18px;
-            background: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .swiper-slide img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
         /* 폼 스타일 */
         textarea {
             width: 100%;
-            min-height: 230px;
+            min-height: 260px;
             max-height: 300px;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            resize: vertical;
+            resize: none;
             margin: 10px 0;
         }
 
@@ -622,6 +619,26 @@
             }
         }
 
+        /* 스와이퍼 스타일 */
+        .swiper {width: 100%;height: 50%;}
+        .post-update-modal .swiper {width: 100%;height: 100%;}
+        .post-insert-modal .swiper {width: 100%;height: 100%;}
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .swiper-slide img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
         /* 스와이퍼 커스텀 스타일 */
         .swiper-button-next,
         .swiper-button-prev {
@@ -642,6 +659,13 @@
             align-content: center;
             justify-content: flex-start;
             justify-content: flex-end;
+        }
+
+        .swiper-horizontal>.swiper-pagination-bullets, .swiper-pagination-bullets.swiper-pagination-horizontal, .swiper-pagination-custom, .swiper-pagination-fraction{
+            bottom: var(--swiper-pagination-bottom, 50px);
+        }
+        .post-update-modal .swiper-horizontal>.swiper-pagination-bullets, .swiper-pagination-bullets.swiper-pagination-horizontal, .swiper-pagination-custom, .swiper-pagination-fraction{
+            bottom: var(--swiper-pagination-bottom, 0px);
         }
     </style>
 </head>
@@ -698,7 +722,16 @@
         <form action="<%=request.getContextPath() %>/post/insertpost.do" method="post" enctype="multipart/form-data">
             <div class="modal-body">
                 <div class="modal-l">
-                    <input type="file" class="post-ipt" multiple="multiple" name="postphoto"/>
+                    <label for="post-input" class="post-ipt-label">
+                        <div class="swiper post-photo-swiper">
+                            <div class="swiper-wrapper">
+                            </div>
+                            <div class="swiper-pagination"></div>
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-button-next"></div>
+                        </div>
+                        <input type="file" id="post-input" class="post-ipt" multiple="multiple" name="postphoto" hidden="hidden" style="display: none;"/>
+                    </label>
                 </div>
                 <div class="modal-r">
                     <div>
@@ -748,6 +781,36 @@
 <script src="<%=request.getContextPath() %>/js/swiper-11.2.5.js"></script>
 <script>
     $(function () {
+        function extractHashtags(text) {
+            const hashtags = [];
+            let currentIndex = 0;
+
+            while (currentIndex < text.length) {
+                const hashIndex = text.indexOf('#', currentIndex);
+
+                if (hashIndex === -1) {
+                    break; // 더 이상 해시태그가 없음
+                }
+
+                let endIndex = text.indexOf(' ', hashIndex);
+                const nextHashIndex = text.indexOf('#', hashIndex + 1);
+
+                if (endIndex === -1) {
+                    endIndex = text.length; // 공백이 없으면 문자열 끝까지
+                }
+
+                if (nextHashIndex !== -1 && nextHashIndex < endIndex) {
+                    currentIndex = nextHashIndex; // ##인 경우 다음 #으로 건너뜀
+                } else {
+                    const hashtag = text.substring(hashIndex, endIndex);
+                    hashtags.push(hashtag);
+                    currentIndex = endIndex;
+                }
+            }
+
+            return hashtags;
+        }
+
         // 게시글 작성 버튼 클릭시
         $(".post_write_btn").on('click', function () {
             $(".post-insert-modal").toggleClass("view");
@@ -779,6 +842,19 @@
                     $('.post-update-modal input[name=postindex]').val(result.post_index);
                     $('.post-update-modal input[name=postwriter]').val(result.mem_id);
                     $('.post-update-modal textarea[name=postcon]').val(result.post_con);
+                    let htmlcode ='';
+                    htmlcode += '            <div class="swiper post-photo-swiper updatemodal">';
+                    htmlcode += '                <div class="swiper-wrapper">';
+                    $.each(result.postPhotoDetailList, function (i, v) {
+                        htmlcode += '<div class="swiper-slide"><img class="post-photo-img" src="/post/postview.do?postphoto='+v.post_photo+'&postphotosn='+v.post_photo_sn+'"></div>';
+                    });
+                    htmlcode += '                </div>';
+                    htmlcode += '                <div class="swiper-button-next"></div>';
+                    htmlcode += '                <div class="swiper-button-prev"></div>';
+                    htmlcode += '                <div class="swiper-pagination"></div>';
+                    htmlcode += '            </div>';
+                    $('.post-update-modal .modal-l').html(htmlcode);
+                    setseiper();
 
                     if (result.post_visible == "Y") {
                         $("#updatetoggles").prop("checked", true);
@@ -799,10 +875,33 @@
             $('.post-delete-modal input[name=postindex]').val(postindex);
         });
 
-        // 게시글 줄여보기 > 전체보이게
-        $(document).on('click', ".a-c-bd", function () {
+        //게시글 ... 줄여보기 > 전체보이게
+        $(document).on('click',".a-c-bd", function () {
             $(this).addClass("view");
         });
+
+
+            $('.a-c-bd').each(function() {
+                var $textElement = $(this);
+                var lineHeight = parseFloat($textElement.css('line-height'));
+                var maxLines = 3;
+                var maxHeight = lineHeight * maxLines;
+                var $readMoreButton = $textElement.find('.read-more');
+
+                // 말줄임표가 생성되었는지 확인
+                if ($textElement[0].scrollHeight > maxHeight) {
+                    $readMoreButton.show(); // 말줄임표가 있다면 더보기 버튼 표시
+
+                    $readMoreButton.on('click', function() {
+                        $textElement.css({
+                            '-webkit-line-clamp': 'unset',
+                            'overflow': 'visible'
+                        });
+                        $(this).hide();
+                    });
+                }
+            });
+
 
         // 댓글 가져오기
         $(document).on('click', ".btn-cover.replybtn", function () {
@@ -1368,7 +1467,7 @@
                             }
                             htmlcode += '        </div>';
                             htmlcode += '        <div class="a-bd-btns">';
-                            htmlcode += '            <div class="btn-cover">';
+                            htmlcode += '            <div class="btn-cover ilikebtn">';
                             htmlcode += '                <svg aria-label="좋아요" class="" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">';
                             htmlcode += '                    <title>좋아요</title>';
                             htmlcode += '                    <path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z"></path>';
@@ -1397,12 +1496,12 @@
                             htmlcode += '    </div>';
                             htmlcode += '    <div class="a-con">';
                             htmlcode += '        <div class="a-c-h">';
-                            htmlcode += '            <div>해쉬태그</div>';
-                            htmlcode += '            <div>프로젝트</div>';
-                            htmlcode += '            <div>공부</div>';
-                            htmlcode += '            <div>집가고싶다</div>';
+                            let hashs = extractHashtags(pl.post_con)
+                            $.each(hashs, function (i, v) {
+                                if(v == "#"){}else {htmlcode += '<div>'+v+'</div>';}
+                            });
                             htmlcode += '        </div>';
-                            htmlcode += '        <div class="a-c-bd">' + pl.post_con.replace("\r\n", "<br>").replace("\r", "<br>").replace("\n", "<br>") + '</div>';
+                            htmlcode += '        <div class="a-c-bd">' + pl.post_con.replace("\r\n", "<br>").replace("\r", "<br>").replace("\n", "<br>") + '<button class="read-more">더보기</button></div>';
                             htmlcode += '        <div class="a-c-rp a-c-rp-w" data-index=' + pl.post_index + '>';
                             htmlcode += '            <form action="/reply/replyInsert.do" method="post">';
                             htmlcode += '                <input type="hidden" name="post_index" value="' + pl.post_index + '"/>';
@@ -1417,10 +1516,12 @@
                             htmlcode += '        </div>';
                             htmlcode += '    </div>';
                             htmlcode += '</article>';
+
+
                         });
                     } else {
                         stoploading = true;
-                        htmlcode += '<article class="post-atc">데이터가 없습니다.</article>';
+                        // htmlcode += '<article class="post-atc">데이터가 없습니다.</article>';
                     }
 
                     $(".post-atcwrap").append(htmlcode);
@@ -1451,29 +1552,45 @@
         // 이미지 미리보기
         $('.post-ipt').on('change', function (e) {
             const files = e.target.files; // 선택된 파일 목록 가져오기
-
             if (files && files.length > 0) {
-                // 기존 미리보기 이미지 제거
-                $('.modal-l img').remove();
+                // 기존 슬라이드 내용 제거
+                $('.swiper-wrapper').empty();
                 $('.modal-l').addClass('view');
                 $('.modal-r').addClass('view');
 
                 for (let i = 0; i < files.length; i++) {
                     const file = files[i];
 
-                    // 파일 타입 검사 (이미지 파일인지 확인)
                     if (file.type.startsWith('image/')) {
-                        // 이미지 파일 처리 로직
                         const reader = new FileReader();
                         reader.onload = function (event) {
-                            // 이미지 미리보기
-                            const img = $('<img>').attr('src', event.target.result).width(200);
-                            $('.modal-l').append(img);
+                            // Swiper 슬라이드에 이미지 추가
+                            const slide = $('<div class="swiper-slide"></div>');
+                            const img = $('<img>').attr('src', event.target.result).css('max-width', '100%'); // 이미지 최대 너비 설정
+                            slide.append(img);
+                            $('.swiper-wrapper').append(slide);
                         };
                         reader.readAsDataURL(file);
                     } else {
                         console.log('이미지 파일이 아닙니다:', file.name);
                     }
+                }
+                // Swiper 초기화 또는 업데이트
+                if (typeof swiper !== 'undefined') {
+                    swiper.update(); // Swiper가 이미 초기화된 경우 업데이트
+                } else {
+                    swiper = new Swiper('.post-photo-swiper', {
+                        cssMode: true,
+                        navigation: {
+                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prev',
+                        },
+                        pagination: {
+                            el: '.swiper-pagination',
+                        },
+                        mousewheel: true,
+                        keyboard: true,
+                    });
                 }
             }
         });
@@ -1494,6 +1611,8 @@
             keyboard: true,
         });
     }
+
+
 </script>
 </body>
 </html>
