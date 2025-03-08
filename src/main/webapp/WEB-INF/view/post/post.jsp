@@ -844,7 +844,7 @@
 
         $(".post-insert-modal form").submit(function(event) {
             // textarea의 값 가져오기
-            var postContent = $("textarea[name='postcon']").val().trim();
+            var postContent = $(".post-insert-modal textarea[name='postcon']").val().trim();
 
             // textarea가 비어있는지 확인
             if (postContent === "") {
