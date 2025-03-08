@@ -108,7 +108,6 @@ public class PostDaoImpl implements IPostDao {
         return cnt;
     }
 
-    //39
     @Override
     public PostVO getPost(int num) {
         SqlSession session = MyBatisUtil.getSqlSession();
@@ -120,9 +119,23 @@ public class PostDaoImpl implements IPostDao {
         }finally {
             session.close();
         }
-
         return pv;
     }
+
+    @Override
+    public PostVO getPostPhotoList(int num) {
+        SqlSession session = MyBatisUtil.getSqlSession();
+        PostVO pv = null;
+        try{
+            pv =session.selectOne("post.getPostPhotoList",num);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+        return pv;
+    }
+
     @Override
     public List<PostVO> selectScrollPost(int page, int num) {
         List<PostVO> pList = new ArrayList<PostVO>();
