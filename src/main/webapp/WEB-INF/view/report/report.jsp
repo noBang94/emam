@@ -29,11 +29,12 @@
     MemberVO memVo = (MemberVO) session.getAttribute("loginMember");
     if (memVo == null) {
         response.sendRedirect(request.getContextPath() + "/member/loginMember.do");
-    return;
+        return;
     }
     String memId = memVo.getMem_id();
 %>
 <body>
+<jsp:include page="/WEB-INF/view/common/gnb.jsp" />
 <div class="container mt-3">
     <h2>신고하기</h2>
     <table class="table table-borderless">
@@ -44,7 +45,7 @@
             </tr>
             <tr class="row">
                 <td class="col-md-3">신고대상</td>
-                <td class="col-md-9"><input type="text" class="form-control" name="toId" required/></td>
+                <td class="col-md-9"><input type="text" class="form-control" name="toId" required value="<%=tmemVo.getMem_id()%>"/></td>
             </tr>
             <tr class="row">
                 <td class="col-md-3">신고유형</td>
