@@ -674,6 +674,27 @@
             transition: all 0.3s ease;
 
         }
+        /*좋아요*/
+        .heart {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .ilikebtn:hover .heart path{
+            stroke: #ff3366;
+            transition: all 0.2s ease;
+        }
+        .heart path {
+            fill: transparent;
+            stroke: #262626;  /* Black outline */
+            stroke-width: 2px;
+            transition: all 0.2s ease;
+        }
+        .heart.filled path {
+            fill: #ff3366;
+            stroke: #ff3366;
+        }
     </style>
 </head>
 <body>
@@ -792,31 +813,48 @@
             const hashtags = [];
             let currentIndex = 0;
 
-            while (currentIndex < text.length) {
-                const hashIndex = text.indexOf('#', currentIndex);
+            if(text != undefined){
+                while (currentIndex < text.length) {
+                    const hashIndex = text.indexOf('#', currentIndex);
 
-                if (hashIndex === -1) {
-                    break; // 더 이상 해시태그가 없음
-                }
+                    if (hashIndex === -1) {
+                        break; // 더 이상 해시태그가 없음
+                    }
 
-                let endIndex = text.indexOf(' ', hashIndex);
-                const nextHashIndex = text.indexOf('#', hashIndex + 1);
+                    let endIndex = text.indexOf(' ', hashIndex);
+                    const nextHashIndex = text.indexOf('#', hashIndex + 1);
 
-                if (endIndex === -1) {
-                    endIndex = text.length; // 공백이 없으면 문자열 끝까지
-                }
+                    if (endIndex === -1) {
+                        endIndex = text.length; // 공백이 없으면 문자열 끝까지
+                    }
 
-                if (nextHashIndex !== -1 && nextHashIndex < endIndex) {
-                    currentIndex = nextHashIndex; // ##인 경우 다음 #으로 건너뜀
-                } else {
-                    const hashtag = text.substring(hashIndex, endIndex);
-                    hashtags.push(hashtag);
-                    currentIndex = endIndex;
+                    if (nextHashIndex !== -1 && nextHashIndex < endIndex) {
+                        currentIndex = nextHashIndex; // ##인 경우 다음 #으로 건너뜀
+                    } else {
+                        const hashtag = text.substring(hashIndex, endIndex);
+                        hashtags.push(hashtag);
+                        currentIndex = endIndex;
+                    }
                 }
             }
 
+
             return hashtags;
         }
+
+        $(".post-insert-modal form").submit(function(event) {
+            // textarea의 값 가져오기
+            var postContent = $("textarea[name='postcon']").val().trim();
+
+            // textarea가 비어있는지 확인
+            if (postContent === "") {
+                // 알림 표시
+                alert("내용을 입력해주세요.");
+
+                // 폼 제출 방지
+                event.preventDefault();
+            }
+        });
 
         // 게시글 작성 버튼 클릭시
         $(".post_write_btn").on('click', function () {
@@ -886,28 +924,49 @@
         $(document).on('click',".a-c-bd", function () {
             $(this).addClass("view");
         });
+        $('.a-c-bd').each(function() {
+            var $textElement = $(this);
+            var lineHeight = parseFloat($textElement.css('line-height'));
+            var maxLines = 3;
+            var maxHeight = lineHeight * maxLines;
+            var $readMoreButton = $textElement.find('.read-more');
 
+            // 말줄임표가 생성되었는지 확인
+            if ($textElement[0].scrollHeight > maxHeight) {
+                $readMoreButton.show(); // 말줄임표가 있다면 더보기 버튼 표시
 
-            $('.a-c-bd').each(function() {
-                var $textElement = $(this);
-                var lineHeight = parseFloat($textElement.css('line-height'));
-                var maxLines = 3;
-                var maxHeight = lineHeight * maxLines;
-                var $readMoreButton = $textElement.find('.read-more');
-
-                // 말줄임표가 생성되었는지 확인
-                if ($textElement[0].scrollHeight > maxHeight) {
-                    $readMoreButton.show(); // 말줄임표가 있다면 더보기 버튼 표시
-
-                    $readMoreButton.on('click', function() {
-                        $textElement.css({
-                            '-webkit-line-clamp': 'unset',
-                            'overflow': 'visible'
-                        });
-                        $(this).hide();
+                $readMoreButton.on('click', function() {
+                    $textElement.css({
+                        '-webkit-line-clamp': 'unset',
+                        'overflow': 'visible'
                     });
+                    $(this).hide();
+                });
+            }
+        });
+
+        //좋아요 클릭시
+        $(document).on('click', ".btn-cover.ilikebtn", function () {
+            let targetheart = $(this).find(".heart");
+            let memid = '<%=loginMember.getMem_id()%>';
+            let postindex = $(this).data('index');
+
+            $.ajax({
+                url: "/setilike.do",
+                type: "post",
+                data: {"memid":memid,"postindex":postindex},
+                contentType: "application/x-www-form-urlencoded",
+                success: function (data) {
+                    console.log(data)
+                    if(data == false){
+                        targetheart.removeClass('filled');
+                    }else {
+                        targetheart.addClass('filled');
+                    }
+
                 }
             });
+        });
 
 
         // 댓글 가져오기
@@ -1474,10 +1533,15 @@
                             }
                             htmlcode += '        </div>';
                             htmlcode += '        <div class="a-bd-btns">';
-                            htmlcode += '            <div class="btn-cover ilikebtn">';
-                            htmlcode += '                <svg aria-label="좋아요" class="" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">';
+                            htmlcode += '            <div class="btn-cover ilikebtn" data-index=' + pl.post_index + '>';
+                            if(pl.Likecheck){
+                                htmlcode += '                <svg aria-label="좋아요" class="heart filled" role="img" viewBox="0 0 24 24" height="24" width="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+                            }else{
+                                htmlcode += '                <svg aria-label="좋아요" class="heart" role="img" viewBox="0 0 24 24" height="24" width="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+                            }
+
                             htmlcode += '                    <title>좋아요</title>';
-                            htmlcode += '                    <path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z"></path>';
+                            htmlcode += '                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>';
                             htmlcode += '                </svg>';
                             htmlcode += '            </div>';
                             htmlcode += '            <div class="btn-cover replybtn" data-index=' + pl.post_index + '>';
@@ -1523,9 +1587,8 @@
                             htmlcode += '        </div>';
                             htmlcode += '    </div>';
                             htmlcode += '</article>';
-
-
                         });
+
                     } else {
                         stoploading = true;
                         // htmlcode += '<article class="post-atc">데이터가 없습니다.</article>';

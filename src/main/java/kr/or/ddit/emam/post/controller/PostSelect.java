@@ -7,16 +7,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import kr.or.ddit.emam.ilike.service.ILikeService;
+import kr.or.ddit.emam.ilike.service.LikeServiceImpl;
 import kr.or.ddit.emam.member.service.IMemberService;
 import kr.or.ddit.emam.member.service.MemberServiceImpl;
 import kr.or.ddit.emam.post.service.IPostPhotoService;
 import kr.or.ddit.emam.post.service.IPostService;
 import kr.or.ddit.emam.post.service.PostPhotoServiceImpl;
 import kr.or.ddit.emam.post.service.PostServiceImpl;
-import kr.or.ddit.emam.vo.MemberVO;
-import kr.or.ddit.emam.vo.PostPhotoDetailVO;
-import kr.or.ddit.emam.vo.PostPhotoVO;
-import kr.or.ddit.emam.vo.PostVO;
+import kr.or.ddit.emam.vo.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -43,6 +42,8 @@ public class PostSelect extends HttpServlet {
         //세션에 로그인멤버가 있는지 확인한다
         MemberVO memcheck = (MemberVO) session.getAttribute("loginMember");
 
+        ILikeService likeService = LikeServiceImpl.getInstance();
+
         //페이지 번호 가져오기
         String page = req.getParameter("page");
         int pageNum = 0;
@@ -51,6 +52,9 @@ public class PostSelect extends HttpServlet {
         }else {
             pageNum = Integer.parseInt(page);
         }
+
+
+
 
         //한번에 보여줄 수
         int setviewnum = 3;
@@ -73,6 +77,16 @@ public class PostSelect extends HttpServlet {
             for(PostVO postVO : postList){
                 MemberVO memVo = memberService.getMember(postVO.getMem_id());
                 postVO.setMemVo(memVo);
+
+                ILikeVO lv = new ILikeVO(postVO.getPost_index(), memcheck.getMem_id());
+                int cnt = likeService.likeCheck(lv);
+                boolean liked = false;
+                if(cnt>0){
+                    liked = true;
+                }else {
+                    liked = false;
+                }
+                postVO.setLikecheck(liked);
             }
 //            req.setAttribute("postList", postList);
 //            req.getRequestDispatcher("/WEB-INF/view/post/post.jsp").forward(req, resp);

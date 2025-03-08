@@ -14,6 +14,15 @@ public class PostVO {
     private int post_ilikecnt; //좋아요 수
     private int post_viewcnt; //조회 수
     private MemberVO memVo; //작성자 정보
+    private boolean Likecheck;
+
+    public boolean isLikecheck() {
+        return Likecheck;
+    }
+
+    public void setLikecheck(boolean likecheck) {
+        Likecheck = likecheck;
+    }
 
     private PostPhotoVO postPhotoVO; //게시글 사진 정보
     private List<PostPhotoDetailVO> postPhotoDetailList;

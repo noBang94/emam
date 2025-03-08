@@ -32,4 +32,5 @@ public interface IPostDao {
 
     PostVO selectOnePost(int num);
 
+
 }
