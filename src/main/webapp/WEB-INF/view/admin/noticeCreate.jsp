@@ -12,34 +12,347 @@
   <title><%= "update".equals(mode) ? "공지사항 수정" : "공지사항 작성" %></title>
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
   <style>
+    :root {
+      --primary-color: #64B5F6;
+      --primary-light: #90CAF9;
+      --primary-lighter: #BBDEFB;
+      --primary-dark: #42A5F5;
+      --primary-darker: #1E88E5;
+      --accent-color: #4FC3F7;
+      --secondary-color: #7986CB;
+      --secondary-light: #9FA8DA;
+      --secondary-dark: #5C6BC0;
+      --tertiary-color: #4DD0E1;
+      --text-color: #333;
+      --text-light: #666;
+      --background-color: #EBF5FE;
+      --card-background: #fff;
+      --border-color: #e2e8f0;
+      --danger-color: #F08E95;
+      --danger-hover: #E57373;
+      --success-color: #81C784;
+      --warning-color: #FFD54F;
+      --info-color: #4DD0E1;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      --radius: 0.5rem;
+      --transition: all 0.3s ease;
+    }
+
     body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f4f4f4;
+      padding: 0;
+      margin: 0;
+      color: var(--text-color);
+      font-family: 'Noto Sans KR', sans-serif;
+      min-height: 100vh;
+      position: relative;
+      background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
     }
-    .notice-form-container {
-      width: 80%;
-      margin: 50px auto;
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2364b5f6' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      z-index: -1;
+      opacity: 0.7;
+    }
+
+    .page-wrapper {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .bg-gradient-1 {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(79, 195, 247, 0.2) 0%, rgba(79, 195, 247, 0) 70%);
+      top: -300px;
+      right: -200px;
+      z-index: -1;
+    }
+
+    .bg-gradient-2 {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(121, 134, 203, 0.2) 0%, rgba(121, 134, 203, 0) 70%);
+      bottom: -200px;
+      left: -100px;
+      z-index: -1;
+    }
+
+    .bg-gradient-3 {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(77, 208, 225, 0.15) 0%, rgba(77, 208, 225, 0) 70%);
+      top: 30%;
+      left: 10%;
+      z-index: -1;
+    }
+
+    .top-bar {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-darker) 100%);
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .top-bar h2 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+
+    .top-bar h2::before {
+      content: "\f075";
+      font-family: "Font Awesome 5 Free";
+      font-weight: 900;
+      margin-right: 12px;
+      font-size: 20px;
+    }
+
+    .back-btn {
       background-color: white;
-      padding: 20px;
+      color: var(--primary-darker);
+      border: none;
+      padding: 8px 20px;
       border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      font-weight: 500;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
     }
+
+    .back-btn i {
+      margin-right: 8px;
+    }
+
+    .back-btn:hover {
+      background-color: #f8f9fa;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .container-wrapper {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .notice-form-container {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 16px;
+      box-shadow: var(--shadow-lg);
+      padding: 30px;
+      margin-bottom: 40px;
+      border: 1px solid rgba(100, 181, 246, 0.2);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(5px);
+    }
+
+    .notice-form-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-darker) 100%);
+    }
+
+    .notice-form-container h2 {
+      color: var(--text-color);
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+    }
+
+    .notice-form-container h2::before {
+      content: <%= "update".equals(mode) ? "\"\\f044\"" : "\"\\f067\"" %>;
+      font-family: "Font Awesome 5 Free";
+      font-weight: 900;
+      margin-right: 12px;
+      font-size: 20px;
+      color: var(--primary-color);
+    }
+
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
-    label {
-      font-weight: bold;
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text-color);
+      font-size: 15px;
     }
-    textarea {
+
+    .form-control {
+      height: auto;
+      padding: 12px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: none;
+      transition: var(--transition);
+      font-size: 15px;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.2);
+    }
+
+    textarea.form-control {
+      min-height: 200px;
       resize: vertical;
     }
+
     .btn-container {
-      text-align: center;
-      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 10px 25px;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+    }
+
+    .btn i {
+      margin-right: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-darker) 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-darker) 100%);
+    }
+
+    .btn-secondary {
+      background: #f8f9fa;
+      color: var(--text-color);
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      background: #e9ecef;
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, var(--danger-color) 0%, var(--danger-hover) 100%);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      background: linear-gradient(135deg, var(--danger-hover) 0%, var(--danger-hover) 100%);
+    }
+
+    .wave-container {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      left: 0;
+      height: 150px;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .wave {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg"><path fill="%2364B5F6" fill-opacity="0.2" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+      background-size: 1440px 100px;
+      animation: wave 20s linear infinite;
+    }
+
+    .wave:nth-child(2) {
+      bottom: 0;
+      animation: wave 15s linear reverse infinite;
+      opacity: 0.7;
+      background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg"><path fill="%237986CB" fill-opacity="0.2" d="M0,64L48,80C96,96,192,128,288,128C384,128,480,96,576,90.7C672,85,768,107,864,144C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+    }
+
+    @keyframes wave {
+      0% {
+        background-position-x: 0;
+      }
+      100% {
+        background-position-x: 1440px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container-wrapper {
+        padding: 0 15px;
+        margin: 30px auto;
+      }
+
+      .notice-form-container {
+        padding: 20px;
+      }
+
+      .btn-container {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .btn {
+        width: 100%;
+      }
     }
   </style>
 
@@ -58,31 +371,54 @@
   </script>
 </head>
 <body>
+<div class="page-wrapper">
+  <div class="bg-gradient-1"></div>
+  <div class="bg-gradient-2"></div>
+  <div class="bg-gradient-3"></div>
 
-<div class="notice-form-container">
-  <h2><%= "update".equals(mode) ? "공지사항 수정" : "공지사항 작성" %></h2>
-  <form action="<%=request.getContextPath() %>/admin/noticeUpdate.do" method="post">
-    <% if ("update".equals(mode)) { %>
-    <input type="hidden" name="noticeIndex" value="<%= noticeVO.getNotice_index() %>">
-    <input type="hidden" name="mode" value="update">
-    <% } %>
-    <div class="form-group">
-      <label for="noticeTitle">제목</label>
-      <input type="text" class="form-control" id="noticeTitle" name="noticeTitle" value="<%= "update".equals(mode) ? noticeVO.getNotice_title() : "" %>" required>
-    </div>
-    <div class="form-group">
-      <label for="noticeCon">내용</label>
-      <textarea class="form-control" id="noticeCon" name="noticeCon" rows="10" required><%if (noticeVO == null) {%><%} else {%><%="update".equals(mode) ? noticeVO.getNotice_con() : "" %><%}%></textarea>
+  <div class="top-bar">
+    <h2><%= "update".equals(mode) ? "공지사항 수정" : "공지사항 작성" %></h2>
+    <button id="cancelBtn" class="back-btn"><i class="fas fa-arrow-left"></i> 목록으로</button>
+  </div>
 
+  <div class="container-wrapper">
+    <div class="notice-form-container">
+      <h2><%= "update".equals(mode) ? "공지사항 수정" : "공지사항 작성" %></h2>
+      <form action="<%=request.getContextPath() %>/admin/noticeUpdate.do" method="post">
+        <% if ("update".equals(mode)) { %>
+        <input type="hidden" name="noticeIndex" value="<%= noticeVO.getNotice_index() %>">
+        <input type="hidden" name="mode" value="update">
+        <% } %>
+        <div class="form-group">
+          <label for="noticeTitle">제목</label>
+          <input type="text" class="form-control" id="noticeTitle" name="noticeTitle" value="<%= "update".equals(mode) ? noticeVO.getNotice_title() : "" %>" required>
+        </div>
+        <div class="form-group">
+          <label for="noticeCon">내용</label>
+          <textarea class="form-control" id="noticeCon" name="noticeCon" rows="10" required><%= "update".equals(mode) && noticeVO != null ? noticeVO.getNotice_con() : "" %></textarea>
+        </div>
+        <div class="btn-container">
+          <button type="submit" class="btn btn-primary">
+            <i class="fas <%= "update".equals(mode) ? "fa-save" : "fa-plus" %>"></i>
+            <%= "update".equals(mode) ? "수정 완료" : "작성 완료" %>
+          </button>
+          <button type="button" class="btn btn-secondary" id="cancelBtn">
+            <i class="fas fa-times"></i> 취소
+          </button>
+          <% if ("update".equals(mode)) { %>
+          <button type="button" class="btn btn-danger" id="deleteBtn">
+            <i class="fas fa-trash-alt"></i> 삭제
+          </button>
+          <% } %>
+        </div>
+      </form>
     </div>
-    <div class="btn-container">
-      <button type="submit" class="btn btn-primary"><%= "update".equals(mode) ? "수정 완료" : "작성 완료" %></button>
-      <button type="button" class="btn btn-secondary" id="cancelBtn">취소</button>
-      <% if ("update".equals(mode)) { %>
-      <button type="button" class="btn btn-danger delete-btn" id="deleteBtn">삭제</button>
-      <% } %>
-    </div>
-  </form>
+  </div>
+
+  <div class="wave-container">
+    <div class="wave"></div>
+    <div class="wave"></div>
+  </div>
 </div>
 </body>
 </html>
