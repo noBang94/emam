@@ -19,4 +19,7 @@ public interface INotificationDao {
 
     //알림 확인
     public int updateNotification(int num);
+
+    //타겟과 타입으로 해당하는 알림 index 구하기
+    public int selectOneNotification(NotificationVO notificationVo);
 }

@@ -1,4 +1,3 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
 <%@ page import="jakarta.mail.*" %>
@@ -12,21 +11,276 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>비밀번호 찾기</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap">
+
+    <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #64B5F6;
+            --primary-hover: #90CAF9;
+            --secondary-color: #64B5F6; /* 회원가입 버튼 색상 */
+            --secondary-hover: #90CAF9; /* 회원가입 버튼 호버 색상 */
+            --tertiary-color: #64B5F6; /* 비밀번호 찾기 버튼 색상 */
+            --tertiary-hover: #90CAF9; /* 비밀번호 찾기 버튼 호버 색상 */
+            --text-color: #333;
+            --text-light: #666;
+            --background-color: #f5f7fa;
+            --card-background: #fff;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius: 0.5rem;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: 'Noto Sans KR', sans-serif;
+            min-height: 100vh;
+        }
+
+        .password-page {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        .password-form-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .image-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #EBF5FE;
+            overflow: hidden;
+        }
+
+        .image-container img {
+            max-width: 85%;
+            height: auto;
+            object-fit: contain;
+            transition: var(--transition);
+        }
+
+        h2 {
+            text-align: center;
+            margin: 0 0 30px;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: -0.5px;
+        }
+
+        .password-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 35px 40px;
+            background-color: var(--card-background);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .password-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            color: var(--text-color);
+            font-weight: 500;
+            font-size: 15px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-control {
+            height: 48px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 16px;
+            transition: var(--transition);
+            box-shadow: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.2);
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .button-group button {
+            width: 100%;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            color: white;
+        }
+
+        #sendTempPwdBtn {
+            background-color: var(--primary-color);
+        }
+
+        #sendTempPwdBtn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        #backToLoginBtn {
+            background-color: var(--secondary-color);
+        }
+
+        #backToLoginBtn:hover {
+            background-color: var(--secondary-hover);
+            transform: translateY(-2px);
+        }
+
+        #resultMessage {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            min-height: 20px;
+            color: #F08E95;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .password-page {
+                flex-direction: column-reverse;
+            }
+
+            .password-form-container, .image-container {
+                flex: none;
+                width: 100%;
+            }
+
+            .image-container {
+                height: 250px;
+            }
+
+            .password-container {
+                max-width: 450px;
+                margin-bottom: 60px;
+            }
+
+            h2 {
+                font-size: 28px;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .password-container {
+                padding: 25px;
+            }
+
+            .image-container {
+                height: 200px;
+            }
+        }
+    </style>
+
+    <script>
+        $(function(){
+            $("#sendTempPwdBtn").on("click", function(){
+                const email = $("#email").val();
+
+                if (email.length === 0) {
+                    $("#resultMessage").text("이메일을 입력하세요.");
+                    return;
+                }
+
+                // 폼 제출
+                $("#passwordForm").submit();
+            });
+
+            $("#backToLoginBtn").on("click", function(){
+                window.location.href = "<%=request.getContextPath() %>/member/loginMember.do";
+            });
+
+            // Enter key support
+            $("#email").on("keypress", function(e) {
+                if (e.which === 13) {
+                    $("#sendTempPwdBtn").click();
+                }
+            });
+
+            // Focus animation
+            $(".form-control").on("focus", function() {
+                $(this).parent().addClass("focused");
+            }).on("blur", function() {
+                $(this).parent().removeClass("focused");
+            });
+        });
+    </script>
 </head>
 <body>
-<h2>비밀번호 찾기</h2>
-<form action="<%=request.getContextPath() %>/member/SendTempPassword.do" method="GET">
-    <label for="email">아이디:</label>
-    <input type="email" id="email" name="email" placeholder="아이디를 입력하세요." required><br><br>
 
-    <button type="submit">임시 비밀번호 발급받기</button>
-</form>
+<div class="password-page">
+    <div class="password-form-container">
+        <h2>비밀번호 찾기</h2>
 
-<%
-    if (request.getAttribute("message") != null) {
-        out.println("<p style='color: red;'>" + request.getAttribute("message") + "</p>");
-    }
-%>
+        <div class="password-container">
+            <form id="passwordForm" action="<%=request.getContextPath() %>/member/SendTempPassword.do" method="GET">
+                <div class="form-group">
+                    <label for="email">아이디</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="이메일을 입력하세요.">
+                </div>
+
+                <div class="button-group">
+                    <button id="sendTempPwdBtn" type="button" class="btn">임시 비밀번호 발급받기</button>
+                    <button id="backToLoginBtn" type="button" class="btn">로그인 페이지로 돌아가기</button>
+                </div>
+
+                <p id="resultMessage">
+                    <% if (request.getAttribute("message") != null) { %>
+                    <%= request.getAttribute("message") %>
+                    <% } %>
+                </p>
+            </form>
+        </div>
+    </div>
+    <div class="image-container">
+        <img src="<%=request.getContextPath()%>/images/emam_login.png" alt="로고">
+    </div>
+</div>
+
 </body>
 </html>

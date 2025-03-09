@@ -95,4 +95,20 @@ public class NotificationDaoImpl implements INotificationDao {
         }
         return res;
     }
+
+    //타겟과 타입으로 해당하는 알림 index 구하기
+    @Override
+    public int selectOneNotification(NotificationVO notificationVo) {
+        int res = 0;
+        SqlSession session = MyBatisUtil.getSqlSession();
+        try {
+            res = session.update("notification.selectOneNotification", notificationVo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.commit();
+            session.close();
+        }
+        return res;
+    }
 }

@@ -6,53 +6,166 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>개인 정보 수정</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap">
   <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script src="<%=request.getContextPath() %>/js/jquery.serializejson.min.js"></script>
   <style>
-    form.form-horizontal {
+    :root {
+      --primary-color: #64B5F6;
+      --primary-hover: #90CAF9;
+      --secondary-color: #64B5F6;
+      --text-color: #333;
+      --text-light: #666;
+      --background-color: #f5f7fa;
+      --card-background: #fff;
+      --border-color: #e2e8f0;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --radius: 0.5rem;
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      padding: 0;
+      margin: 0;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      font-family: 'Noto Sans KR', sans-serif;
+      min-height: 100vh;
+      margin-top: 60px;
+    }
+
+    /* 메인 컨테이너 스타일 */
+    .update-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      min-height: calc(100vh - 60px); /* GNB 높이 제외 */
+    }
+
+    h2 {
+      text-align: center;
+      margin: 0 0 30px;
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--primary-color);
+      letter-spacing: -0.5px;
+    }
+
+    .form-container {
       width: 100%;
       max-width: 600px;
-      margin: 20px auto;
-      text-align: center;
+      padding: 35px 40px;
+      background-color: var(--card-background);
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      transition: var(--transition);
+    }
+
+    .form-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
     }
 
     .form-group {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      margin-bottom: 10px;
-
+      margin-bottom: 20px;
     }
 
-    .btn-custom {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
+    .form-group label {
+      color: var(--text-color);
+      font-weight: 500;
+      font-size: 15px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .form-control {
+      height: 48px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 15px;
       font-size: 16px;
-      border-radius: 5px;
-      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: none;
     }
 
-    .btn-custom:hover {
-      background-color: #0056b3;
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.2);
+    }
+
+    .btn {
+      height: 33.99px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
       color: white;
+      background-color: var(--primary-color);
+    }
+
+    .btn:hover {
+      background-color: var(--primary-hover); /* 모든 버튼 호버 색상 변경 */
+      transform: translateY(-2px);
     }
 
     .password-buttons {
       display: flex;
-      align-items: center;
-      margin-left: 5px;
+      gap: 8px;
+      margin-top: 8px;
     }
 
-    .form-group label {
-      width: 100px;
+    .radio-inline {
+      margin-right: 15px;
+      font-weight: normal;
     }
 
+    .status-message {
+      margin-top: 5px;
+      font-size: 12px;
+    }
+    .checkbox-inline+.checkbox-inline, .radio-inline+.radio-inline{
+      margin-left:0 !important;
+    }
+    .gen-warp{
+      display: flex;
+
+    }
+
+    #nicknameCheckMsg {
+      display: block;
+      margin-top: 5px;
+      font-size: 12px;
+    }
+
+    .submit-button {
+      width: 100%;
+      height: 48px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .form-container {
+        padding: 25px;
+      }
+
+      h2 {
+        font-size: 28px;
+        margin-bottom: 20px;
+      }
+    }
   </style>
   <script>
     $(function(){
@@ -67,7 +180,7 @@
       //input 입력값 제한
       //비밀번호 - 숫자와 영어만 입력하도록 제한
       $("#mem_pw").on("keyup", function () { $(this).val($(this).val().replace(replaceNotIntEng,"") );});
-      //닉네임 - 숫자와 영어만 입력하도록 제한
+      //닉네임 - 숫자와 ��어만 입력하도록 제한
       $("#mem_nickname").on("keyup", function () { $(this).val($(this).val().replace(replaceNotIntEng,"") );});
       //전화번호 - 숫자만 입력하도록 제한
       $("#mem_phone").on("keyup", function () { $(this).val($(this).val().replace(replaceNotInt,"") );});
@@ -82,7 +195,7 @@
           $('#mem_id').val(member.mem_id);
           $('#mem_pw').val(member.mem_pw);
           $('#mem_nickname').val(member.mem_nickname);
-          $('#mem_name').val(member.mem_nickname);
+          $('#mem_name').val(member.mem_name);
           $('#mem_addr').val(member.mem_addr);
           $('#mem_phone').val(member.mem_phone);
           if (member.mem_bir) {
@@ -143,19 +256,19 @@
         const nickname = $('#mem_nickname').val();
 
         if (nickname.trim() === "") {
-          alert("닉네임을 입력해주세요.");
+          $('#nicknameCheckMsg').html("닉네임을 입력해주세요.").css('color', 'red');
           return;
         }
 
         fetch('<%=request.getContextPath() %>/member/nicknameCheck.do?nickname=' + nickname)
-            .then(res => {
-              if (res.ok) return res.json();
-              else throw new Error(res.statusText);
-            })
-            .then(result => {
-              $('#nicknameCheckMsg').html(result.message).css('color', result.available ? 'green' : 'red');
-            })
-            .catch(err => console.log(err));
+                .then(res => {
+                  if (res.ok) return res.json();
+                  else throw new Error(res.statusText);
+                })
+                .then(result => {
+                  $('#nicknameCheckMsg').html(result.message).css('color', result.available ? 'green' : 'red');
+                })
+                .catch(err => console.log(err));
       });
 
       // 비밀번호 표시/숨김 토글 버튼 클릭 이벤트 핸들러
@@ -231,99 +344,98 @@
   </script>
 </head>
 <body>
-<br><br>
-<div class="text-center">
+<!-- GNB 인클루드 -->
+<jsp:include page="/WEB-INF/view/common/gnb.jsp" />
+
+<!-- 메인 컨텐츠 -->
+<div class="update-container">
   <h2>개인 정보 수정</h2>
-</div>
-<br><br>
-<form class="form-horizontal" onsubmit="return false;">
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="mem_id">아이디</label>
-    <div class="col-sm-3">
-      <input type="email" name="mem_id" class="form-control" id="mem_id" readonly>
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="mem_pw">비밀번호</label>
-    <div class="col-sm-3">
-      <input type="password" name="mem_pw" class="form-control" id="mem_pw" placeholder="비밀번호 입력">
-    </div>
-    <div class="col-sm-5">
-      <div class="password-buttons">
-        <button type="button" class="btn btn-primary btn-sm" id="changePasswordBtn">비밀번호 변경</button>
-        <button type="button" class="btn btn-primary btn-sm" id="togglePasswordBtn">보기</button>
-        <button type="button" class="btn btn-primary btn-sm" id="changePasswordConfirmBtn">비밀번호 변경 확인</button>
+
+  <div class="form-container">
+    <form onsubmit="return false;">
+      <div class="form-group">
+        <label for="mem_id">아이디</label>
+        <input type="email" name="mem_id" class="form-control" id="mem_id" readonly>
       </div>
-    </div>
+
+      <div class="form-group">
+        <label for="mem_pw">비밀번호</label>
+        <input type="password" name="mem_pw" class="form-control" id="mem_pw" placeholder="비밀번호 입력">
+        <div class="password-buttons">
+          <button type="button" class="btn btn-primary" id="changePasswordBtn">비밀번호 변경</button>
+          <button type="button" class="btn btn-primary" id="togglePasswordBtn">보기</button>
+          <button type="button" class="btn btn-primary" id="changePasswordConfirmBtn">변경 확인</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="mem_nickname">닉네임</label>
+        <div class="input-group">
+          <input type="text" name="mem_nickname" class="form-control" id="mem_nickname" placeholder="닉네임 입력">
+          <span class="input-group-btn">
+            <button id="nicknameCheckBtn" type="button" class="btn btn-primary">중복확인</button>
+          </span>
+        </div>
+        <span id="nicknameCheckMsg"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="mem_name">이름</label>
+        <input type="text" name="mem_name" class="form-control" id="mem_name" readonly>
+      </div>
+
+      <div class="form-group">
+        <label for="mem_addr">주소</label>
+        <select name="mem_addr" class="form-control" id="mem_addr">
+          <option value="">선택하세요</option>
+          <option value="서울특별시">서울특별시</option>
+          <option value="부산광역시">부산광역시</option>
+          <option value="대구광역시">대구광역시</option>
+          <option value="인천광역시">인천광역시</option>
+          <option value="광주광역시">광주광역시</option>
+          <option value="대전광역시">대전광역시</option>
+          <option value="울산광역시">울산광역시</option>
+          <option value="세종특별자치시">세종특별자치시</option>
+          <option value="경기도">경기도</option>
+          <option value="강원특별자치도">강원특별자치도</option>
+          <option value="충청북도">충청북도</option>
+          <option value="충청남도">충청남도</option>
+          <option value="전북특별자치도">전북특별자치도</option>
+          <option value="전라남도">전라남도</option>
+          <option value="경상북도">경상북도</option>
+          <option value="경상남도">경상남도</option>
+          <option value="제주특별자치도">제주특별자치도</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="mem_phone">전화번호</label>
+        <input type="text" name="mem_phone" class="form-control" id="mem_phone" placeholder="전화번호 입력" maxlength="13">
+      </div>
+
+      <div class="form-group">
+        <label for="mem_bir">생년월일</label>
+        <input type="date" name="mem_bir" class="form-control" id="mem_bir" readonly>
+      </div>
+
+      <div class="form-group">
+        <label>성별</label>
+        <div class="gen-warp">
+          <label class="radio-inline">
+            <input type="radio" name="mem_gen" value="M"> 남자
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="mem_gen" value="F"> 여자
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button type="button" class="btn btn-primary submit-button" id="send">수정 완료</button>
+      </div>
+    </form>
   </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="mem_nickname">닉네임</label>
-    <div class="col-sm-3">
-      <input type="text" name="mem_nickname" class="form-control" id="mem_nickname" placeholder="닉네임 입력">
-    </div>
-    <div class="col-sm-2">
-      <input id="nicknameCheckBtn" type="button" class="btn btn-success btn-sm" value="중복확인">
-      <span id="nicknameCheckMsg"></span>
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="mem_name">이름</label>
-    <div class="col-sm-3">
-      <input type="text" name="mem_name" class="form-control" id="mem_name" readonly>
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="mem_addr">주소</label>
-    <div class="col-sm-3">
-      <select name="mem_addr" class="form-control" id="mem_addr">
-        <option value="">선택하세요</option>
-        <option value="서울특별시">서울특별시</option>
-        <option value="부산광역시">부산광역시</option>
-        <option value="대구광역시">대구광역시</option>
-        <option value="인천광역시">인천광역시</option>
-        <option value="광주광역시">광주광역시</option>
-        <option value="대전광역시">대전광역시</option>
-        <option value="울산광역시">울산광역시</option>
-        <option value="세종특별자치시">세종특별자치시</option>
-        <option value="경기도">경기도</option>
-        <option value="강원특별자치도">강원특별자치도</option>
-        <option value="충청북도">충청북도</option>
-        <option value="충청남도">충청남도</option>
-        <option value="전북특별자치도">전북특별자치도</option>
-        <option value="전라남도">전라남도</option>
-        <option value="경상북도">경상북도</option>
-        <option value="경상남도">경상남도</option>
-        <option value="제주특별자치도">제주특별자치도</option>
-      </select>
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="mem_phone">전화번호</label>
-    <div class="col-sm-3">
-      <input type="text" name="mem_phone" class="form-control" id="mem_phone" placeholder="전화번호 입력" maxlength="13">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="mem_bir">생년월일</label>
-    <div class="col-sm-3">
-      <input type="date" name="mem_bir" class="form-control" id="mem_bir" readonly>
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2">성별</label>
-    <div class="col-sm-10">
-      <label class="radio-inline">
-        <input type="radio" name="mem_gen" value="M"> 남자
-      </label>
-      <label class="radio-inline">
-        <input type="radio" name="mem_gen" value="F"> 여자
-      </label>
-    </div>
-  </div>
-  <div class="form-group">
-    <div class="text-center mt-4">
-      <button type="button" class="btn btn-custom btn-sm" id="send">수정 완료</button>
-    </div>
-  </div>
-</form>
+</div>
 </body>
+</html>
+

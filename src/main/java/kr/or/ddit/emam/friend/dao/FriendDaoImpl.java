@@ -23,11 +23,11 @@ public class FriendDaoImpl implements IFriendDao {
 
     //상대와 내가 현재 친구 상호작용이 있는 상태인지 확인(0 = 친구아님 / 1 = 신청중이거나 이미 친구임)
     @Override
-    public int checkFriend(Map<String, String> map) {
+    public int checkFriend(FriendVO friendVo) {
         int res = 0;
         SqlSession session = MyBatisUtil.getSqlSession();
         try {
-            res = session.selectOne("friend.checkFriend", map);
+            res = session.selectOne("friend.checkFriend", friendVo);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -38,11 +38,11 @@ public class FriendDaoImpl implements IFriendDao {
 
     //상대와 나의 현재 친구상태(null = 친구아님 / 0 = 신청중 / 1 = 친구) 확인
     @Override
-    public int statusFriend(Map<String, String> map) {
+    public int statusFriend(FriendVO friendVo) {
         int res = 0;
         SqlSession session = MyBatisUtil.getSqlSession();
         try {
-            res = session.selectOne("friend.statusFriend", map);
+            res = session.selectOne("friend.statusFriend", friendVo);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -50,6 +50,22 @@ public class FriendDaoImpl implements IFriendDao {
         }
         return res;
     }
+
+    //상대와 나의 현재 친구상태에 대한 친구번호(index) 구함
+    @Override
+    public int indexFriend(FriendVO friendVo) {
+        int res = 0;
+        SqlSession session = MyBatisUtil.getSqlSession();
+        try {
+            res = session.selectOne("friend.indexFriend", friendVo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return res;
+    }
+
 
     //친구 신청
     @Override

@@ -34,4 +34,9 @@ public interface IProfileService {
     public int updateProfile(ProfileVO profileVO);
 
     void updateProfileImg(Collection<Part> parts, String memId);
+
+    List<MemberVO> getFriend(String memId);
+
+    public boolean isFriend(String loginMemberId, String profileOwnerId);
+
 }

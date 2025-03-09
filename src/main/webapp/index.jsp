@@ -324,18 +324,22 @@
 
                 <div class="button-group">
                     <button id="loginBtn" type="button" class="btn">로그인</button>
-                    <button id="joinBtn" type="button" class="btn">회원가입</button>
                     <button id="findPwdBtn" type="button" class="btn">비밀번호 찾기</button>
+                    <button id="joinBtn" type="button" class="btn">회원가입</button>
                 </div>
 
                 <p id="loginResult"></p>
             </form>
             <a href="<%=request.getContextPath() %>/admin/adminLogin.do" class="admin-button">관리자</a>
         </div>
-    </div>
 
+        <div id="signupForm" style="display: none;">
+            <h2>회원가입</h2>
+            <jsp:include page="/WEB-INF/view/member/memberJoin.jsp"/>
+        </div>
+    </div>
     <div class="image-container">
-        <img src="images/emam_login.png" alt="로고">
+        <img src="<%=request.getContextPath()%>/images/emam_login.png" alt="로고">
     </div>
 </div>
 

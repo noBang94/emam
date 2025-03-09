@@ -61,7 +61,7 @@ public class EditProfile extends HttpServlet {
         String profileHeaderPhoto = null;
 
         // **수정된 파일 저장 경로: "C:/Users/PC-07/Desktop/emam/src/main/webapp/upload"**
-        String uploadDir = "C:/Users/PC-07/Desktop/emam/src/main/webapp/upload";
+        String uploadDir = "D:/emam/src/main/webapp/upload";
         File uploadPath = new File(uploadDir);
         if (!uploadPath.exists()) {
             uploadPath.mkdirs();

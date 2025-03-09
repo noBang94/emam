@@ -52,11 +52,11 @@ public class MemberInsert extends HttpServlet {
             int insetCnt = service.insertMember(vo);
             String result;
             if (insetCnt > 0) {
-                result = String.format("{\"flag\": \"%s님 가입을 축하합니다\", \"redirectUrl\": \"%s/member/loginMember.do\"}", vo.getMem_name(), request.getContextPath());
+                result = String.format("{\"flag\": \"%s님 가입을 축하합니다\", \"redirectUrl\": \"/\"}", vo.getMem_name(), request.getContextPath());
                 usersettingsService.insertUsersettings(vo.getMem_id());
                 profileService.insertProfile(vo);
             } else {
-                result = "{\"flag\": \"이미 존재하는 회원입니다.\"}";
+                result = "{\"flag\": \"가입에 실패했습니다. 입력사항을 검토해주세요.\"}";
             }
 
             PrintWriter out = response.getWriter();

@@ -117,6 +117,37 @@
         select * from post where POST_INDEX = #{num}
     </select>
 
+<!--    게시글 1개에 해당하는 사진 리스트 까지 (s)-->
+    <resultMap id="postMap2" type="PostVO">
+        <id property="post_index" column="POST_INDEX" />
+        <result property="mem_id" column="MEM_ID"></result>
+        <result property="post_con" column="POST_CON"></result>
+        <result property="post_photo" column="POST_PHOTO"></result>
+        <result property="post_date" column="POST_DATE"></result>
+        <result property="post_visible" column="POST_VISIBLE"></result>
+        <result property="post_replycnt" column="POST_REPLYCNT"></result>
+        <result property="post_ilikecnt" column="POST_ILIKECNT"></result>
+        <result property="post_viewcnt" column="POST_VIEWCNT"></result>
+        <collection property="postPhotoDetailList" resultMap="postPhotoDetailMap2" />
+    </resultMap>
+
+    <resultMap id="postPhotoDetailMap2" type="PostPhotoDetailVO">
+        <id property="post_photo" column="POST_PHOTO"/>
+        <id property="post_photo_sn" column="POST_PHOTO_SN"/>
+        <result property="photo_stre_cours" column="PHOTO_STRE_COURS"></result>
+        <result property="photo_flie_nm" column="PHOTO_FILE_NM"></result>
+        <result property="org_photo_nm" column="ORG_PHOTO_NM"></result>
+        <result property="photo_extsn" column="PHOTO_EXTSN"></result>
+    </resultMap>
+
+    <select id="getPostPhotoList" resultMap="postMap2">
+        SELECT *
+        FROM POST a
+        INNER JOIN POST_PHOTO_DETAIL b ON(a.POST_PHOTO = b.POST_PHOTO)
+        where post_index = #{post_index}
+        order by POST_DATE desc
+    </select>
+    <!--    게시글 1개에 해당하는 사진 리스트 까지 (e)-->
 
     <!--    게시글 수정-->
     <update id="updatePost" parameterType="kr.or.ddit.emam.vo.PostVO">

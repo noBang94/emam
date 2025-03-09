@@ -23,6 +23,9 @@ public interface IPostService {
     //게시글에 정보 가져오기
     public PostVO getPost(int num);
 
+    //게시글 정보 가져오고 이미지 리스트 가져오기
+    public PostVO getPostPhotoList(int num);
+
     //게시글 1번에 3개씩 조회
     public List<PostVO> selectScrollPost(int page, int num);
 }
