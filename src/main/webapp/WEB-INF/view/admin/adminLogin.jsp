@@ -7,74 +7,233 @@
     <title>관리자 로그인</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap">
+
     <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <style>
+        :root {
+            --primary-color: #64B5F6;
+            --primary-hover: #90CAF9;
+            --text-color: #333;
+            --text-light: #666;
+            --background-color: #f5f7fa;
+            --card-background: #fff;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius: 0.5rem;
+            --transition: all 0.3s ease;
+        }
+
         body {
-            background-color: #e9ecef; /* 연한 회색 배경 */
+            padding: 0;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: 'Noto Sans KR', sans-serif;
+            min-height: 100vh;
+        }
+
+        .login-page {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        .login-form-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .image-container {
+            flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            background-color: #EBF5FE;
+            overflow: hidden;
         }
+
+        .image-container img {
+            max-width: 85%;
+            height: auto;
+            object-fit: contain;
+            transition: var(--transition);
+        }
+
+        h2 {
+            text-align: center;
+            margin: 0 0 30px;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: -0.5px;
+        }
+
         .login-container {
-            width: 400px;
-            padding: 50px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* 그림자 강화 */
-        }
-        .login-container h2 {
-            text-align: center;
-            margin-bottom: 40px;
-            color: #343a40;
-            font-weight: 600; /* 폰트 굵게 */
-        }
-        .form-group {
-            margin-bottom: 25px;
-        }
-        .form-control {
-            border-radius: 8px;
-            padding: 14px;
-            border: 1.5px solid #ced4da; /* 테두리 두께 조정 */
-            font-size: 16px; /* 폰트 크기 조정 */
-        }
-        .btn-primary {
             width: 100%;
-            padding: 14px;
-            background-color: #007bff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px; /* 폰트 크기 조정 */
-            font-weight: 500; /* 폰트 굵기 조정 */
+            max-width: 400px;
+            padding: 35px 40px;
+            background-color: var(--card-background);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            transition: var(--transition);
         }
-        .btn-primary:hover {
-            background-color: #0056b3;
+
+        .login-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
         }
-        #adminLoginResult {
-            text-align: center;
-            margin-top: 25px;
-            font-size: 14px;
+
+        .form-group {
+            margin-bottom: 20px;
         }
-        .login-container label {
-            font-weight: 500; /* 라벨 폰트 굵기 조정 */
+
+        .form-group label {
+            color: var(--text-color);
+            font-weight: 500;
+            font-size: 15px;
             margin-bottom: 8px;
             display: block;
+        }
+
+        .form-control {
+            height: 48px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 16px;
+            transition: var(--transition);
+            box-shadow: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.2);
+        }
+
+        .button-group {
+            margin-top: 30px;
+        }
+
+        .button-group button {
+            width: 100%;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            color: white;
+        }
+
+        #adminLoginBtn {
+            background-color: var(--primary-color);
+        }
+
+        #adminLoginBtn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        #adminLoginResult {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            min-height: 20px;
+        }
+
+        .home-button {
+            position: absolute;
+            bottom: -50px;
+            right: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #64B5F6;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid #E1F0FE;
+            border-radius: 20px;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .home-button:hover {
+            color: white;
+            background-color: #64B5F6;
+            border-color: #64B5F6;
+            box-shadow: 0 4px 8px rgba(100, 181, 246, 0.3);
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        .home-button:before {
+            content: "🏠";
+            margin-right: 6px;
+            font-size: 12px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .login-page {
+                flex-direction: column-reverse;
+            }
+
+            .login-form-container, .image-container {
+                flex: none;
+                width: 100%;
+            }
+
+            .image-container {
+                height: 250px;
+            }
+
+            .login-container {
+                max-width: 450px;
+                margin-bottom: 60px;
+            }
+
+            h2 {
+                font-size: 28px;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .login-container {
+                padding: 25px;
+            }
+
+            .image-container {
+                height: 200px;
+            }
         }
     </style>
 
     <script>
-
         $(function(){
             $("#adminLoginBtn").on("click", function(){
                 const adminId = $("#adminId").val();
                 const adminPw = $("#adminPw").val();
 
                 if (adminId.length === 0 || adminPw.length === 0) {
-                    alert("관리자 아이디와 비밀번호를 입력하세요.");
+                    $("#adminLoginResult").text("관리자 아이디와 비밀번호를 입력하세요.").css("color", "#F08E95");
                     return;
                 }
 
@@ -87,7 +246,7 @@
                             window.location.href = "<%=request.getContextPath() %>/admin/adminMain.do";
                             alert("관리자님 환영합니다.");
                         } else {
-                            $("#adminLoginResult").text("로그인 실패. 아이디 또는 비밀번호를 확인하세요.").css("color", "red");
+                            $("#adminLoginResult").text("로그인 실패. 아이디 또는 비밀번호를 확인하세요.").css("color", "#F08E95");
                         }
                     },
                     error: function(xhr) {
@@ -96,25 +255,54 @@
                     dataType: "json"
                 });
             });
+
+            // Enter key support
+            $("#adminId, #adminPw").on("keypress", function(e) {
+                if (e.which === 13) {
+                    $("#adminLoginBtn").click();
+                }
+            });
+
+            // Focus animation
+            $(".form-control").on("focus", function() {
+                $(this).parent().addClass("focused");
+            }).on("blur", function() {
+                $(this).parent().removeClass("focused");
+            });
         });
     </script>
 </head>
 <body>
 
-<div class="login-container">
-    <h2>관리자 로그인</h2>
-    <form onsubmit="return false;">
-        <div class="form-group">
-            <label for="adminId">관리자 아이디</label>
-            <input type="text" class="form-control" id="adminId" placeholder="관리자 아이디 입력">
+<div class="login-page">
+    <div class="login-form-container">
+        <h2>관리자 로그인</h2>
+
+        <div class="login-container">
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <label for="adminId">관리자 아이디</label>
+                    <input type="text" class="form-control" id="adminId" placeholder="관리자 아이디를 입력하세요.">
+                </div>
+
+                <div class="form-group">
+                    <label for="adminPw">비밀번호</label>
+                    <input type="password" class="form-control" id="adminPw" placeholder="비밀번호를 입력하세요.">
+                </div>
+
+                <div class="button-group">
+                    <button id="adminLoginBtn" type="button" class="btn">로그인</button>
+                </div>
+
+                <p id="adminLoginResult"></p>
+            </form>
+            <a href="<%=request.getContextPath() %>/index.jsp" class="home-button">홈으로</a>
         </div>
-        <div class="form-group">
-            <label for="adminPw">비밀번호</label>
-            <input type="password" class="form-control" id="adminPw" placeholder="비밀번호 입력">
-        </div>
-        <button id="adminLoginBtn" type="button" class="btn btn-primary">로그인</button>
-        <p id="adminLoginResult"></p>
-    </form>
+    </div>
+
+    <div class="image-container">
+        <img src="<%=request.getContextPath() %>/images/admin_logo.png" alt="관리자 로고" onerror="this.src='<%=request.getContextPath() %>/images/emam_login.png'; this.onerror=null;">
+    </div>
 </div>
 
 </body>
