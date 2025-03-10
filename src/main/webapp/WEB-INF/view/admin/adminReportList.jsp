@@ -458,8 +458,12 @@
           <td><%= report.getReportType() %></td>
           <td><%= report.getReportContent() %></td>
           <td><%= report.getReportDate() %></td>
-          <td><%= report.getReportProdate() == null ? "미처리" : report.getReportProdate() %></td>
-          <td><%= "Y".equals(report.getReportStatus()) ? "처리 완료" : "미처리" %></td>
+          <td style="color: <%= report.getReportProdate() == null ? "red" : "inherit" %>;">
+            <%= report.getReportProdate() == null ? "미처리" : report.getReportProdate() %>
+          </td>
+          <td style="color: <%= "N".equals(report.getReportStatus()) ? "red" : "inherit" %>;">
+            <%= "Y".equals(report.getReportStatus()) ? "처리 완료" : "미처리" %>
+          </td>
         </tr>
         <%
           }
