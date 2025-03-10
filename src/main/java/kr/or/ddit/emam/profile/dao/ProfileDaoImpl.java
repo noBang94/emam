@@ -39,14 +39,19 @@ public class ProfileDaoImpl implements IProfileDao {
     @Override
     public ProfileVO selectProfile(String memId) {
         SqlSession session = MyBatisUtil.getSqlSession();
-
-        return session.selectOne("profile.selectProfile", memId);
+        ProfileVO pv=session.selectOne("profile.selectProfile", memId);;
+        session.commit();
+        session.close();
+        return pv;
     }
 
     @Override
     public List<PostVO> selectPostList(String memId) {
         SqlSession session = MyBatisUtil.getSqlSession();
-        return session.selectList("profile.selectPostList", memId);
+        List<PostVO> list = session.selectList("profile.selectPostList", memId);
+        session.commit();
+        session.close();
+        return list;
     }
 
     @Override
@@ -54,6 +59,7 @@ public class ProfileDaoImpl implements IProfileDao {
         SqlSession session = MyBatisUtil.getSqlSession();
         int result = session.update("profile.updateProfile", profileVO);
         session.commit();
+        session.close();
         return result;
 
     }
@@ -61,7 +67,9 @@ public class ProfileDaoImpl implements IProfileDao {
     @Override
     public int selectPostCount(String memId) {
         SqlSession session = MyBatisUtil.getSqlSession();
-        return session.selectOne("profile.selectPostCount", memId); // 새로운 쿼리 ID 사용
+        int cnt = session.selectOne("profile.selectPostCount", memId);
+        session.close();
+        return  cnt;// 새로운 쿼리 ID 사용
     }
 
     @Override
@@ -69,6 +77,7 @@ public class ProfileDaoImpl implements IProfileDao {
         SqlSession session = MyBatisUtil.getSqlSession();
         int result = session.update("profile.updateProfilePostCount", profileVO); // 새로운 쿼리 ID 사용
         session.commit();
+        session.close();
         return result;
     }
     @Override
