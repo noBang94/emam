@@ -8,8 +8,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.or.ddit.emam.member.service.IMemberService;
 import kr.or.ddit.emam.member.service.MemberServiceImpl;
+import kr.or.ddit.emam.profile.service.IProfileService;
+import kr.or.ddit.emam.profile.service.ProfileServiceImpl;
 import kr.or.ddit.emam.reply.service.IReplyService;
 import kr.or.ddit.emam.reply.service.ReplyServiceImpl;
+import kr.or.ddit.emam.vo.ProfileVO;
 import kr.or.ddit.emam.vo.ReplyVO;
 
 import java.io.IOException;
@@ -34,8 +37,14 @@ public class Replyreplyselect extends HttpServlet {
         int replyindexInt = Integer.parseInt(reindex);
 
         ReplyVO replyVO = new ReplyVO(replyindexInt,postindexInt);
+        IProfileService profileService = ProfileServiceImpl.getInstance();
 
         List<ReplyVO> ReplyList = replyService.selectReplyReplyList(replyVO);
+
+        for(ReplyVO replyVO2 : ReplyList){
+            ProfileVO pfVO = profileService.selectProfile(replyVO2.getMem_id());
+            replyVO2.setProfileVo(pfVO);
+        }
 
         Gson gson = new Gson();
         String jsonData = null; //변환된 Json문자열이 저장될 변수

@@ -15,6 +15,15 @@ public class PostVO {
     private int post_viewcnt; //조회 수
     private MemberVO memVo; //작성자 정보
     private boolean Likecheck;
+    private ProfileVO profileVo; //해당 사용자의 프로필 정보
+
+    public ProfileVO getProfileVo() {
+        return profileVo;
+    }
+
+    public void setProfileVo(ProfileVO profileVo) {
+        this.profileVo = profileVo;
+    }
 
     public boolean isLikecheck() {
         return Likecheck;

@@ -10,10 +10,13 @@ import kr.or.ddit.emam.member.service.IMemberService;
 import kr.or.ddit.emam.member.service.MemberServiceImpl;
 import kr.or.ddit.emam.post.service.IPostService;
 import kr.or.ddit.emam.post.service.PostServiceImpl;
+import kr.or.ddit.emam.profile.service.IProfileService;
+import kr.or.ddit.emam.profile.service.ProfileServiceImpl;
 import kr.or.ddit.emam.reply.service.IReplyService;
 import kr.or.ddit.emam.reply.service.ReplyServiceImpl;
 import kr.or.ddit.emam.vo.MemberVO;
 import kr.or.ddit.emam.vo.PostVO;
+import kr.or.ddit.emam.vo.ProfileVO;
 import kr.or.ddit.emam.vo.ReplyVO;
 
 import java.io.IOException;
@@ -34,7 +37,13 @@ public class Replyselect extends HttpServlet {
         String postindex = req.getParameter("postindex");
         int postindexInt = Integer.parseInt(postindex);
 
+        IProfileService profileService = ProfileServiceImpl.getInstance();
+
         List<ReplyVO> ReplyList = replyService.selectReplyListByPostIndex(postindexInt);
+        for(ReplyVO replyVO : ReplyList){
+            ProfileVO pfVO = profileService.selectProfile(replyVO.getMem_id());
+            replyVO.setProfileVo(pfVO);
+        }
 
 //        ReplyVO replyVO = replyService.selectOneReply(postindexInt);
 

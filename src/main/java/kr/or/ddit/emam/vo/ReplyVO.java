@@ -10,8 +10,16 @@ public class ReplyVO {
     private String mem_id;
     private String reply_con;
     private String mem_nickname;
-
     private MemberVO memVo;
+    private ProfileVO profileVo; //해당 사용자의 프로필 정보
+
+    public ProfileVO getProfileVo() {
+        return profileVo;
+    }
+
+    public void setProfileVo(ProfileVO profileVo) {
+        this.profileVo = profileVo;
+    }
 
     public ReplyVO(int reply_index, int post_index) {
         this.reply_index = reply_index;

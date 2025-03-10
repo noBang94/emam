@@ -21,6 +21,7 @@
         MemberVO loginMember = (MemberVO)session.getAttribute("loginMember");
         //컨트롤러에서 자료 받기
         List<FriendVO> friendCheckList =(List<FriendVO>)request.getAttribute("friendCheckList");
+        List friendPhotoList = (List)request.getAttribute("friendPhotoList");
     %>
 
 
@@ -117,7 +118,7 @@
     <table class="table">
         <thead>
         <tr>
-            <th>아이디</th>
+            <th colspan="2">아이디</th>
             <th>이름</th>
             <th>닉네임</th>
             <th>프로필 보기</th>
@@ -137,6 +138,8 @@
                     return;
                 }
             %>
+
+            <td><img src="<%=request.getContextPath()%>/<%=friendPhotoList.get(i)%>" alt="프로필사진"></td>
             <td><%= member.getMem_id() %></td>
             <td><%= member.getMem_name() %></td>
             <td><%= member.getMem_nickname() %></td>
