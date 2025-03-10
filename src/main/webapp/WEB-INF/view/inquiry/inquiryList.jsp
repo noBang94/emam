@@ -27,16 +27,19 @@
         }
 
         body {
-            background-color: #f8f9fa;
+            /* 그라데이션 배경 적용 - notice.jsp와 동일 */
+            background: linear-gradient(to bottom, #e0f2fe, #ffffff);
             color: #333;
             margin-top: 60px; /* 상단 GNB 높이만큼 여백 */
             padding: 20px;
+            min-height: 100vh;
         }
 
         .page-title {
             display: flex;
             align-items: center;
             margin-bottom: 20px;
+            margin-top: 40px; /* 상단 여백 추가 */
         }
 
         .page-title i {
@@ -54,10 +57,10 @@
 
         .search-container {
             background-color: #fff;
-            border-radius: 4px;
-            padding: 15px;
+            border-radius: 8px; /* 둥근 모서리 증가 */
+            padding: 20px; /* 패딩 증가 */
             margin-bottom: 20px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 강화 */
         }
 
         .search-flex {
@@ -76,46 +79,52 @@
         }
 
         input[type="text"] {
-            padding: 8px 12px;
+            padding: 10px 15px; /* 패딩 증가 */
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 6px; /* 둥근 모서리 증가 */
             width: 250px;
             font-size: 14px;
             outline: none;
+            transition: all 0.2s ease; /* 전환 효과 추가 */
         }
 
         input[type="text"]:focus {
             border-color: #64B5F6;
+            box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.2); /* 포커스 효과 추가 */
         }
 
         .btn-search {
             background-color: #64B5F6;
             color: white;
             border: none;
-            border-radius: 4px;
-            padding: 8px 15px;
+            border-radius: 6px; /* 둥근 모서리 증가 */
+            padding: 10px 15px; /* 패딩 증가 */
             cursor: pointer;
             font-weight: 500;
             font-size: 14px;
+            transition: all 0.2s ease; /* 전환 효과 추가 */
         }
 
         .btn-search:hover {
             background-color: #90CAF9;
+            transform: translateY(-2px); /* 호버 시 약간 위로 이동 */
         }
 
         .btn-write {
-            background-color: #4CAF50;
+            background-color: #64B5F6;
             color: white;
             border: none;
-            border-radius: 4px;
-            padding: 8px 15px;
+            border-radius: 6px; /* 둥근 모서리 증가 */
+            padding: 10px 15px; /* 패딩 증가 */
             cursor: pointer;
             font-weight: 500;
             font-size: 14px;
+            transition: all 0.2s ease; /* 전환 효과 추가 */
         }
 
         .btn-write:hover {
             background-color: #66BB6A;
+            transform: translateY(-2px); /* 호버 시 약간 위로 이동 */
         }
 
         .checkbox-container {
@@ -138,9 +147,10 @@
 
         .inquiry-table-container {
             background-color: white;
-            border-radius: 4px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-radius: 8px; /* 둥근 모서리 증가 */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 강화 */
             overflow: hidden;
+            margin-bottom: 20px; /* 하단 여백 추가 */
         }
 
         .inquiry-table {
@@ -149,8 +159,8 @@
         }
 
         .inquiry-table th {
-            background-color: #f8f9fa;
-            padding: 12px 15px;
+            background-color: #c1e0ff; /* 배경색 변경 */
+            padding: 15px; /* 패딩 증가 */
             text-align: left;
             font-weight: 500;
             color: #555;
@@ -159,7 +169,7 @@
         }
 
         .inquiry-table td {
-            padding: 12px 15px;
+            padding: 15px; /* 패딩 증가 */
             border-bottom: 1px solid #eee;
             color: #333;
             font-size: 14px;
@@ -167,11 +177,11 @@
 
         .inquiry-row {
             cursor: pointer;
-            transition: background-color 0.1s;
+            transition: background-color 0.2s; /* 전환 효과 추가 */
         }
 
         .inquiry-row:hover {
-            background-color: #f8f9fa;
+            background-color: rgba(100, 181, 246, 0.05); /* 호버 배경색 변경 */
         }
 
         .empty-result {
@@ -191,6 +201,10 @@
             display: flex;
             list-style: none;
             gap: 5px;
+            background-color: white; /* 배경색 추가 */
+            border-radius: 8px; /* 둥근 모서리 추가 */
+            padding: 5px; /* 패딩 추가 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
         }
 
         .page-item {
@@ -478,3 +492,4 @@
 
 </body>
 </html>
+

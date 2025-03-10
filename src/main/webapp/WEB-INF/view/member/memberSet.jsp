@@ -30,7 +30,7 @@
     body {
       padding: 0;
       margin: 0;
-      background-color: var(--background-color);
+      background: linear-gradient(to bottom, #e0f2fe, #ffffff);
       color: var(--text-color);
       font-family: 'Noto Sans KR', sans-serif;
       min-height: 100vh;
@@ -43,14 +43,14 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 40px 20px;
+      padding: 20px 20px 0 20px;
       min-height: calc(100vh - 60px); /* GNB 높이 제외 */
     }
 
     h2 {
       text-align: center;
       margin: 0 0 30px;
-      font-size: 36px;
+      font-size: 31px !important;
       font-weight: 700;
       color: var(--primary-color);
       letter-spacing: -0.5px;
@@ -65,6 +65,7 @@
       box-shadow: var(--shadow-lg);
       position: relative;
       transition: var(--transition);
+      margin: 20px 0 0 0;
     }
 
     .form-container:hover {
@@ -180,7 +181,7 @@
       //input 입력값 제한
       //비밀번호 - 숫자와 영어만 입력하도록 제한
       $("#mem_pw").on("keyup", function () { $(this).val($(this).val().replace(replaceNotIntEng,"") );});
-      //닉네임 - 숫자와 ��어만 입력하도록 제한
+      //닉네임 - 숫자와 ??어만 입력하도록 제한
       $("#mem_nickname").on("keyup", function () { $(this).val($(this).val().replace(replaceNotIntEng,"") );});
       //전화번호 - 숫자만 입력하도록 제한
       $("#mem_phone").on("keyup", function () { $(this).val($(this).val().replace(replaceNotInt,"") );});
@@ -438,4 +439,3 @@
 </div>
 </body>
 </html>
-
