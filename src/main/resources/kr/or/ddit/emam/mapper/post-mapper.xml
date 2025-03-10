@@ -81,6 +81,7 @@
                                          FROM FRIEND
                                          WHERE FRIEND_FROMID = #{mem_id} and FRIEND_STATUS=1)
                       ) c
+                 ORDER BY POST_DATE DESC
              )
         WHERE rnum BETWEEN #{start} AND #{end}
     </select>

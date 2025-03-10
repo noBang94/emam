@@ -66,7 +66,7 @@ public class LikeDaoImpl implements ILikeDao {
     }
 
     @Override
-    public int countLike(String postindex) {
+    public int countLike(int postindex) {
         int cnt = 0;
         SqlSession session = MyBatisUtil.getSqlSession();
         try {
