@@ -873,14 +873,27 @@
         </p>
       </div>
 
+      <%@ page import="java.net.URLEncoder" %>
+
       <div class="profile-link">
         <h3><i class="fas fa-link"></i> 링크</h3>
         <p>
-          <%if(pv.getProfile_url()==null){%>
+          <%
+            String profileUrl = pv.getProfile_url();
+            if (profileUrl == null || profileUrl.trim().isEmpty()) {
+          %>
           <span>링크가 없습니다</span>
-          <%}else {%>
-          <a href="<%=pv.getProfile_url()%>" target="_blank"><%=pv.getProfile_url()%></a>
-          <%}%>
+          <%
+          } else {
+            if (!profileUrl.startsWith("http://") && !profileUrl.startsWith("https://")) {
+              profileUrl = "http://" + profileUrl; // 프로토콜 추가
+            }
+            String encodedUrl = URLEncoder.encode(profileUrl, "UTF-8"); // URL 인코딩
+          %>
+          <a href="<%=profileUrl%>" target="_blank"><%=profileUrl%></a>
+          <%
+            }
+          %>
         </p>
       </div>
 
