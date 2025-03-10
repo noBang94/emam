@@ -55,6 +55,11 @@
         .table tbody tr:hover {
             background-color: #f9f9f9;
         }
+        .user-list-container .table .pr img{
+            max-width: 30px;
+            border-radius: 50%;
+            height: 30px;
+        }
         .btn-info {
             background-color: #5bc0de;
             border: none;
@@ -139,7 +144,7 @@
                 }
             %>
 
-            <td><img src="<%=request.getContextPath()%>/<%=friendPhotoList.get(i)%>" alt="프로필사진"></td>
+            <td class="pr"><img src="<%=request.getContextPath()%>/<%=friendPhotoList.get(i)%>" alt="프로필사진"></td>
             <td><%= member.getMem_id() %></td>
             <td><%= member.getMem_name() %></td>
             <td><%= member.getMem_nickname() %></td>
