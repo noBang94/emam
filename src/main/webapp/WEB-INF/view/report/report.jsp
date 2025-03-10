@@ -226,7 +226,6 @@
                 <button type="submit" class="btn btn-danger">신고하기</button>
             </div>
         </form>
-    </div>
 </div>
 
 <script>
