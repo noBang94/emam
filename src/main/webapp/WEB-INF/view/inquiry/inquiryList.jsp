@@ -339,10 +339,10 @@
                 $("#searchForm").submit();
             });
 
-            //문의 내용 보기 이벤트 - 수정된 부분
+            //문의 내용 보기 이벤트
             $(document).on('click', '.inquiry-row', function() {
                 const num = $(this).data("num");
-                const isPrivate = $(this).data("private") === 1;
+                const isPrivate = $(this).data("private") === 0; // 0 means private in your code
                 const author = $(this).data("author");
                 const currentUser = "<%=loginMember.getMem_id()%>";
 
