@@ -144,7 +144,7 @@
             <td><%= member.getMem_name() %></td>
             <td><%= member.getMem_nickname() %></td>
             <td>
-                <a href="<%=request.getContextPath() %>/profile.do?memId=<%= member.getMem_id() %>" class="btn btn-info btn-sm">프로필</a>
+                <a href="<%=request.getContextPath() %>/profile/profile.do?memId=<%= member.getMem_id() %>" class="btn btn-info btn-sm">프로필</a>
             </td>
             <td class="friendBtn">
                 <%
