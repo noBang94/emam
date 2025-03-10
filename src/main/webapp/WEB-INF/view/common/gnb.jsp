@@ -352,28 +352,28 @@
                         <div>설정</div>
                         <div class="noti-set">
                             <span>친구 알람</span>
-                            <input type="checkbox" name="friendnoti" id="friendtoggles" value="1" class="toggles" />
+                            <input type="checkbox" name="friendnoti" id="friendtoggles" value="1" class="toggles" hidden="hidden"/>
                             <label for="friendtoggles" class="toggleSwitch">
                                 <span class="toggleButton"></span>
                             </label>
                         </div>
                         <div class="noti-set">
                             <span>댓글 알람</span>
-                            <input type="checkbox" name="replynoti" id="replytoggles" value="1" class="toggles" />
+                            <input type="checkbox" name="replynoti" id="replytoggles" value="1" class="toggles" hidden="hidden"/>
                             <label for="replytoggles" class="toggleSwitch">
                                 <span class="toggleButton"></span>
                             </label>
                         </div>
                         <div class="noti-set">
                             <span>좋아요 알람</span>
-                            <input type="checkbox" name="ilikenoti" id="iliketoggles" value="1" class="toggles" />
+                            <input type="checkbox" name="ilikenoti" id="iliketoggles" value="1" class="toggles" hidden="hidden"/>
                             <label for="iliketoggles" class="toggleSwitch">
                                 <span class="toggleButton"></span>
                             </label>
                         </div>
                         <div class="noti-set">
                             <span>채팅 허용</span>
-                            <input type="checkbox" name="chatnoti" id="chattoggles" value="1" class="toggles" />
+                            <input type="checkbox" name="chatnoti" id="chattoggles" value="1" class="toggles" hidden="hidden"/>
                             <label for="chattoggles" class="toggleSwitch">
                                 <span class="toggleButton"></span>
                             </label>
