@@ -29,12 +29,12 @@ public class PostPhotoServiceImpl implements IPostPhotoService {
     @Override
     public PostPhotoVO savePostPhoto(Collection<Part> parts) {
         //상대경로나  pc 환경에 맞게 되게 수정 요함
-        String uploadPath = "C:/Users/PC-07/Desktop/emam/src/main/webapp/upload";
+//        String uploadPath = "C:/Users/PC-07/Desktop/emam/src/main/webapp/upload";
 
         String tttt = this.getClass().getResource("/").getPath();
         System.out.println("tttt: " +tttt);
 
-//        String uploadPath = "D:/emam/src/main/webapp/upload";
+        String uploadPath = "D:/emam/src/main/webapp/upload";
         File uploadDir =new File(uploadPath);
         if(!uploadDir.exists()) {
             uploadDir.mkdir();

@@ -987,7 +987,11 @@
                                 htmlcode += '<li>';
                                 htmlcode += '    <div class="rp-r-wrap">';
                                 htmlcode += '        <div class="rp-r-w-prf">';
-                                htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                if(v.profileVo == undefined || v.profileVo.profile_photo != null){
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
+                                }else{
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                }
                                 htmlcode += '        </div>';
                                 htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
                                 htmlcode += '            <div class="rp-r-w-con-warp">';
@@ -1007,7 +1011,11 @@
                                 htmlcode += '<li>';
                                 htmlcode += '    <div class="rp-r-wrap">';
                                 htmlcode += '        <div class="rp-r-w-prf">';
-                                htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                if(v.profileVo == undefined || v.profileVo.profile_photo != null){
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
+                                }else{
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                }
                                 htmlcode += '        </div>';
                                 htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
                                 htmlcode += '            <div class="rp-r-w-con-warp">';
@@ -1069,7 +1077,11 @@
                                 htmlcode += '<li>';
                                 htmlcode += '    <div class="rp-r-wrap">';
                                 htmlcode += '        <div class="rp-r-w-prf">';
-                                htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                if(v.profileVo == undefined || v.profileVo.profile_photo != null){
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
+                                }else{
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                }
                                 htmlcode += '        </div>';
                                 htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
                                 htmlcode += '            <div class="rp-r-w-con-warp">';
@@ -1089,7 +1101,11 @@
                                 htmlcode += '<li>';
                                 htmlcode += '    <div class="rp-r-wrap">';
                                 htmlcode += '        <div class="rp-r-w-prf">';
-                                htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                if(v.profileVo == undefined || v.profileVo.profile_photo != null){
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
+                                }else{
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                }
                                 htmlcode += '        </div>';
                                 htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
                                 htmlcode += '            <div class="rp-r-w-con-warp">';
@@ -1166,7 +1182,11 @@
                                     htmlcode += '<li>';
                                     htmlcode += '    <div class="rp-r-wrap">';
                                     htmlcode += '        <div class="rp-r-w-prf">';
-                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                    if(v.profileVo == undefined || v.profileVo.profile_photo != null){
+                                        htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
+                                    }else{
+                                        htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                    }
                                     htmlcode += '        </div>';
                                     htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
                                     htmlcode += '            <div class="rp-r-w-con-warp">';
@@ -1188,7 +1208,11 @@
                                     htmlcode += '<li>';
                                     htmlcode += '    <div class="rp-r-wrap">';
                                     htmlcode += '        <div class="rp-r-w-prf">';
-                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                    if(v.profileVo == undefined || v.profileVo.profile_photo != null){
+                                        htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
+                                    }else{
+                                        htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                    }
                                     htmlcode += '        </div>';
                                     htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
                                     htmlcode += '            <div class="rp-r-w-con-warp">';
@@ -1265,7 +1289,11 @@
                                 htmlcode += '<li>';
                                 htmlcode += '    <div class="rp-r-wrap">';
                                 htmlcode += '        <div class="rp-r-w-prf">';
-                                htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                if(v.profileVo == undefined || v.profileVo.profile_photo != null){
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
+                                }else{
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                }
                                 htmlcode += '        </div>';
                                 htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
                                 htmlcode += '            <div class="rp-r-w-con-warp">';
@@ -1283,7 +1311,11 @@
                                 htmlcode += '<li>';
                                 htmlcode += '    <div class="rp-r-wrap">';
                                 htmlcode += '        <div class="rp-r-w-prf">';
-                                htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                if(v.profileVo == undefined || v.profileVo.profile_photo != null){
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
+                                }else{
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                }
                                 htmlcode += '        </div>';
                                 htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
                                 htmlcode += '            <div class="rp-r-w-con-warp">';
@@ -1338,7 +1370,11 @@
                                 htmlcode += '<li>';
                                 htmlcode += '    <div class="rp-r-wrap">';
                                 htmlcode += '        <div class="rp-r-w-prf">';
-                                htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                if(v.profileVo == undefined || v.profileVo.profile_photo != null){
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
+                                }else{
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                }
                                 htmlcode += '        </div>';
                                 htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
                                 htmlcode += '            <div class="rp-r-w-con-warp">';
@@ -1356,7 +1392,11 @@
                                 htmlcode += '<li>';
                                 htmlcode += '    <div class="rp-r-wrap">';
                                 htmlcode += '        <div class="rp-r-w-prf">';
-                                htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                if(v.profileVo == undefined || v.profileVo.profile_photo != null){
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
+                                }else{
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                }
                                 htmlcode += '        </div>';
                                 htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
                                 htmlcode += '            <div class="rp-r-w-con-warp">';
@@ -1430,7 +1470,11 @@
                                     htmlcode += '<li>';
                                     htmlcode += '    <div class="rp-r-wrap">';
                                     htmlcode += '        <div class="rp-r-w-prf">';
-                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                    if(v.profileVo == undefined || v.profileVo.profile_photo != null){
+                                        htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
+                                    }else{
+                                        htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                    }
                                     htmlcode += '        </div>';
                                     htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
                                     htmlcode += '            <div class="rp-r-w-con-warp">';
@@ -1448,7 +1492,11 @@
                                     htmlcode += '<li>';
                                     htmlcode += '    <div class="rp-r-wrap">';
                                     htmlcode += '        <div class="rp-r-w-prf">';
-                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                    if(v.profileVo == undefined || v.profileVo.profile_photo != null){
+                                        htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
+                                    }else{
+                                        htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                    }
                                     htmlcode += '        </div>';
                                     htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
                                     htmlcode += '            <div class="rp-r-w-con-warp">';
@@ -1507,7 +1555,12 @@
                             htmlcode += '    <div class="a-hd">';
                             htmlcode += '        <div class="a-h-prf-pho">';
                             htmlcode += '            <a>';
-                            htmlcode += '                <img src="/upload/demo_logo.png">';
+                            if(pl.profileVo.profile_photo != null){
+                                htmlcode += '                <img src="<%=request.getContextPath()%>/'+pl.profileVo.profile_photo+'">';
+                            }else {
+                                htmlcode += '                <img src="/upload/demo_logo.png">';
+                            }
+
                             htmlcode += '                <span>' + pl.memVo.mem_nickname + '</span>';
                             htmlcode += '            </a>';
                             htmlcode += '        </div>';
@@ -1600,7 +1653,9 @@
                     loading = false;
                 },
                 error: function () {
-                    alert("데이터 로드 실패!");
+                    alert("데이터 로드 실패!" +
+                        "정상적 접근이 아닙니다.");
+                    window.location.href = '/';
                     loading = false;
                 }
             });

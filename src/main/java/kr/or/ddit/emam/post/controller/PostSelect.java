@@ -15,6 +15,8 @@ import kr.or.ddit.emam.post.service.IPostPhotoService;
 import kr.or.ddit.emam.post.service.IPostService;
 import kr.or.ddit.emam.post.service.PostPhotoServiceImpl;
 import kr.or.ddit.emam.post.service.PostServiceImpl;
+import kr.or.ddit.emam.profile.service.IProfileService;
+import kr.or.ddit.emam.profile.service.ProfileServiceImpl;
 import kr.or.ddit.emam.vo.*;
 
 import java.io.IOException;
@@ -42,6 +44,8 @@ public class PostSelect extends HttpServlet {
         //세션에 로그인멤버가 있는지 확인한다
         MemberVO memcheck = (MemberVO) session.getAttribute("loginMember");
 
+
+
         ILikeService likeService = LikeServiceImpl.getInstance();
 
         //페이지 번호 가져오기
@@ -66,6 +70,7 @@ public class PostSelect extends HttpServlet {
             //서비스 객체 얻기
             IMemberService memberService = MemberServiceImpl.getInstance();
             IPostService postService = PostServiceImpl.getInstance();
+            IProfileService profileService = ProfileServiceImpl.getInstance();
             
             //전체
 //            List<PostVO> postList = postService.selectAllPost();
@@ -73,9 +78,9 @@ public class PostSelect extends HttpServlet {
             //스크롤하면서 가져오기
             List<PostVO> postList = postService.selectScrollPost(pageNum, setviewnum);
             
-            
             for(PostVO postVO : postList){
                 MemberVO memVo = memberService.getMember(postVO.getMem_id());
+                ProfileVO pfVO = profileService.selectProfile(postVO.getMem_id());
                 postVO.setMemVo(memVo);
 
                 ILikeVO lv = new ILikeVO(postVO.getPost_index(), memcheck.getMem_id());
@@ -87,6 +92,7 @@ public class PostSelect extends HttpServlet {
                     liked = false;
                 }
                 postVO.setLikecheck(liked);
+                postVO.setProfileVo(pfVO);
             }
 //            req.setAttribute("postList", postList);
 //            req.getRequestDispatcher("/WEB-INF/view/post/post.jsp").forward(req, resp);
