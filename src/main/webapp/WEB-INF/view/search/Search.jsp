@@ -118,7 +118,7 @@
     <table class="table">
         <thead>
         <tr>
-            <th>아이디</th>
+            <th colspan="2">아이디</th>
             <th>이름</th>
             <th>닉네임</th>
             <th>프로필 보기</th>
