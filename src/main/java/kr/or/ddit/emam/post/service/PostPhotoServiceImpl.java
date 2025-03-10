@@ -34,6 +34,7 @@ public class PostPhotoServiceImpl implements IPostPhotoService {
         String tttt = this.getClass().getResource("/").getPath();
         System.out.println("tttt: " +tttt);
 
+        // /Users/beryz/Desktop/emam/src/main/webapp/images;
 //        String uploadPath = "D:/emam/src/main/webapp/upload";
         File uploadDir =new File(uploadPath);
         if(!uploadDir.exists()) {
