@@ -950,7 +950,7 @@
             let targetheart = $(this).find(".heart");
             let memid = '<%=loginMember.getMem_id()%>';
             let postindex = $(this).data('index');
-
+            let getcount = $(this).find("span.likecnt").html();
             $.ajax({
                 url: "/setilike.do",
                 type: "post",
@@ -960,8 +960,12 @@
                     console.log(data)
                     if(data == false){
                         targetheart.removeClass('filled');
+                        getcount = +getcount - 1 ;
+                        $('.btn-cover.ilikebtn[data-index="'+postindex+'"] span.likecnt').html(getcount);
                     }else {
                         targetheart.addClass('filled');
+                        getcount = +getcount + 1 ;
+                        $('.btn-cover.ilikebtn[data-index="'+postindex+'"] span.likecnt').html(getcount);
                     }
 
                 }
@@ -1593,9 +1597,11 @@
                                 htmlcode += '                <svg aria-label="좋아요" class="heart" role="img" viewBox="0 0 24 24" height="24" width="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
                             }
 
+
                             htmlcode += '                    <title>좋아요</title>';
                             htmlcode += '                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>';
                             htmlcode += '                </svg>';
+                            htmlcode += '               <span class="likecnt">'+pl.likecheckcnt+'</span>';
                             htmlcode += '            </div>';
                             htmlcode += '            <div class="btn-cover replybtn" data-index=' + pl.post_index + '>';
                             htmlcode += '                <svg aria-label="댓글 달기" class="" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">';

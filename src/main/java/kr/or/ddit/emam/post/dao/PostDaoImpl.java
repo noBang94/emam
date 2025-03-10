@@ -137,11 +137,12 @@ public class PostDaoImpl implements IPostDao {
     }
 
     @Override
-    public List<PostVO> selectScrollPost(int page, int num) {
+    public List<PostVO> selectScrollPost(String memid, int page, int num) {
         List<PostVO> pList = new ArrayList<PostVO>();
         SqlSession session = MyBatisUtil.getSqlSession();
         try{
-            Map<String, Integer> params = new HashMap<>();
+            Map<String, Object> params = new HashMap<>();
+            params.put("mem_id", memid);
             params.put("start", (page-1) * num + 1);
             params.put("end", page * num);
 

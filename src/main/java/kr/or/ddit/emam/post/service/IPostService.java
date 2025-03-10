@@ -27,5 +27,5 @@ public interface IPostService {
     public PostVO getPostPhotoList(int num);
 
     //게시글 1번에 3개씩 조회
-    public List<PostVO> selectScrollPost(int page, int num);
+    public List<PostVO> selectScrollPost(String memid, int page, int num);
 }
