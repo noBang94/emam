@@ -485,7 +485,7 @@
             });
 
             $("#backBtn").on("click", function(){
-                window.history.back();
+                window.location.href = "<%=request.getContextPath() %>/admin/adminMain.do";
             });
         });
 
@@ -583,19 +583,25 @@
 
                         if (currentPage > 1) {
                     %>
-                    <li><a href="<%=request.getContextPath() %>/admin/userList.do?page=<%= currentPage - 1 %>&searchId=<%= request.getParameter("searchId") != null ? request.getParameter("searchId") : "" %>">&laquo;</a></li>
+                    <li>
+                        <a href="<%=request.getContextPath()%>/admin/userList.do?page=<%= currentPage - 1 %><%= request.getParameter("searchId") != null && !request.getParameter("searchId").isEmpty() ? "&searchId=" + request.getParameter("searchId") : "" %>">&laquo;</a>
+                    </li>
                     <%
                         }
 
                         for (int i = startPage; i <= endPage; i++) {
                     %>
-                    <li <%= currentPage == i ? "class='active'" : "" %>><a href="<%=request.getContextPath() %>/admin/userList.do?page=<%= i %>&searchId=<%= request.getParameter("searchId") != null ? request.getParameter("searchId") : "" %>"><%= i %></a></li>
+                    <li <%= currentPage == i ? "class='active'" : "" %>>
+                        <a href="<%=request.getContextPath()%>/admin/userList.do?page=<%= i %><%= request.getParameter("searchId") != null && !request.getParameter("searchId").isEmpty() ? "&searchId=" + request.getParameter("searchId") : "" %>"><%= i %></a>
+                    </li>
                     <%
                         }
 
                         if (currentPage < totalPages) {
                     %>
-                    <li><a href="<%=request.getContextPath() %>/admin/userList.do?page=<%= currentPage + 1 %>&searchId=<%= request.getParameter("searchId") != null ? request.getParameter("searchId") : "" %>">&raquo;</a></li>
+                    <li>
+                        <a href="<%=request.getContextPath()%>/admin/userList.do?page=<%= currentPage + 1 %><%= request.getParameter("searchId") != null && !request.getParameter("searchId").isEmpty() ? "&searchId=" + request.getParameter("searchId") : "" %>">&raquo;</a>
+                    </li>
                     <%
                         }
                     %>
