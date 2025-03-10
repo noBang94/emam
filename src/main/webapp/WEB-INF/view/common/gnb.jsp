@@ -201,6 +201,7 @@
         border-radius: 50%;
         background-color: #ddd; /* 프로필 이미지 배경색 */
         margin-left: 15px;
+        cursor: pointer;
     }
 
     /* 반응형 스타일 */
@@ -292,6 +293,10 @@
         <%--    });--%>
         <%--});--%>
 
+        // 프로필 이미지 클릭 시 프로필 페이지로 이동
+        $(".profile-img").on("click", function() {
+            window.location.href = "<%=request.getContextPath() %>/profile/profile.do";
+        });
     });
 </script>
 <div class="gnb">
