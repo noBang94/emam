@@ -333,16 +333,22 @@
         <ul id="notiList">
           <% if (notiList != null && !notiList.isEmpty()) { %>
             <% for (NotificationVO noti : notiList) { %>
-          <li class="notiRow">
-              <% if (noti.getNotification_isread()==0) { %>
-                    <%=noti.getNotification_con() %>
-                 <% if (noti.getNotification_type().equals("friend")){ %>
-                      <input type="button" value="수락" class="friendBtn friendYes" data-fromfriendid="<%=noti.getNotification_fromId() %>">
-                      <input type="button" value="거절" class="friendBtn friendNo" data-fromfriendid="<%=noti.getNotification_fromId() %>">
-                    <% } %>
+            <% if (noti.getNotification_isread()==0) { //안읽은 알림이라면 %>
+              <% if (noti.getNotification_fromId()!=null) { //보낸사람이 null이 아님=관리자가 생성한 알림(문의, 신고)이 아니라면... 프사를 띄우고싶은데 일단 기능 제외함 %>
+                <li class="notiRow" onclick="viewProfile('<%= noti.getNotification_fromId() %>')">
+                <%=noti.getNotification_con() %>
+                <% if (noti.getNotification_type().equals("friend")){ //알림이 친구신청에 대한 거라면 %>
+                  <input type="button" value="수락" class="friendBtn friendYes" data-fromfriendid="<%=noti.getNotification_fromId() %>">
+                  <input type="button" value="거절" class="friendBtn friendNo" data-fromfriendid="<%=noti.getNotification_fromId() %>">
+                <% } %>
+                </li>
+              <% }else { %>
+                <li class="notiRow" onclick="viewInquiry('<%= noti.getNotification_target() %>')">
+                <%=noti.getNotification_con() %>
+                </li>
               <% } %>
-          </li>
-           <% } %>
+            <% } %>
+           <% } //for문 종료 %>
           <% } else { %>
           <li> 알림내역이 없습니다.</li>
           <% } %>
@@ -418,6 +424,14 @@
 
   function viewNotice(noticeIndex) {
     location.href = "<%=request.getContextPath()%>/notice/noticeDetail.do?noticeIndex=" + noticeIndex;
+  }
+
+  function viewProfile(fromId) {
+    location.href = "<%=request.getContextPath() %>/profile/profile.do?memId=" + fromId;
+  }
+
+  function viewInquiry(inquiryIndex) {
+    location.href = "<%=request.getContextPath() %>/inquiry/notiInquiryView.do?num=" + inquiryIndex;
   }
 
   function goToProfile() {
