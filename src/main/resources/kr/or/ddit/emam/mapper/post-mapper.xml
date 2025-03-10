@@ -81,6 +81,47 @@
                               POST_REPLYCNT,
                               POST_ILIKECNT,
                               POST_VIEWCNT
+                          FROM POST post
+                                   INNER JOIN(SELECT
+                                                  M.mem_id as memid
+                                              FROM MEMBER M
+                                                       INNER JOIN PROFILE P ON M.mem_id = P.mem_id
+                                                       INNER JOIN (
+                                                  SELECT B.TOID AS MEM_ID
+                                                  FROM (
+                                                           SELECT FRIEND_FROMID AS TOID, FRIEND_STATUS
+                                                           FROM FRIEND
+                                                           WHERE FRIEND_TOID = #{mem_id}
+                                                           UNION ALL
+                                                           SELECT FRIEND_TOID AS TOID, FRIEND_STATUS
+                                                           FROM FRIEND
+                                                           WHERE FRIEND_FROMID = #{mem_id}
+                                                       ) B
+                                                  WHERE B.FRIEND_STATUS = 1
+                                              ) C ON M.mem_id = C.MEM_ID) f on (post.mem_id = f.memid)
+                          WHERE POST_VISIBLE = 'Y'
+                          ORDER BY POST_DATE DESC
+                      ) c
+             )
+        WHERE rnum BETWEEN #{start} AND #{end}
+    </select>
+    <!--
+    전체 게시글 가져오기
+    <select id="selectScrollPost" resultMap="postMap" parameterType="map">
+        SELECT *
+        FROM (
+                 SELECT ROWNUM AS rnum, c.*
+                 FROM (
+                          SELECT
+                              POST_INDEX,
+                              MEM_ID,
+                              POST_CON,
+                              POST_PHOTO,
+                              POST_DATE,
+                              POST_VISIBLE,
+                              POST_REPLYCNT,
+                              POST_ILIKECNT,
+                              POST_VIEWCNT
                           FROM POST
                           WHERE POST_VISIBLE = 'Y'
                           ORDER BY POST_DATE DESC
@@ -88,7 +129,7 @@
              )
         WHERE rnum BETWEEN #{start} AND #{end}
     </select>
-
+-->
     <select id="selectPostPhotoDetails" resultMap="postPhotoDetailMap">
         SELECT
             POST_PHOTO,
@@ -111,7 +152,7 @@
 <!--    </select>-->
 
     <!--    게시글 하나 조회
-    pv =session.selectOne("post.selectOnePost",num);
+    pv =session.selectOne("post.selectOnePost",num)
     -->
     <select id="selectOnePost" resultType="PostVO" parameterType="int">
         select * from post where POST_INDEX = #{num}

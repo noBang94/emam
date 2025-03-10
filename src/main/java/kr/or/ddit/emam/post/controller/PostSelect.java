@@ -44,8 +44,6 @@ public class PostSelect extends HttpServlet {
         //세션에 로그인멤버가 있는지 확인한다
         MemberVO memcheck = (MemberVO) session.getAttribute("loginMember");
 
-
-
         ILikeService likeService = LikeServiceImpl.getInstance();
 
         //페이지 번호 가져오기
@@ -56,9 +54,6 @@ public class PostSelect extends HttpServlet {
         }else {
             pageNum = Integer.parseInt(page);
         }
-
-
-
 
         //한번에 보여줄 수
         int setviewnum = 3;
@@ -75,8 +70,9 @@ public class PostSelect extends HttpServlet {
             //전체
 //            List<PostVO> postList = postService.selectAllPost();
 
+            String memid = memcheck.getMem_id();
             //스크롤하면서 가져오기
-            List<PostVO> postList = postService.selectScrollPost(pageNum, setviewnum);
+            List<PostVO> postList = postService.selectScrollPost(memid, pageNum, setviewnum);
             
             for(PostVO postVO : postList){
                 MemberVO memVo = memberService.getMember(postVO.getMem_id());
@@ -85,6 +81,7 @@ public class PostSelect extends HttpServlet {
 
                 ILikeVO lv = new ILikeVO(postVO.getPost_index(), memcheck.getMem_id());
                 int cnt = likeService.likeCheck(lv);
+                int lcnt = likeService.likeCheck(lv);
                 boolean liked = false;
                 if(cnt>0){
                     liked = true;
@@ -93,6 +90,7 @@ public class PostSelect extends HttpServlet {
                 }
                 postVO.setLikecheck(liked);
                 postVO.setProfileVo(pfVO);
+                postVO.setLikecheckcnt(lcnt);
             }
 //            req.setAttribute("postList", postList);
 //            req.getRequestDispatcher("/WEB-INF/view/post/post.jsp").forward(req, resp);

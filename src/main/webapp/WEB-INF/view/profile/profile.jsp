@@ -793,7 +793,7 @@
         $.ajax({
           url: "<%=request.getContextPath() %>/friend/friendRequest.do",
           type: "get",
-          data: "toFriend="+<%=pv.getMem_id()%>,
+          data: "toFriend="+'<%=pv.getMem_id()%>',
         });
         $(this).attr("class", "friendReadyBtn");
         $(this).attr("value", "친구 신청 취소");
@@ -803,7 +803,7 @@
         $.ajax({
           url: "<%=request.getContextPath() %>/friend/friendDelete.do",
           type: "get",
-          data: "toFriend="+<%=pv.getMem_id()%>,
+          data: "toFriend="+'<%=pv.getMem_id()%>',
         });
         $(this).attr("class", "friendRequestBtn");
         $(this).attr("value", "친구 신청");
@@ -813,7 +813,7 @@
         $.ajax({
           url: "<%=request.getContextPath() %>/friend/friendDelete.do",
           type: "get",
-          data: "toFriend="+<%=pv.getMem_id()%>,
+          data: "toFriend="+'<%=pv.getMem_id()%>',
         });
         $(this).attr("class", "friendRequestBtn");
         $(this).attr("value", "친구 신청 취소");

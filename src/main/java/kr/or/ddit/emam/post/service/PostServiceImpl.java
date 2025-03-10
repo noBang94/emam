@@ -70,5 +70,5 @@ public class PostServiceImpl implements IPostService {
     public PostVO getPostPhotoList(int num) {return dao.getPostPhotoList(num);}
 
     @Override
-    public List<PostVO> selectScrollPost(int page, int num) {return dao.selectScrollPost(page, num);}
+    public List<PostVO> selectScrollPost(String memid, int page, int num) {return dao.selectScrollPost(memid, page, num);}
 }

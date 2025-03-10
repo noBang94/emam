@@ -14,8 +14,17 @@ public class PostVO {
     private int post_ilikecnt; //좋아요 수
     private int post_viewcnt; //조회 수
     private MemberVO memVo; //작성자 정보
-    private boolean Likecheck;
+    private boolean Likecheck; //해당 사용자가 게시글에 좋아요 했는지 체크
+    private int likecheckcnt; // 해당 게시글에 좋아요 개수 가져오기
     private ProfileVO profileVo; //해당 사용자의 프로필 정보
+
+    public int getLikecheckcnt() {
+        return likecheckcnt;
+    }
+
+    public void setLikecheckcnt(int likecheckcnt) {
+        this.likecheckcnt = likecheckcnt;
+    }
 
     public ProfileVO getProfileVo() {
         return profileVo;
