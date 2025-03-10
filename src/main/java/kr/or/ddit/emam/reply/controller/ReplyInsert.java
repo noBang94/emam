@@ -8,8 +8,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.or.ddit.emam.post.service.IPostService;
 import kr.or.ddit.emam.post.service.PostServiceImpl;
+import kr.or.ddit.emam.profile.service.IProfileService;
+import kr.or.ddit.emam.profile.service.ProfileServiceImpl;
 import kr.or.ddit.emam.reply.service.IReplyService;
 import kr.or.ddit.emam.reply.service.ReplyServiceImpl;
+import kr.or.ddit.emam.vo.ProfileVO;
 import kr.or.ddit.emam.vo.ReplyVO;
 
 import java.io.IOException;
@@ -25,6 +28,7 @@ public class ReplyInsert extends HttpServlet {
 
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html");
+        IProfileService profileService = ProfileServiceImpl.getInstance();
         //댓글 객체 생성
         IReplyService replyService = ReplyServiceImpl.getInstance();
 
@@ -55,7 +59,10 @@ public class ReplyInsert extends HttpServlet {
         if (cnt > 0) {
 //            resp.sendRedirect(req.getContextPath() + "/post/postList.do");
             List<ReplyVO> ReplyList = replyService.selectReplyListByPostIndex(postindexInt);
-
+            for(ReplyVO replyVO3 : ReplyList){
+                ProfileVO pfVO = profileService.selectProfile(replyVO3.getMem_id());
+                replyVO3.setProfileVo(pfVO);
+            }
             Gson gson = new Gson();
             String jsonData = null; //변환된 Json문자열이 저장될 변수
 

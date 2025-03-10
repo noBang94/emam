@@ -6,8 +6,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kr.or.ddit.emam.profile.service.IProfileService;
+import kr.or.ddit.emam.profile.service.ProfileServiceImpl;
 import kr.or.ddit.emam.reply.service.IReplyService;
 import kr.or.ddit.emam.reply.service.ReplyServiceImpl;
+import kr.or.ddit.emam.vo.ProfileVO;
 import kr.or.ddit.emam.vo.ReplyVO;
 
 import java.io.IOException;
@@ -22,7 +25,7 @@ public class Replyreplyupdate extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html");
-
+        IProfileService profileService = ProfileServiceImpl.getInstance();
         //게시글 인덱스
         String postindex = req.getParameter("postindex");
         int postindexInt = Integer.parseInt(postindex);
@@ -49,6 +52,10 @@ public class Replyreplyupdate extends HttpServlet {
         if (cnt > 0) {
             ReplyVO replyVO2 = new ReplyVO(parentreindexInt,postindexInt);
             List<ReplyVO> ReplyList = replyService.selectReplyReplyList(replyVO2);
+            for(ReplyVO replyVO3 : ReplyList){
+                ProfileVO pfVO = profileService.selectProfile(replyVO3.getMem_id());
+                replyVO3.setProfileVo(pfVO);
+            }
 
             Gson gson = new Gson();
             String jsonData = null; //변환된 Json문자열이 저장될 변수

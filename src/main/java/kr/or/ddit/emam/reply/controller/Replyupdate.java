@@ -6,8 +6,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kr.or.ddit.emam.profile.service.IProfileService;
+import kr.or.ddit.emam.profile.service.ProfileServiceImpl;
 import kr.or.ddit.emam.reply.service.IReplyService;
 import kr.or.ddit.emam.reply.service.ReplyServiceImpl;
+import kr.or.ddit.emam.vo.ProfileVO;
 import kr.or.ddit.emam.vo.ReplyVO;
 
 import java.io.IOException;
@@ -22,7 +25,7 @@ public class Replyupdate extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html");
-
+        IProfileService profileService = ProfileServiceImpl.getInstance();
         //게시글 인덱스
         String postindex = req.getParameter("postindex");
         int postindexInt = Integer.parseInt(postindex);
@@ -40,12 +43,13 @@ public class Replyupdate extends HttpServlet {
         ReplyVO replyVO = new ReplyVO(ReplyindexInt,Replycon);
 
         int cnt = replyService.updateReply(replyVO);
-
-
-
         if (cnt > 0) {
 //            resp.sendRedirect(req.getContextPath() + "/post/postList.do");
             List<ReplyVO> ReplyList = replyService.selectReplyListByPostIndex(postindexInt);
+            for(ReplyVO replyVO2 : ReplyList){
+                ProfileVO pfVO = profileService.selectProfile(replyVO2.getMem_id());
+                replyVO2.setProfileVo(pfVO);
+            }
 
             Gson gson = new Gson();
             String jsonData = null;
