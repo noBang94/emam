@@ -339,9 +339,19 @@
                 $("#searchForm").submit();
             });
 
-            //문의 내용 보기 이벤트
+            //문의 내용 보기 이벤트 - 수정된 부분
             $(document).on('click', '.inquiry-row', function() {
                 const num = $(this).data("num");
+                const isPrivate = $(this).data("private") === 1;
+                const author = $(this).data("author");
+                const currentUser = "<%=loginMember.getMem_id()%>";
+
+                // 비공개 글이고 작성자가 현재 사용자가 아니면 접근 불가
+                if(isPrivate && author !== currentUser) {
+                    alert("비공개 문의글은 작성자만 확인할 수 있습니다.");
+                    return false;
+                }
+
                 $("#viewNum").val(num);
                 $("#viewForm").submit();
             });
@@ -391,7 +401,7 @@
         }else {
             for(InquiryVO vo : inquiryList){
         %>
-        <tr class="inquiry-row" data-num="<%=vo.getInquiry_index()%>">
+        <tr class="inquiry-row" data-num="<%=vo.getInquiry_index()%>" data-private="<%=vo.getInquiry_ispublic()%>" data-author="<%=vo.getMem_id()%>">
             <td><%=vo.getInquiry_index()%></td>
             <td><%=vo.getMem_id()%></td>
             <td><%=vo.getInquiry_title()%></td>
