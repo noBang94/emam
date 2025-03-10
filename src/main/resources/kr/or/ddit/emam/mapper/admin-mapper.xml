@@ -34,7 +34,7 @@
         FROM member
         <where>
             <if test="memberVo != null and memberVo.mem_id != null and memberVo.mem_id != ''">
-                MEM_ID = #{memberVo.mem_id}
+                MEM_ID LIKE '%' || #{memberVo.mem_id} || '%'
             </if>
         </where>
         ORDER BY MEM_JOINDATE desc
@@ -90,7 +90,7 @@
         select NOTICE_INDEX, NOTICE_TITLE, NOTICE_CON, NOTICE_DATE
         from notice
         where
-            NOTICE_TITLE = #{notice_title}
+            NOTICE_TITLE LIKE '%' || #{notice_title} || '%'
         ORDER BY NOTICE_INDEX DESC
     </select>
 
