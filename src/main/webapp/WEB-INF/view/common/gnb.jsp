@@ -273,24 +273,24 @@
         });
 
         // 알림 버튼 클릭 시 알림 목록 불러오기
-        $(".noti-btn").on("click", function(){
-            $.ajax({
-                url: "<%=request.getContextPath() %>/notification/notificationList.do",
-                type: "get",
-                dataType: "json",
-                success: function(data) {
-                    // 알림 목록을 HTML로 변환하여 noti-dropdown-menu에 추가
-                    var notiHtml = "";
-                    $.each(data, function(index, noti) {
-                        notiHtml += "<li>" + noti.notification_con + "</li>";
-                    });
-                    $(".noti-dropdown-menu ul").html(notiHtml);
-                },
-                error: function(xhr) {
-                    alert("알림 목록을 불러오는 데 실패했습니다.");
-                }
-            });
-        });
+        <%--$(".noti-btn").on("click", function(){--%>
+        <%--    $.ajax({--%>
+        <%--        url: "<%=request.getContextPath() %>/notification/notificationList.do",--%>
+        <%--        type: "get",--%>
+        <%--        dataType: "json",--%>
+        <%--        success: function(data) {--%>
+        <%--            // 알림 목록을 HTML로 변환하여 noti-dropdown-menu에 추가--%>
+        <%--            var notiHtml = "";--%>
+        <%--            $.each(data, function(index, noti) {--%>
+        <%--                notiHtml += "<li>" + noti.notification_con + "</li>";--%>
+        <%--            });--%>
+        <%--            $(".noti-dropdown-menu ul").html(notiHtml);--%>
+        <%--        },--%>
+        <%--        error: function(xhr) {--%>
+        <%--            alert("알림 목록을 불러오는 데 실패했습니다.");--%>
+        <%--        }--%>
+        <%--    });--%>
+        <%--});--%>
 
     });
 </script>
@@ -314,7 +314,7 @@
 
         <div class="gnb-right">
             <button class="gnb-button friend-btn">친구</button>
-            <button class="gnb-button noti-btn">알림</button>
+<%--            <button class="gnb-button noti-btn">알림</button>--%>
             <button class="gnb-button my-btn">내 메뉴</button>
             <div class="profile-img">
             </div>

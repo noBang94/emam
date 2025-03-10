@@ -38,7 +38,7 @@ public class PostPhotoServiceImpl implements IPostPhotoService {
 //       String uploadPath = "D:/emam/src/main/webapp/upload";
         //"/Users/enix/Desktop/coll/emam/src/main/webapp/upload";
 
-        String uploadPath = String uploadPath = "D:/emam/src/main/webapp/upload";
+        String uploadPath = "D:/emam/src/main/webapp/upload";
         File uploadDir =new File(uploadPath);
         if(!uploadDir.exists()) {
             uploadDir.mkdir();
