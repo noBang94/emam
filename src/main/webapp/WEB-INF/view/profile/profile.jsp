@@ -853,7 +853,7 @@
 
     <div class="profile-info">
       <h2 class="profile-name"><%=mv.getMem_nickname()%></h2>
-      <p class="profile-username">@<%=mv.getMem_id()%></p>
+      <p class="profile-username"><%=mv.getMem_id()%></p>
 
       <div class="profile-stats">
         <div class="stat-item">

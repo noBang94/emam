@@ -12,7 +12,10 @@ import jakarta.servlet.http.HttpSession;
 //import kr.or.ddit.board.controller.StreamData;
 import kr.or.ddit.emam.member.service.IMemberService;
 import kr.or.ddit.emam.member.service.MemberServiceImpl;
+import kr.or.ddit.emam.profile.service.IProfileService;
+import kr.or.ddit.emam.profile.service.ProfileServiceImpl;
 import kr.or.ddit.emam.vo.MemberVO;
+import kr.or.ddit.emam.vo.ProfileVO;
 
 
 @WebServlet("/member/loginMember.do")
@@ -28,20 +31,26 @@ public class LoginMember extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         request.setCharacterEncoding("utf-8");
+        IProfileService profileService = ProfileServiceImpl.getInstance();
 
         //{"mem_id" : "a001" , "mem_pass" : "asdfasdf"}
         String memId = request.getParameter("mem_id");
         String memPw = request.getParameter("mem_pw");
+        ProfileVO pfVO = profileService.selectProfile(memId);
 
         MemberVO memVo = new MemberVO();
         memVo.setMem_id(memId);
         memVo.setMem_pw(memPw);
+
 
         //service객체 얻기
         IMemberService service = MemberServiceImpl.getInstance();
 
         //service메소드 호출 - 결과값 받기
         MemberVO loginMemVo = service.getLoginMember(memVo);
+        loginMemVo.setMem_id(memId);
+        loginMemVo.setPfVo(pfVO);
+
         System.out.println("lmVo : " + loginMemVo);
 
         HttpSession session = request.getSession();

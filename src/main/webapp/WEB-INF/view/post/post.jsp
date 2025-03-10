@@ -128,6 +128,17 @@
             border-radius: 50%;
             background: #64B5F6;
         }
+        .gnb .toggleSwitch .toggleButton {
+            width: 14px;
+            height: 14px;
+            position: absolute;
+            top: 9px !important;
+            left: 2px;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
 
         #inserttoggles:checked ~ .toggleSwitch,
         #updatetoggles:checked ~ .toggleSwitch {
@@ -136,7 +147,7 @@
 
         #inserttoggles:checked ~ .toggleSwitch .toggleButton,
         #updatetoggles:checked ~ .toggleSwitch .toggleButton {
-            left: calc(100% - 18px);
+            left: calc(100% - 16px);
             background: #fff;
         }
 

@@ -159,6 +159,15 @@ public class MemberVO {
     private String mem_gen;
     private String mem_joindate;
     private String profile_photo;
+    private ProfileVO pfVo; // 해당 회원의 프로필 정보 소개
+
+    public ProfileVO getPfVo() {
+        return pfVo;
+    }
+
+    public void setPfVo(ProfileVO pfVo) {
+        this.pfVo = pfVo;
+    }
 
     public String getMem_id() {
         return mem_id;

@@ -73,7 +73,7 @@
         transition: all 0.2s ease;
     }
 
-    .toggleSwitch .toggleButton {
+    .gnb .toggleSwitch .toggleButton {
         width: 14px;
         height: 14px;
         position: absolute;
@@ -321,6 +321,10 @@
         background-color: #eee;
         margin: 4px 0;
     }
+    .gnbprofilephoto{
+        width: 40px;
+        height: 40px;
+    }
 
     /* 반응형 스타일 */
     @media (max-width: 768px) {
@@ -375,9 +379,17 @@
         // 프로필 이미지에 사용자 이니셜 표시
         const userName = "<%= loginMemberVo.getMem_name() %>";
         const initial = userName.charAt(0);
-        $(".profile-img").text(initial);
+        let getprofileimg = "<%= loginMemberVo.getPfVo().getProfile_photo() %>";
+        if(getprofileimg != null) {
+            let htmlcode = '<img class="gnbprofilephoto" src="<%=request.getContextPath()%>/'+getprofileimg+'">';
+            $(".profile-img").append(htmlcode)
+        }else {
+            $(".profile-img").text(initial);
+        }
 
-        $(".gnb-button").on("click", function(){
+
+
+        $(".gnb-button").on("click", function () {
             $(".friend-dropdown-menu, .noti-dropdown-menu, .my-dropdown-menu").hide();
             if ($(this).hasClass("friend-btn")) {
                 loadFriendList();
@@ -389,19 +401,27 @@
             }
         });
 
-        $(document).on("click", function(event) {
+        $(document).on("click", function (event) {
             if (!$(event.target).closest(".gnb-button, .friend-dropdown-menu, .noti-dropdown-menu, .my-dropdown-menu").length) {
                 $(".friend-dropdown-menu, .noti-dropdown-menu, .my-dropdown-menu").hide();
             }
         });
 
         //토글버튼을 DB값대로 on/off 표기하기
-        <% if(usersettingsVo.getSet_friend()==1) { %> $("#friendtoggles").attr("checked", true); <% } %>
-        <% if(usersettingsVo.getSet_reply()==1) { %> $("#replytoggles").attr("checked", true); <% } %>
-        <% if(usersettingsVo.getSet_ilike()==1) { %> $("#iliketoggles").attr("checked", true); <% } %>
-        <% if(usersettingsVo.getSet_chat()==1) { %> $("#chattoggles").attr("checked", true); <% } %>
+        <% if(usersettingsVo.getSet_friend()==1) { %>
+        $("#friendtoggles").attr("checked", true);
+        <% } %>
+        <% if(usersettingsVo.getSet_reply()==1) { %>
+        $("#replytoggles").attr("checked", true);
+        <% } %>
+        <% if(usersettingsVo.getSet_ilike()==1) { %>
+        $("#iliketoggles").attr("checked", true);
+        <% } %>
+        <% if(usersettingsVo.getSet_chat()==1) { %>
+        $("#chattoggles").attr("checked", true);
+        <% } %>
         //토글버튼 변경 시 데이터 전송하기
-        $(".toggles").on("click", function(){
+        $(".toggles").on("click", function () {
             let togglesFormData = $("#toggliesForm").serialize();
             $.ajax({
                 url: "<%=request.getContextPath() %>/usersettings/usersettings.do",
@@ -411,7 +431,7 @@
         });
 
         // 프로필 이미지 클릭 시 프로필 페이지로 이동
-        $(".profile-img").on("click", function() {
+        $(".profile-img").on("click", function () {
             window.location.href = "<%=request.getContextPath() %>/profile/profile.do";
         });
 
@@ -420,14 +440,14 @@
                 url: "<%=request.getContextPath() %>/friend/friendGnbList.do",
                 type: "get",
                 dataType: "html",
-                success: function(html) {
+                success: function (html) {
                     $(".friend-dropdown-menu").html(html);
                     // AJAX 성공 후 이벤트 바인딩
-                    $(".chat-button").on("click", function() {
+                    $(".chat-button").on("click", function () {
                         window.location.href = "<%=request.getContextPath() %>/chat";
                     });
                 },
-                error: function() {
+                error: function () {
                     alert("친구 목록을 불러오는 데 실패했습니다.");
                 }
             });
@@ -462,6 +482,7 @@
             </button>
             <div class="profile-img">
                 <!-- 이니셜이 JavaScript로 삽입됩니다 -->
+
             </div>
         </div>
 

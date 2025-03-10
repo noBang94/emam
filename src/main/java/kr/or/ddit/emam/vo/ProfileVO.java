@@ -14,6 +14,7 @@ public class ProfileVO {
     private int profile_postcnt; // 게시글 수
     private String profile_url; // URL 소개
 
+
     public String getMem_id() {
         return mem_id;
     }

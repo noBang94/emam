@@ -29,7 +29,17 @@ public class FriendGnbList extends HttpServlet {
         String mem_id = loginMemberVo.getMem_id();
         List<MemberVO> friendList = friendService.selectFriend(mem_id);
 
-        StringBuilder html = new StringBuilder();
+        StringBuilder html = new StringBuilder("<ul>");
+//        for (MemberVO friend : friendList) {
+//            html.append("<li>");
+//            // 프로필 이미지, 닉네임, 채팅 버튼 등 친구 정보를 HTML로 구성
+//            html.append("<a href='").append(request.getContextPath()).append("/profile/profile.do?mem_id=").append(friend.getMem_id()).append("'>"); // 프로필 링크 추가
+//            html.append("<img src='").append(request.getContextPath()+'/').append(friend.getProfile_photo()).append("' width='30' height='30' style='border-radius: 50%;'>");
+//            html.append("<span>").append(friend.getMem_nickname()).append("</span>");
+//            html.append("</a>");
+//            html.append("</li>");
+//        }
+//        html.append("</ul>");
 
         // 친구 목록 헤더 추가
         html.append("<div class='friend-header'>친구 목록</div>");
@@ -52,7 +62,7 @@ public class FriendGnbList extends HttpServlet {
                 // 프로필 이미지
                 html.append("<div class='friend-avatar'>");
                 if (friend.getProfile_photo() != null && !friend.getProfile_photo().isEmpty()) {
-                    html.append("<img src='").append(request.getContextPath()).append("/images/profile/").append(friend.getProfile_photo()).append("' alt='프로필'>");
+                    html.append("<img src='").append(request.getContextPath()).append("/").append(friend.getProfile_photo()).append("' alt='프로필'>");
                 } else {
                     // 프로필 이미지가 없는 경우 이니셜 표시
                     String initial = friend.getMem_nickname().substring(0, 1);
@@ -62,7 +72,7 @@ public class FriendGnbList extends HttpServlet {
 
                 // 친구 정보
                 html.append("<div class='friend-info'>");
-                html.append("<a href='").append(request.getContextPath()).append("/profile/profile.do?mem_id=").append(friend.getMem_id()).append("' class='friend-name'>");
+                html.append("<a href='").append(request.getContextPath()).append("/profile/profile.do?memId=").append(friend.getMem_id()).append("' class='friend-name'>");
                 html.append(friend.getMem_nickname());
                 html.append("</a>");
                 html.append("</div>");

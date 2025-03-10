@@ -65,6 +65,8 @@
       align-items: center;
       justify-content: flex-start;
       padding: 1.5rem;
+      height: 100vh;
+      overflow: hidden;
     }
 
     .main-container {
