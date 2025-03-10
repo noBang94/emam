@@ -244,6 +244,7 @@
         $(".gnb-button").on("click", function(){
             $(".friend-dropdown-menu, .noti-dropdown-menu, .my-dropdown-menu").hide();
             if ($(this).hasClass("friend-btn")) {
+                loadFriendList();
                 $(".friend-dropdown-menu").show();
             } else if ($(this).hasClass("noti-btn")) {
                 $(".noti-dropdown-menu").show();
@@ -297,6 +298,20 @@
         $(".profile-img").on("click", function() {
             window.location.href = "<%=request.getContextPath() %>/profile/profile.do";
         });
+
+        function loadFriendList() {
+            $.ajax({
+                url: "<%=request.getContextPath() %>/friend/friendGnbList.do",
+                type: "get",
+                dataType: "html", // 응답 데이터 타입을 HTML로 설정
+                success: function(html) {
+                    $(".friend-dropdown-menu").html(html);
+                },
+                error: function() {
+                    alert("친구 목록을 불러오는 데 실패했습니다.");
+                }
+            });
+        }
     });
 </script>
 <div class="gnb">
@@ -326,13 +341,6 @@
         </div>
 
         <div class="friend-dropdown-menu">
-            <ul>
-                <li>프사 닉네임 채팅</li>
-                <li>프사 닉네임 채팅</li>
-                <li>프사 닉네임 채팅</li>
-                <li>프사 닉네임 채팅</li>
-                <li>프사 닉네임 채팅</li>
-            </ul>
         </div>
 
         <div class="noti-dropdown-menu">
