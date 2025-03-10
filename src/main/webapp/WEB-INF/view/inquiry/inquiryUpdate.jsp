@@ -1,6 +1,7 @@
 <%@ page import="kr.or.ddit.emam.vo.MemberVO" %>
 <%@ page import="kr.or.ddit.emam.vo.InquiryVO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:include page="/WEB-INF/view/common/gnb.jsp"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,18 +11,157 @@
   <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script src="<%=request.getContextPath() %>/js/jquery.serializejson.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<%
-  //세션 로그인 값
-  MemberVO loginMember = (MemberVO)session.getAttribute("loginMember");
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
 
-  //기존에 작성한 문의내용 값
-  InquiryVO inquiryVo = (InquiryVO)request.getAttribute("inquiryVo");
+    body {
+      background-color: #f0f7ff;
+      color: #333;
+      padding: 20px;
+      margin-top: 60px;
+    }
 
-%>
+    h3 {
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 24px;
+      font-weight: 700;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #4a90e2;
+      display: flex;
+      align-items: center;
+    }
+
+    h3 i {
+      margin-right: 10px;
+    }
+
+    #main {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .mainTable {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .mainTable td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .mainTable td:first-child {
+      width: 120px;
+      font-weight: 500;
+      color: #555;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    input[type="text"]:focus {
+      border-color: #4a90e2;
+      box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 200px;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      resize: vertical;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: #4a90e2;
+      box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 20px;
+      margin: 10px 0;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    input[type="radio"] {
+      margin-right: 8px;
+      cursor: pointer;
+      width: 16px;
+      height: 16px;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    input[type="button"] {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    #updateBtn {
+      background-color: #64B5F6;
+      color: white;
+    }
+
+    #updateBtn:hover {
+      background-color: #90CAF9;
+    }
+
+    #resetBtn {
+      background-color: #f44336;
+      color: white;
+    }
+
+    #resetBtn:hover {
+      background-color: #ef5350;
+    }
+  </style>
+
+  <%
+    //세션 로그인 값
+    MemberVO loginMember = (MemberVO)session.getAttribute("loginMember");
+
+    //기존에 작성한 문의내용 값
+    InquiryVO inquiryVo = (InquiryVO)request.getAttribute("inquiryVo");
+  %>
   <script>
     $(function (){
-
       //기존에 선택한 공개여부에 따라 공개여부 선택값(라디오버튼 설정값) 가져와 적용하기
       $('input:radio[name="inquiry_ispublic"]:input[value="<%=inquiryVo.getInquiry_ispublic()%>"]').attr("checked", true);
 
@@ -72,39 +212,48 @@
   </script>
 </head>
 <body>
-<h3>문의 수정하기</h3>
+<h3><i class="fas fa-edit"></i> 문의 수정하기</h3>
 <div id="main">
   <form id="mainForm" action="<%=request.getContextPath()%>/inquiry/inquiryUpdate.do">
-    <input type="hidden" id="id" name="mem_id" value="<%=loginMember.getMem_id()%>">
-    <input type="hidden" id="id" name="inquiry_index" value="<%=inquiryVo.getInquiry_index()%>">
+    <input type="hidden" name="mem_id" value="<%=loginMember.getMem_id()%>">
+    <input type="hidden" name="inquiry_index" value="<%=inquiryVo.getInquiry_index()%>">
     <table class="mainTable">
       <tr>
         <td>문의 제목</td>
         <td>
-          <input type="text" id="title" name="inquiry_title" value="<%=inquiryVo.getInquiry_title()%>">
+          <input type="text" id="title" name="inquiry_title" value="<%=inquiryVo.getInquiry_title()%>" placeholder="제목을 입력하세요">
         </td>
       </tr>
       <tr>
         <td>문의 내용</td>
         <td>
-          <input type="text" id="con" name="inquiry_con" value="<%=inquiryVo.getInquiry_con()%>">
+          <textarea id="con" name="inquiry_con" placeholder="문의 내용을 상세히 입력해주세요"><%=inquiryVo.getInquiry_con()%></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td>공개 여부</td>
+        <td>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="inquiry_ispublic" value="1"> 공개
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="inquiry_ispublic" value="0"> 비공개
+            </label>
+          </div>
         </td>
       </tr>
       <tr>
         <td colspan="2">
-          <input type="radio" name="inquiry_ispublic" value="1">공개
-          <input type="radio" name="inquiry_ispublic" value="0">비공개
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
-          <input type="button" id="updateBtn" value="수정">
-          <input type="button" id="resetBtn" value="취소">
+          <div class="button-group">
+            <input type="button" id="updateBtn" value="수정">
+            <input type="button" id="resetBtn" value="취소">
+          </div>
         </td>
       </tr>
     </table>
   </form>
 </div>
-
 </body>
 </html>
+
