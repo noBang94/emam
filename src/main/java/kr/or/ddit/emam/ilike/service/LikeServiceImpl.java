@@ -25,5 +25,5 @@ public class LikeServiceImpl implements ILikeService{
     public int deleteILike(ILikeVO ILikeVO) {return dao.deleteILike(ILikeVO);}
 
     @Override
-    public int countLike(String postindex) {return dao.countLike(postindex);}
+    public int countLike(int postindex) {return dao.countLike(postindex);}
 }

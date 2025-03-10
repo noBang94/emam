@@ -30,5 +30,5 @@ public interface ILikeDao {
      * @param postindex
      * @return
      */
-    public int countLike(String postindex);
+    public int countLike(int postindex);
 }

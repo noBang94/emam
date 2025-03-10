@@ -81,7 +81,7 @@ public class PostSelect extends HttpServlet {
 
                 ILikeVO lv = new ILikeVO(postVO.getPost_index(), memcheck.getMem_id());
                 int cnt = likeService.likeCheck(lv);
-                int lcnt = likeService.likeCheck(lv);
+                int lcnt = likeService.countLike(postVO.getPost_index());
                 boolean liked = false;
                 if(cnt>0){
                     liked = true;
