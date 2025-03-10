@@ -358,8 +358,8 @@
 
   <script>
     $(function() {
-      $("#cancelBtn").on("click", function () {
-        window.location.href = "<%=request.getContextPath() %>/admin/noticeList.do";
+      $("#backBtn, #cancelBtn").on("click", function () {
+        location.href = "<%=request.getContextPath() %>/admin/noticeList.do";
       });
 
       $("#deleteBtn").on("click", function () {
@@ -378,7 +378,7 @@
 
   <div class="top-bar">
     <h2><%= "update".equals(mode) ? "공지사항 수정" : "공지사항 작성" %></h2>
-    <button id="cancelBtn" class="back-btn"><i class="fas fa-arrow-left"></i> 목록으로</button>
+    <button id="backBtn" class="back-btn"><i class="fas fa-arrow-left"></i>목록으로</button>
   </div>
 
   <div class="container-wrapper">
