@@ -485,7 +485,7 @@
             });
 
             $("#backBtn").on("click", function(){
-                window.history.back();
+                window.location.href = "<%=request.getContextPath() %>/admin/adminMain.do";
             });
         });
 
