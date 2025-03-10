@@ -80,11 +80,12 @@
                                          SELECT FRIEND_TOID AS TOID
                                          FROM FRIEND
                                          WHERE FRIEND_FROMID = #{mem_id} and FRIEND_STATUS=1)
+                          order by post_date DESC
                       ) c
-                 ORDER BY POST_DATE DESC
              )
         WHERE rnum BETWEEN #{start} AND #{end}
     </select>
+
     <!--
     전체 게시글 가져오기
     <select id="selectScrollPost" resultMap="postMap" parameterType="map">
