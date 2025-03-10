@@ -336,10 +336,6 @@
   </div>
 
   <div class="action-buttons">
-    <button onclick="location.href='<%=request.getContextPath()%>/report.do'" class="btn btn-report">
-      <span class="btn-icon">⚠️</span>
-      <span>신고</span>
-    </button>
     <button onclick="location.href='<%=request.getContextPath()%>/chat'" class="btn btn-chat">
       <span class="btn-icon">💬</span>
       <span>채팅</span>
@@ -437,6 +433,18 @@
         }
         break;
     }
+
+    //컨텐츠 외 클릭시 게시글 화면으로 이동
+    $("body").on('click', function (e) {
+      if (!$(e.target).closest('.gnb').length &&
+          !$(e.target).closest('.notice-list').length &&
+          !$(e.target).closest('.additional-info-block').length &&
+          !$(e.target).closest('.profile-block').length &&
+          !$(e.target).closest('.action-buttons').length
+      ) {
+        window.location.href = '/post/postList.do';
+      }
+    });
   });
 </script>
 </body>
