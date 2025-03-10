@@ -13,7 +13,7 @@
   List<PostVO> postList = (List<PostVO>) request.getAttribute("postList");
   boolean isMyProfile = (Boolean) request.getAttribute("isMyProfile");
   List<MemberVO> friendList = (List<MemberVO>) request.getAttribute("friendList");
-  boolean isFriend = (Boolean) request.getAttribute("isFriend"); // ⭐ 친구 여부 정보 추가됨 ⭐
+  String friendStatus = (String) request.getAttribute("friendStatus"); //친구 상태(null:상호작용 없음 / 0:신청중 / 1:친구)
 %>
 
 <!DOCTYPE html>
@@ -787,7 +787,37 @@
   <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
   <script>
     $(function () {
-
+      //친구 신청 버튼 클릭 시
+      $(".friendBtn").on("click", ".friendRequestBtn", function () {
+        //신청 데이터 전송하기
+        $.ajax({
+          url: "<%=request.getContextPath() %>/friend/friendRequest.do",
+          type: "get",
+          data: "toFriend="+<%=pv.getMem_id()%>,
+        });
+        $(this).attr("class", "friendReadyBtn");
+        $(this).attr("value", "친구 신청 취소");
+      });
+      //친구 삭제 버튼 클릭 시
+      $(".friendBtn").on("click", ".friendDeleteBtn", function () {
+        $.ajax({
+          url: "<%=request.getContextPath() %>/friend/friendDelete.do",
+          type: "get",
+          data: "toFriend="+<%=pv.getMem_id()%>,
+        });
+        $(this).attr("class", "friendRequestBtn");
+        $(this).attr("value", "친구 신청");
+      });
+      //친구 신청중 버튼 클릭 시 (신청 취소)
+      $(".friendBtn").on("click", ".friendReadyBtn", function () {
+        $.ajax({
+          url: "<%=request.getContextPath() %>/friend/friendDelete.do",
+          type: "get",
+          data: "toFriend="+<%=pv.getMem_id()%>,
+        });
+        $(this).attr("class", "friendRequestBtn");
+        $(this).attr("value", "친구 신청 취소");
+      });
 
       $(".modal").on('click', function (e) {
         if (!$(e.target).closest('.modal-i-warp').length) {
@@ -854,18 +884,24 @@
         </p>
       </div>
 
-      <% if (!isMyProfile) { %> <%-- [⭐ 조건부 렌더링: 친구 프로필일 때만 표시 ⭐] --%>
-      <div class="friend-profile-buttons">
+      <% if (!isMyProfile) { %> <%-- [⭐ 조건부 렌더링: 타인의 프로필일 때만 표시 ⭐] --%>
+      <div class="friendBtn">
         <%-- 🚩 [조건부 렌더링]: 친구 여부에 따라 다른 버튼 표시 --%>
-        <% if (isFriend) { %> <%-- [⭐ isFriend 값이 true (친구) 이면 "친구 삭제" 버튼 표시 --%>
-        <button class="btn btn-secondary" type="button">
-          <i class="fas fa-user-minus"></i> 친구 삭제
-        </button>
-        <% } else { %> <%-- [⭐ isFriend 값이 false (친구 아님) 이면 "친구 신청" 버튼 표시 --%>
-        <button class="btn btn-primary" type="button">
-          <i class="fas fa-user-plus"></i> 친구 신청
-        </button>
-        <% } %> <%-- [⭐ 조건부 렌더링 종료 --%>
+            <%
+            if(friendStatus.equals("null")) { //상호작용 없는 상태
+            %>
+            <input type="button" class="friendRequestBtn" value="친구 신청">
+            <%
+            }else if(friendStatus.equals("0")) { //친구 신청중
+            %>
+            <input type="button" class="friendReadyBtn" value="친구 신청 취소">
+            <%
+            }else { //친구 삭제
+            %>
+            <input type="button" class="friendDeleteBtn" value="친구 삭제">
+            <%
+            }
+            %>
         <%--        <a class="btn btn-danger" href="/report.do?nickname=<%=pv.getMem_nickname()%>">--%>
         <a class="btn btn-danger" href="/report.do?nickname=<%=pv.getMem_nickname()%>">
           <i class="fas fa-flag"></i> 계정 신고

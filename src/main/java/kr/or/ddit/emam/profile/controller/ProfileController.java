@@ -1,13 +1,12 @@
 package kr.or.ddit.emam.profile.controller;
 
+import kr.or.ddit.emam.friend.service.FriendServiceImpl;
+import kr.or.ddit.emam.friend.service.IFriendService;
 import kr.or.ddit.emam.post.service.IPostPhotoService;
 import kr.or.ddit.emam.post.service.PostPhotoServiceImpl;
 import kr.or.ddit.emam.profile.service.IProfileService;
 import kr.or.ddit.emam.profile.service.ProfileServiceImpl;
-import kr.or.ddit.emam.vo.MemberVO;
-import kr.or.ddit.emam.vo.PostPhotoDetailVO;
-import kr.or.ddit.emam.vo.PostVO;
-import kr.or.ddit.emam.vo.ProfileVO;
+import kr.or.ddit.emam.vo.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -83,6 +82,22 @@ public class ProfileController extends HttpServlet {
         request.setAttribute("friendList", friendList);
 
         String viewPage = "/WEB-INF/view/profile/profile.jsp"; // JSP 페이지 경로 설정 (기존 코드 유지)
+
+        // 로그인한 회원과 상대 회원에 대하여 친구상태 구하여 목록 만들기(status값이 null이면 상호작용 없음, 0이면 신청중, 1이면 친구)
+        IFriendService friendService = FriendServiceImpl.getInstance();
+        FriendVO friendVo = new FriendVO();
+        String friendStatus = "";
+        friendVo.setFriend_fromid(loginMember.getMem_id());
+        friendVo.setFriend_toid(memId);
+        if(friendService.checkFriend(friendVo)==0){
+            friendStatus = "null";
+        }else if(friendService.statusFriend(friendVo)==0){
+            friendStatus = "0";
+        }else {
+            friendStatus = "1";
+        }
+        request.setAttribute("friendStatus", friendStatus);
+
         request.getRequestDispatcher(viewPage).forward(request, response); // JSP 페이지로 forward (기존 코드 유지)
     }
 }
