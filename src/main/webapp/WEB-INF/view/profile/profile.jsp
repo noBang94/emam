@@ -788,7 +788,7 @@
   <script>
     $(function () {
       //친구 신청 버튼 클릭 시
-      $(".friendBtn").on("click", ".friendRequestBtn", function () {
+      $(document).on("click", ".friendRequestBtn", function () {
         //신청 데이터 전송하기
         $.ajax({
           url: "<%=request.getContextPath() %>/friend/friendRequest.do",
@@ -799,7 +799,7 @@
         $(this).attr("value", "친구 신청 취소");
       });
       //친구 삭제 버튼 클릭 시
-      $(".friendBtn").on("click", ".friendDeleteBtn", function () {
+      $(document).on("click", ".friendDeleteBtn", function () {
         $.ajax({
           url: "<%=request.getContextPath() %>/friend/friendDelete.do",
           type: "get",
@@ -809,14 +809,14 @@
         $(this).attr("value", "친구 신청");
       });
       //친구 신청중 버튼 클릭 시 (신청 취소)
-      $(".friendBtn").on("click", ".friendReadyBtn", function () {
+      $(document).on("click", ".friendReadyBtn", function () {
         $.ajax({
           url: "<%=request.getContextPath() %>/friend/friendDelete.do",
           type: "get",
           data: "toFriend="+'<%=pv.getMem_id()%>',
         });
         $(this).attr("class", "friendRequestBtn");
-        $(this).attr("value", "친구 신청 취소");
+        $(this).attr("value", "친구 신청");
       });
 
       $(".modal").on('click', function (e) {
