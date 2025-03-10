@@ -6,6 +6,7 @@ import kr.or.ddit.emam.vo.MemberVO;
 import kr.or.ddit.emam.vo.NoticeVO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface INoticeService {
 
@@ -17,7 +18,7 @@ public interface INoticeService {
 
     public List<NoticeVO> selectAllNotice(String getNotice);
 
-    public List<NoticeVO> searchTitle(String searchTitle);
+    public List<NoticeVO> searchTitle(Map<String, Object> params);
 
 }
 

@@ -58,7 +58,7 @@ public class WelcomeMain extends HttpServlet {
 
         //날씨 - 날짜와 시간과 좌표 받아서 API URL로 보내기
         String baseDate = today.format(formatterBaseDate);
-        String baseTime = nowtime.plusHours(-1).format(formatterBaseTime); //날씨정보 발표시간
+        String baseTime = nowtime.plusHours(-4).format(formatterBaseTime); //날씨정보 발표시간
         String nx = weatherVo.getLocal_nx();
         String ny = weatherVo.getLocal_ny();
 

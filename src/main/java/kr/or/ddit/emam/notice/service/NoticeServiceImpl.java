@@ -2,12 +2,16 @@ package kr.or.ddit.emam.notice.service;
 
 import kr.or.ddit.emam.admin.dao.AdminDaoImpl;
 import kr.or.ddit.emam.admin.dao.IAdminDao;
+import kr.or.ddit.emam.notice.dao.INoticeDao;
+import kr.or.ddit.emam.notice.dao.NoticeDaoImpl;
 import kr.or.ddit.emam.vo.NoticeVO;
 
 import java.util.List;
+import java.util.Map;
 
 public class NoticeServiceImpl implements INoticeService {
     private IAdminDao dao;
+    private INoticeDao daoImpl = NoticeDaoImpl.getInstance();
     private static INoticeService service;
 
     private NoticeServiceImpl() {
@@ -40,8 +44,8 @@ public class NoticeServiceImpl implements INoticeService {
     }
 
     @Override
-    public List<NoticeVO> searchTitle(String searchTitle) {
-        return dao.searchTitle(searchTitle);
+    public List<NoticeVO> searchTitle(Map<String, Object> params) {
+        return daoImpl.searchTitle(params);
     }
 }
 

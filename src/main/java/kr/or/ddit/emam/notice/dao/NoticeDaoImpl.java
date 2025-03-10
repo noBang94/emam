@@ -4,7 +4,9 @@ import kr.or.ddit.emam.util.MyBatisUtil;
 import kr.or.ddit.emam.vo.NoticeVO;
 import org.apache.ibatis.session.SqlSession;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NoticeDaoImpl implements INoticeDao {
     private static INoticeDao dao;
@@ -40,18 +42,9 @@ public class NoticeDaoImpl implements INoticeDao {
     }
 
     @Override
-    public List<NoticeVO> searchTitle(String searchTitle) {
-        SqlSession session = MyBatisUtil.getSqlSession();
-        List<NoticeVO> noticelist = null;
-
-        try {
-            noticelist = session.selectList("notice.searchTitle", searchTitle);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            session.close();
+    public List<NoticeVO> searchTitle(Map<String, Object> params) {
+        try (SqlSession session = MyBatisUtil.getSqlSession()) {
+            return session.selectList("notice.searchTitle", params);
         }
-        return noticelist;
     }
-
 }

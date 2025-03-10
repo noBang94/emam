@@ -34,11 +34,14 @@
     </select>
 
     <!-- 공지사항 제목 조회 -->
-    <select id="searchTitle" parameterType="String" resultType="noticeVo">
+    <select id="searchTitle" parameterType="map" resultType="noticeVo">
         select NOTICE_INDEX, NOTICE_TITLE, NOTICE_CON, NOTICE_DATE
         from notice
-        where
-            NOTICE_TITLE = #{notice_title}
+        <where>
+            <if test="searchTitle != null and searchTitle != ''">
+                NOTICE_TITLE LIKE '%' || #{searchTitle} || '%'
+            </if>
+        </where>
         ORDER BY NOTICE_INDEX DESC
     </select>
 </mapper>
