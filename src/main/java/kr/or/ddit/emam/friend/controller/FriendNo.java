@@ -27,19 +27,16 @@ public class FriendNo extends HttpServlet {
 
         HttpSession session = request.getSession();
         //로그인한 계정정보 가져오기
-        MemberVO fromFriendVo = (MemberVO) session.getAttribute("loginMember");
+        MemberVO loginMemberVo = (MemberVO) session.getAttribute("loginMember");
         //삭제하려는 대상의 계정정보 가져오기
-        String toFriend = request.getParameter("toFriend");
+        String fromFriend = request.getParameter("fromFriend");
 
         //해당 친구 테이블 index 찾기
         FriendVO friendVo = new FriendVO();
-        friendVo.setFriend_toid(toFriend);
-        friendVo.setFriend_fromid(fromFriendVo.getMem_id());
+        friendVo.setFriend_toid(fromFriend);
+        friendVo.setFriend_fromid(loginMemberVo.getMem_id());
         IFriendService friendService = FriendServiceImpl.getInstance();
         int friendIndex = friendService.indexFriend(friendVo);
-
-        //친구 테이블 행 삭제
-        friendService.deleteFriend(friendIndex);
 
         //알림 테이블 행 삭제
         NotificationVO notificationVo = new NotificationVO();
@@ -47,6 +44,9 @@ public class FriendNo extends HttpServlet {
         notificationVo.setNotification_target(friendIndex);
         INotificationService notificationService = NotificationServiceImpl.getInstance();
         int notificationIndex = notificationService.selectOneNotification(notificationVo);
-        notificationService.deleteNotification(notificationIndex);
+        notificationService.updateNotification(notificationIndex);
+
+        //친구 테이블 행 삭제
+        friendService.deleteFriend(friendIndex);
     }
 }

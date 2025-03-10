@@ -8,8 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import kr.or.ddit.emam.friend.service.FriendServiceImpl;
 import kr.or.ddit.emam.friend.service.IFriendService;
+import kr.or.ddit.emam.notification.service.INotificationService;
+import kr.or.ddit.emam.notification.service.NotificationServiceImpl;
 import kr.or.ddit.emam.vo.FriendVO;
 import kr.or.ddit.emam.vo.MemberVO;
+import kr.or.ddit.emam.vo.NotificationVO;
 
 import java.io.IOException;
 
@@ -35,6 +38,14 @@ public class FriendDelete extends HttpServlet {
         friendVo.setFriend_fromid(fromFriendVo.getMem_id());
         IFriendService friendService = FriendServiceImpl.getInstance();
         int friendIndex = friendService.indexFriend(friendVo);
+
+        //알림 테이블 행 삭제
+        NotificationVO notificationVo = new NotificationVO();
+        notificationVo.setNotification_type("friend");
+        notificationVo.setNotification_target(friendIndex);
+        INotificationService notificationService = NotificationServiceImpl.getInstance();
+        int notificationIndex = notificationService.selectOneNotification(notificationVo);
+        notificationService.deleteNotification(notificationIndex);
 
         //친구 테이블 행 삭제
         friendService.deleteFriend(friendIndex);

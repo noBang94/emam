@@ -49,9 +49,9 @@
     </delete>
 
     <!-- 타겟과 타입으로 해당하는 알림 index 찾기 -->
-    <select id="selectOneNotification" parameterType="notificationVo">
+    <select id="selectOneNotification" parameterType="notificationVo" resultType="int">
         select notification_index
-            from notificatin
+            from notification
         where notification_target = #{notification_target}
         and notification_type = #{notification_type}
     </select>

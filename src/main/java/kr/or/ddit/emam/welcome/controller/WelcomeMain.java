@@ -8,8 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import kr.or.ddit.emam.admin.service.AdminServiceImpl;
 import kr.or.ddit.emam.admin.service.IAdminService;
+import kr.or.ddit.emam.notification.service.INotificationService;
+import kr.or.ddit.emam.notification.service.NotificationServiceImpl;
 import kr.or.ddit.emam.vo.MemberVO;
 import kr.or.ddit.emam.vo.NoticeVO;
+import kr.or.ddit.emam.vo.NotificationVO;
 import kr.or.ddit.emam.vo.WeatherVO;
 import kr.or.ddit.emam.welcome.service.IWelcomeService;
 import kr.or.ddit.emam.welcome.service.WelcomeServiceImpl;
@@ -140,9 +143,9 @@ public class WelcomeMain extends HttpServlet {
         request.setAttribute("noticeList", noticeList);
 
         //알림 정보 가져오기
-
-
-
+        INotificationService notificationService = NotificationServiceImpl.getInstance();
+        List<NotificationVO> notiList = notificationService.selectNotification(loginMemberVo.getMem_id());
+        request.setAttribute("notiList", notiList);
 
         request.getRequestDispatcher("/WEB-INF/view/welcome.jsp").forward(request, response);
     }

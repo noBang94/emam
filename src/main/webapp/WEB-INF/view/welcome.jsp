@@ -2,6 +2,7 @@
 <%@ page import="kr.or.ddit.emam.vo.NoticeVO" %>
 <%@ page import="java.util.List" %>
 <%@ page import="kr.or.ddit.emam.vo.WeatherVO" %>
+<%@ page import="kr.or.ddit.emam.vo.NotificationVO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <jsp:include page="/WEB-INF/view/common/gnb.jsp"/>
 
@@ -15,6 +16,7 @@
   int iPty = Integer.parseInt(wPty);
   int iT1h = Integer.parseInt(wT1h);
   List<String> realtimeKeywords = (List<String>) request.getAttribute("realtimeKeywords");
+  List<NotificationVO> notiList = (List<NotificationVO>) request.getAttribute("notiList");
 %>
 
 <!DOCTYPE html>
@@ -257,6 +259,30 @@
       background: #a8a8a8;
     }
   </style>
+  <script>
+    $(function () {
+      //친구 수락 버튼 누르면
+      $(".notiRow").on("click", ".friendYes", function () {
+        console.log($(this).data("fromfriendid"));
+        $.ajax({
+          url: "<%=request.getContextPath() %>/friend/friendYes.do",
+          type: "get",
+          data: "fromFriend="+$(this).data("fromfriendid"),
+        });
+        location.reload();
+      });
+      //친구 거절 버튼 누르면
+      $(".notiRow").on("click", ".friendNo", function () {
+        console.log($(this).data("fromfriendid"));
+        $.ajax({
+          url: "<%=request.getContextPath() %>/friend/friendNo.do",
+          type: "get",
+          data: "fromFriend="+$(this).data("fromfriendid"),
+        });
+        location.reload();
+      });
+    });
+  </script>
 </head>
 <body>
 <div class="main-container">
@@ -299,13 +325,27 @@
       </div>
     </div>
 
-    <div class="card additional-info-block">
+    <div class="card additional-info-block notice-list">
       <div class="card-header">
-        <h2>추가 정보</h2>
+        <h2>알림내역</h2>
       </div>
       <div class="card-content">
-        <ul>
-          <li>가져올 수 없습니다.</li>
+        <ul id="notiList">
+          <% if (notiList != null && !notiList.isEmpty()) { %>
+            <% for (NotificationVO noti : notiList) { %>
+          <li class="notiRow">
+              <% if (noti.getNotification_isread()==0) { %>
+                    <%=noti.getNotification_con() %>
+                 <% if (noti.getNotification_type().equals("friend")){ %>
+                      <input type="button" value="수락" class="friendBtn friendYes" data-fromfriendid="<%=noti.getNotification_fromId() %>">
+                      <input type="button" value="거절" class="friendBtn friendNo" data-fromfriendid="<%=noti.getNotification_fromId() %>">
+                    <% } %>
+              <% } %>
+          </li>
+           <% } %>
+          <% } else { %>
+          <li> 알림내역이 없습니다.</li>
+          <% } %>
         </ul>
       </div>
     </div>

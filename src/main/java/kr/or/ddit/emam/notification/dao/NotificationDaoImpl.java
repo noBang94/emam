@@ -102,7 +102,7 @@ public class NotificationDaoImpl implements INotificationDao {
         int res = 0;
         SqlSession session = MyBatisUtil.getSqlSession();
         try {
-            res = session.update("notification.selectOneNotification", notificationVo);
+            res = session.selectOne("notification.selectOneNotification", notificationVo);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
