@@ -150,6 +150,7 @@ public class AdminDaoImpl implements IAdminDao {
         try (SqlSession session = MyBatisUtil.getSqlSession()) {
             int result = session.delete("admin.deleteNotice", noticeIndex);
             session.commit();
+            session.close();
             return result;
         }
     }
@@ -277,24 +278,48 @@ public class AdminDaoImpl implements IAdminDao {
     @Override
     public int getNewMembersCount() {
         SqlSession session = MyBatisUtil.getSqlSession();
-        return session.selectOne("admin.getNewMembersCount");
+        try {
+            return session.selectOne("admin.getNewMembersCount");
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
     }
 
     @Override
     public int getNewPostsCount() {
         SqlSession session = MyBatisUtil.getSqlSession();
-        return session.selectOne("admin.getNewPostsCount");
+        try {
+            return session.selectOne("admin.getNewPostsCount");
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
     }
 
     @Override
     public int getNewReportsCount() {
         SqlSession session = MyBatisUtil.getSqlSession();
-        return session.selectOne("admin.getNewReportsCount");
+        try {
+            return session.selectOne("admin.getNewReportsCount");
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
     }
 
     @Override
     public int getNewInquiriesCount() {
         SqlSession session = MyBatisUtil.getSqlSession();
-        return session.selectOne("admin.getNewInquiriesCount");
+        try {
+            return session.selectOne("admin.getNewInquiriesCount");
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
     }
 }
