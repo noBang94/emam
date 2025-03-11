@@ -93,26 +93,44 @@ public class AdminDaoImpl implements IAdminDao {
     // 관리자 공지사항
     @Override
     public NoticeVO getNotice(int noticeIndex) {
-        try (SqlSession session = MyBatisUtil.getSqlSession()) {
+        SqlSession session = null;
+        try {
+            session = MyBatisUtil.getSqlSession();
             return session.selectOne("admin.getNotice", noticeIndex);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 
     @Override
     public int insertNotice(NoticeVO noticeVO) {
-        try (SqlSession session = MyBatisUtil.getSqlSession()) {
+        SqlSession session = null;
+        try {
+            session = MyBatisUtil.getSqlSession();
             int result = session.insert("admin.insertNotice", noticeVO);
             session.commit();
             return result;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 
     @Override
     public int updateNotice(NoticeVO noticeVO) {
-        try (SqlSession session = MyBatisUtil.getSqlSession()) {
+        SqlSession session = null;
+        try {
+            session = MyBatisUtil.getSqlSession();
             int result = session.update("admin.updateNotice", noticeVO);
             session.commit();
             return result;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 
