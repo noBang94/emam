@@ -111,4 +111,19 @@ public class NotificationDaoImpl implements INotificationDao {
         }
         return res;
     }
+
+    @Override
+    public int selectIlikeNotification(NotificationVO notificationVo) {
+        int res = 0;
+        SqlSession session = MyBatisUtil.getSqlSession();
+        try {
+            res = session.selectOne("notification.selectIlikeNotification", notificationVo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.commit();
+            session.close();
+        }
+        return res;
+    }
 }

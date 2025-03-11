@@ -22,4 +22,7 @@ public interface INotificationDao {
 
     //타겟과 타입으로 해당하는 알림 index 구하기
     public int selectOneNotification(NotificationVO notificationVo);
+
+    //(좋아요 인덱스가 없어서...) 타겟과 타입과 fromId로 해당하는 알림 index 찾기
+    public int selectIlikeNotification(NotificationVO notificationVo);
 }

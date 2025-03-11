@@ -44,4 +44,7 @@ public class NotificationServiceImpl implements INotificationService {
 
     @Override
     public int selectOneNotification(NotificationVO notificationVo) { return dao.selectOneNotification(notificationVo); }
+
+    @Override
+    public int selectIlikeNotification(NotificationVO notificationVo) { return dao.selectIlikeNotification(notificationVo); }
 }

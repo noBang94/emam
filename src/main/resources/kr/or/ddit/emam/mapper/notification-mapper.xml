@@ -56,4 +56,13 @@
         and notification_type = #{notification_type}
     </select>
 
+    <!-- (좋아요 인덱스가 없어서...) 타겟과 타입과 fromId로 해당하는 알림 index 찾기 -->
+    <select id="selectIlikeNotification" parameterType="notificationVo" resultType="int">
+        select notification_index
+        from notification
+        where notification_target = #{notification_target}
+          and notification_type = #{notification_type}
+          and notification_fromid = #{notification_fromId}
+    </select>
+
 </mapper>

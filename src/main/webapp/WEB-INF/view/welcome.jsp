@@ -347,11 +347,14 @@
             <% for (NotificationVO noti : notiList) { %>
             <% if (noti.getNotification_isread()==0) { //안읽은 알림이라면 %>
               <% if (noti.getNotification_fromId()!=null) { //보낸사람이 null이 아님=관리자가 생성한 알림(문의, 신고)이 아니라면... 프사를 띄우고싶은데 일단 기능 제외함 %>
-                <li class="notiRow" onclick="viewProfile('<%= noti.getNotification_fromId() %>')">
-                <%=noti.getNotification_con() %>
                 <% if (noti.getNotification_type().equals("friend")){ //알림이 친구신청에 대한 거라면 %>
+                  <li class="notiRow" onclick="viewProfile('<%= noti.getNotification_fromId() %>')">
+                  <%=noti.getNotification_con() %>
                   <input type="button" value="수락" class="friendBtn friendYes" data-fromfriendid="<%=noti.getNotification_fromId() %>">
                   <input type="button" value="거절" class="friendBtn friendNo" data-fromfriendid="<%=noti.getNotification_fromId() %>">
+                <% } else { %>
+                  <li class="notiRow notiCheck" value="<%= noti.getNotification_index() %>">
+                  <%=noti.getNotification_con() %>
                 <% } %>
                 </li>
               <% }else { //보낸사람이 null(관리자)라면 %>
