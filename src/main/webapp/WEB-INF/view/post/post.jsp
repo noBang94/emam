@@ -16,6 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
     <link rel="stylesheet" href="<%=request.getContextPath() %>/css/swiper-11.2.5.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* 모달 스타일 */
         .modal {display: none;position: fixed;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0,0,0,0.5);z-index: 1000}
@@ -228,7 +229,7 @@
 
         .t-stemp {
             color: #888;
-            font-size: 12px;
+            font-size: 14px;
         }
 
         .a-bd {
@@ -706,6 +707,118 @@
             fill: #ff3366;
             stroke: #ff3366;
         }
+
+        /* 아이콘 버튼 스타일 */
+        .icon-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: transparent;
+            transition: all 0.2s ease;
+            color: #555;
+        }
+
+        .icon-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .icon-btn.edit-icon {
+            color: #4dabf7;
+        }
+
+        .icon-btn.delete-icon {
+            color: #ff3366;
+        }
+
+        /* Action button styles */
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .update-btn {
+            color: #4dabf7;
+        }
+
+        .update-btn:hover {
+            background-color: rgba(77, 171, 247, 0.1);
+        }
+
+        .delete-btn {
+            color: #ff3366;
+        }
+
+        .delete-btn:hover {
+            background-color: rgba(255, 51, 102, 0.1);
+        }
+
+        .report-btn {
+            color: #ff9800;
+            text-decoration: none;
+        }
+
+        .report-btn:hover {
+            background-color: rgba(255, 152, 0, 0.1);
+        }
+
+        .action-btn i {
+            margin-right: 5px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .update-btn {
+            color: #4dabf7;
+        }
+
+        .update-btn:hover {
+            background-color: rgba(77, 171, 247, 0.1);
+        }
+
+        .delete-btn {
+            color: #ff3366;
+        }
+
+        .delete-btn:hover {
+            background-color: rgba(255, 51, 102, 0.1);
+        }
+
+        .report-btn {
+            color: #ff9800;
+        }
+
+        .report-btn:hover {
+            background-color: rgba(255, 152, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -872,7 +985,11 @@
             $(".post-insert-modal").toggleClass("view");
         });
 
-        // 모달 닫기 클릭
+        // 모달   function () {
+        //     $(".post-insert-modal").toggleClass("view");
+        // });
+
+        // 모달 닫기
         $(".close-btn").on('click', function () {
             $(".modal").removeClass("view");
         });
@@ -1061,491 +1178,6 @@
             });
         });
 
-        // 댓글 작성 후 가져오기
-        $(document).on('click', ".reply-insert-btn", function (e) {
-            e.preventDefault();
-            let postindex = $(this).data("index");
-            let memid = $(this).parent().find("input[name=mem_id]").val();
-            let replycon = $(this).parent().find("input[name=reply_con]").val();
-
-            if (replycon == "" || replycon == null) {
-                alert("댓글을 입력해주세요");
-                $(this).parent().find("input[name=reply_con]").focus();
-                return;
-            }
-
-            $.ajax({
-                url: "/reply/replyInsert.do",
-                type: "post",
-                data: {
-                    "postindex": postindex,
-                    "memid": memid,
-                    "replycon": replycon
-                },
-                contentType: "application/x-www-form-urlencoded",
-                dataType: "json",
-                success: function (result) {
-                    let htmlcode = "";
-                    if (result.length > 0) {
-                        $.each(result, function (i, v) {
-                            if (v.mem_id == "<%=loginMember.getMem_id()%>") {
-                                htmlcode += '<li>';
-                                htmlcode += '    <div class="rp-r-wrap">';
-                                htmlcode += '        <div class="rp-r-w-prf">';
-                                if(v.profileVo == undefined || v.profileVo.profile_photo != null){
-                                    htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
-                                }else{
-                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
-                                }
-                                htmlcode += '        </div>';
-                                htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
-                                htmlcode += '            <div class="rp-r-w-con-warp">';
-                                htmlcode += '                <span class="rp-r-w-nick">' + v.mem_nickname + '</span>';
-                                htmlcode += '                <span class="rp-r-w-con">' + v.reply_con + '</span>';
-                                htmlcode += '            </div>';
-                                htmlcode += '            <div class="rp-r-w-btn-warp">';
-                                htmlcode += '                <a class="btn s-btn re-re-btn" data-reindex=' + v.reply_index + '>답글</a>';
-                                htmlcode += '                <a class="btn s-btn re-up-btn" data-reindex=' + v.reply_index + '>수정</a>';
-                                htmlcode += '                <a class="btn s-btn re-del-btn" data-reindex=' + v.reply_index + ' href="<%=request.getContextPath() %>/reply/replyDelete.do?replyindex=' + v.reply_index + '">삭제</a>';
-                                htmlcode += '            </div>';
-                                htmlcode += '            <div class="rp-r-w-reply-warp"></div>';
-                                htmlcode += '        </div>';
-                                htmlcode += '    </div>';
-                                htmlcode += '</li>';
-                            } else {
-                                htmlcode += '<li>';
-                                htmlcode += '    <div class="rp-r-wrap">';
-                                htmlcode += '        <div class="rp-r-w-prf">';
-                                if(v.profileVo == undefined || v.profileVo.profile_photo != null){
-                                    htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
-                                }else{
-                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
-                                }
-                                htmlcode += '        </div>';
-                                htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
-                                htmlcode += '            <div class="rp-r-w-con-warp">';
-                                htmlcode += '                <span class="rp-r-w-nick">' + v.mem_nickname + '</span>';
-                                htmlcode += '                <span class="rp-r-w-con">' + v.reply_con + '</span>';
-                                htmlcode += '            </div>';
-                                htmlcode += '            <div class="rp-r-w-btn-warp">';
-                                htmlcode += '                <a class="btn s-btn re-re-btn" data-reindex=' + v.reply_index + '>답글</a>';
-                                htmlcode += '                <a class="btn s-btn re-report-btn" href="/report.do?nickname=' + v.mem_nickname + '" data-reindex=' + v.reply_index + '>신고</a>';
-                                htmlcode += '            </div>';
-                                htmlcode += '            <div class="rp-r-w-reply-warp"></div>';
-                                htmlcode += '        </div>';
-                                htmlcode += '    </div>';
-                                htmlcode += '</li>';
-                            }
-                        });
-                    } else {
-                        htmlcode += '<li>';
-                        htmlcode += '    <div class="rp-r-wrap">';
-                        htmlcode += '        <div class="rp-r-w-prf"><img src="<%=request.getContextPath() %>/upload/demo_logo.png"></div>';
-                        htmlcode += '        <div class="rp-r-w-con">댓글이 없습니다.</div>';
-                        htmlcode += '    </div>';
-                        htmlcode += '</li>';
-                    }
-                    $('.a-c-rp[data-index=' + postindex + '] .a-c-rp-r ul').html(htmlcode);
-                    $("input[name=reply_con]").val("");
-                }
-            });
-        });
-
-        // 댓글 수정 폼
-        $(document).on("click", ".re-up-btn", function () {
-            $(this).addClass("unvis");
-
-            let postidex = $(this).parents(".a-c-rp-w").data("index");
-            let reindex = $(this).data("reindex");
-            let con = $(this).parents(".rp-r-w-container").find(".rp-r-w-con").html();
-
-            // 댓글 내용 가리기
-            $(this).parents(".rp-r-w-container").find(".rp-r-w-con").css("display", "none");
-
-            $(this).parent().parent().children("div").eq(0).append(`
-                <span id="spn\${reindex}">
-                    <form action="<%=request.getContextPath() %>/reply/replyUpdate.do" method="post">
-                        <input type="text" id="txtindex\${reindex}" name="replyindex" value="\${reindex}" hidden/>
-                        <input type="text" id="txtCon\${reindex}" name="replycon" value="\${con}" />
-                        <button type="submit" class="btnConfirm btn" data-index="\${postidex}" data-con="\${con}" data-reindex="\${reindex}">수정</button>
-                        <button type="button" class="btnCancel btn" data-reindex="\${reindex}">취소</button>
-                    </form>
-                </span>
-            `);
-        });
-
-        // 댓글 수정 확인 실행
-        $(document).on("click", ".btnConfirm", function () {
-            let postindex = $(this).data("index");
-            let reindex = $(this).data("reindex");
-            let replycon = $(this).parents("form").find("input[name=replycon]").val();
-            let parentreindex = $(this).data("rereindex");
-
-            // 댓글 가져오기 수정후
-            $('form').submit(function (e) {
-                e.preventDefault();
-                $.ajax({
-                    type: 'POST',
-                    url: '/reply/replyUpdate.do',
-                    data: "postindex=" + postindex + "&replyindex=" + reindex + "&replycon=" + replycon,
-                    contentType: "application/x-www-form-urlencoded",
-                    success: function (result) {
-                        let htmlcode = "";
-                        if (result.length > 0) {
-                            $.each(result, function (i, v) {
-                                if (v.mem_id == "<%=loginMember.getMem_id()%>") {
-                                    htmlcode += '<li>';
-                                    htmlcode += '    <div class="rp-r-wrap">';
-                                    htmlcode += '        <div class="rp-r-w-prf">';
-                                    if(v.profileVo == undefined || v.profileVo.profile_photo != null){
-                                        htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
-                                    }else{
-                                        htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
-                                    }
-                                    htmlcode += '        </div>';
-                                    htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
-                                    htmlcode += '            <div class="rp-r-w-con-warp">';
-                                    htmlcode += '                <span class="rp-r-w-nick">' + v.mem_nickname + '</span>';
-                                    htmlcode += '                <span class="rp-r-w-con">' + v.reply_con + '</span>';
-                                    htmlcode += '            </div>';
-                                    htmlcode += '            <div class="rp-r-w-btn-warp">';
-                                    if (parentreindex != 1) {
-                                        htmlcode += '<a class="btn s-btn re-re-btn" data-reindex=' + v.reply_index + '>답글</a>';
-                                    }
-                                    htmlcode += '                <a class="btn s-btn re-up-btn" data-reindex=' + v.reply_index + '>수정</a>';
-                                    htmlcode += '                <a class="btn s-btn re-del-btn" data-reindex=' + v.reply_index + ' href="<%=request.getContextPath() %>/reply/replyDelete.do?replyindex=' + v.reply_index + '">삭제</a>';
-                                    htmlcode += '            </div>';
-                                    htmlcode += '            <div class="rp-r-w-reply-warp"></div>';
-                                    htmlcode += '        </div>';
-                                    htmlcode += '    </div>';
-                                    htmlcode += '</li>';
-                                } else {
-                                    htmlcode += '<li>';
-                                    htmlcode += '    <div class="rp-r-wrap">';
-                                    htmlcode += '        <div class="rp-r-w-prf">';
-                                    if(v.profileVo == undefined || v.profileVo.profile_photo != null){
-                                        htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
-                                    }else{
-                                        htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
-                                    }
-                                    htmlcode += '        </div>';
-                                    htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
-                                    htmlcode += '            <div class="rp-r-w-con-warp">';
-                                    htmlcode += '                <span class="rp-r-w-nick">' + v.mem_nickname + '</span>';
-                                    htmlcode += '                <span class="rp-r-w-con">' + v.reply_con + '</span>';
-                                    htmlcode += '            </div>';
-                                    htmlcode += '            <div class="rp-r-w-btn-warp">';
-                                    if (parentreindex != 1) {
-                                        htmlcode += '<a class="btn s-btn re-re-btn" data-reindex=' + v.reply_index + '>답글</a>';
-                                    }
-                                    htmlcode += '                <a class="btn s-btn re-report-btn" href="/report.do?nickname=' + v.mem_nickname + '" data-reindex=' + v.reply_index + '>신고</a>';
-                                    htmlcode += '            </div>';
-                                    htmlcode += '            <div class="rp-r-w-reply-warp"></div>';
-                                    htmlcode += '        </div>';
-                                    htmlcode += '    </div>';
-                                    htmlcode += '</li>';
-                                }
-                            });
-                        }
-                        if (parentreindex != 1) {
-                            $('.a-c-rp[data-index=' + postindex + '] .a-c-rp-r ul').html(htmlcode);
-                        } else {
-                            $('.a-c-rp[data-index=' + postindex + '] .a-c-rp-r ul .rp-r-w-container[data-reindex=' + reindex + ']').append(htmlcode);
-                        }
-                    },
-                    error: function (error) {
-                        console.error('댓글 수정 실패:', error);
-                    },
-                    dataType: "json"
-                });
-            });
-        });
-
-        // 댓글 수정 취소
-        $(document).on("click", ".btnCancel", function () {
-            let reindex = $(this).data("reindex");
-
-            // 댓글 내용 살리기
-            $(this).parents(".rp-r-w-con-warp").find(".rp-r-w-con").css("display", "inline");
-
-            $("#spn" + reindex).remove();
-            $(".rp-r-w-btn-warp .re-up-btn[data-reindex=" + reindex + "]").removeClass("unvis");
-        });
-
-        // 답글 쓰기 클릭시
-        $(document).on("click", ".re-re-btn", function () {
-            let reindex = $(this).data("reindex");
-            let postindex = $(this).parents(".a-c-rp-w").data("index");
-            $(this).parents(".rp-r-w-btn-warp").find(".btn").css("display", "none");
-
-            $(this).parents(".rp-r-w-btn-warp").append(`
-                <span id="spn\${reindex}">
-                    <form action="<%=request.getContextPath() %>/reply/replyInsert.do" method="post">
-                        <input type="text" id="pindex\${postindex}" name="post_index" value="\${postindex}" hidden/>
-                        <input type="text" id="rindex\${reindex}" name="Replyindex" value="\${reindex}" hidden/>
-                        <input type="text" name="mem_id" value="<%=loginMember.getMem_id()%>" hidden/>
-                        <input type="text" id="txtCon\${reindex}" name="reply_con" value="" placeholder="답글을 입력하세요"/>
-                        <button type="submit" class="rereply-insert-btn btn" data-reindex="\${reindex}">답글</button>
-                    </form>
-                </span>
-            `);
-
-            // 대댓글(답글) 가져오기
-            $.ajax({
-                url: "/reply/getreplyreply.do",
-                type: "post",
-                data: "postindex=" + postindex + "&Replyindex=" + reindex,
-                contentType: "application/x-www-form-urlencoded",
-                success: function (result) {
-                    let htmlcode = "";
-                    if (result.length > 0) {
-                        $.each(result, function (i, v) {
-                            if (v.mem_id == "<%=loginMember.getMem_id()%>") {
-                                htmlcode += '<li>';
-                                htmlcode += '    <div class="rp-r-wrap">';
-                                htmlcode += '        <div class="rp-r-w-prf">';
-                                if(v.profileVo == undefined || v.profileVo.profile_photo != null){
-                                    htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
-                                }else{
-                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
-                                }
-                                htmlcode += '        </div>';
-                                htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
-                                htmlcode += '            <div class="rp-r-w-con-warp">';
-                                htmlcode += '                <span class="rp-r-w-nick">' + v.mem_nickname + '</span>';
-                                htmlcode += '                <span class="rp-r-w-con">' + v.reply_con + '</span>';
-                                htmlcode += '            </div>';
-                                htmlcode += '            <div class="rp-r-w-btn-warp">';
-                                htmlcode += '                <a class="btn s-btn re-re-up-btn" data-reindex=' + v.reply_index + '>수정</a>';
-                                htmlcode += '                <a class="btn s-btn re-del-btn" data-reindex=' + v.reply_index + ' href="<%=request.getContextPath() %>/reply/replyDelete.do?replyindex=' + v.reply_index + '">삭제</a>';
-                                htmlcode += '            </div>';
-                                htmlcode += '        </div>';
-                                htmlcode += '    </div>';
-                                htmlcode += '</li>';
-                            } else {
-                                htmlcode += '<li>';
-                                htmlcode += '    <div class="rp-r-wrap">';
-                                htmlcode += '        <div class="rp-r-w-prf">';
-                                if(v.profileVo == undefined || v.profileVo.profile_photo != null){
-                                    htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
-                                }else{
-                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
-                                }
-                                htmlcode += '        </div>';
-                                htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
-                                htmlcode += '            <div class="rp-r-w-con-warp">';
-                                htmlcode += '                <span class="rp-r-w-nick">' + v.mem_nickname + '</span>';
-                                htmlcode += '                <span class="rp-r-w-con">' + v.reply_con + '</span>';
-                                htmlcode += '            </div>';
-                                htmlcode += '            <div class="rp-r-w-btn-warp">';
-                                htmlcode += '                <a class="btn s-btn re-report-btn" href="/report.do?nickname=' + v.mem_nickname + '" data-reindex=' + v.reply_index + '>신고</a>';
-                                htmlcode += '            </div>';
-                                htmlcode += '        </div>';
-                                htmlcode += '    </div>';
-                                htmlcode += '</li>';
-                            }
-                        });
-                    }
-                    $('.a-c-rp[data-index=' + postindex + '] .a-c-rp-r ul .rp-r-w-container[data-reindex=' + reindex + '] .rp-r-w-reply-warp').append(htmlcode);
-                },
-                dataType: "json"
-            });
-        });
-
-        // 답글 작성 후 가져오기
-        $(document).on('click', ".rereply-insert-btn", function (e) {
-            e.preventDefault();
-            let postindex = $(this).parent().find("input[name=post_index]").val();
-            let memid = $(this).parent().find("input[name=mem_id]").val();
-            let replycon = $(this).parent().find("input[name=reply_con]").val();
-            let Replyindex = $(this).parents(".rp-r-w-container").data("reindex");
-
-            if (replycon == "" || replycon == null) {
-                alert("댓글을 입력해주세요");
-                $(this).parent().find("input[name=reply_con]").focus();
-                return;
-            }
-
-            // 답글 작성 후 가져오기
-            $.ajax({
-                url: "/reply/replyreplyInsert.do",
-                type: "post",
-                data: {
-                    "postindex": postindex,
-                    "memid": memid,
-                    "replycon": replycon,
-                    "Replyindex": Replyindex
-                },
-                contentType: "application/x-www-form-urlencoded",
-                success: function (result) {
-                    let htmlcode = "";
-                    if (result.length > 0) {
-                        $.each(result, function (i, v) {
-                            if (v.mem_id == "<%=loginMember.getMem_id()%>") {
-                                htmlcode += '<li>';
-                                htmlcode += '    <div class="rp-r-wrap">';
-                                htmlcode += '        <div class="rp-r-w-prf">';
-                                if(v.profileVo == undefined || v.profileVo.profile_photo != null){
-                                    htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
-                                }else{
-                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
-                                }
-                                htmlcode += '        </div>';
-                                htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
-                                htmlcode += '            <div class="rp-r-w-con-warp">';
-                                htmlcode += '                <span class="rp-r-w-nick">' + v.mem_nickname + '</span>';
-                                htmlcode += '                <span class="rp-r-w-con">' + v.reply_con + '</span>';
-                                htmlcode += '            </div>';
-                                htmlcode += '            <div class="rp-r-w-btn-warp">';
-                                htmlcode += '                <a class="btn s-btn re-re-up-btn" data-reindex=' + v.reply_index + '>수정</a>';
-                                htmlcode += '                <a class="btn s-btn re-del-btn" data-reindex=' + v.reply_index + ' href="<%=request.getContextPath() %>/reply/replyDelete.do?replyindex=' + v.reply_index + '">삭제</a>';
-                                htmlcode += '            </div>';
-                                htmlcode += '        </div>';
-                                htmlcode += '    </div>';
-                                htmlcode += '</li>';
-                            } else {
-                                htmlcode += '<li>';
-                                htmlcode += '    <div class="rp-r-wrap">';
-                                htmlcode += '        <div class="rp-r-w-prf">';
-                                if(v.profileVo == undefined || v.profileVo.profile_photo != null){
-                                    htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
-                                }else{
-                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
-                                }
-                                htmlcode += '        </div>';
-                                htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
-                                htmlcode += '            <div class="rp-r-w-con-warp">';
-                                htmlcode += '                <span class="rp-r-w-nick">' + v.mem_nickname + '</span>';
-                                htmlcode += '                <span class="rp-r-w-con">' + v.reply_con + '</span>';
-                                htmlcode += '            </div>';
-                                htmlcode += '            <div class="rp-r-w-btn-warp">';
-                                htmlcode += '                <a class="btn s-btn re-report-btn" href="/report.do?nickname=' + v.mem_nickname + '" data-reindex=' + v.reply_index + '>신고</a>';
-                                htmlcode += '            </div>';
-                                htmlcode += '        </div>';
-                                htmlcode += '    </div>';
-                                htmlcode += '</li>';
-                            }
-                        });
-                    }
-                    $('.a-c-rp[data-index=' + postindex + '] .a-c-rp-r ul .rp-r-w-container[data-reindex=' + Replyindex + '] .rp-r-w-reply-warp').html(htmlcode);
-                    $("input[name=reply_con]").val("");
-                },
-                dataType: "json"
-            });
-        });
-
-        // 답글 수정 폼
-        $(document).on("click", ".re-re-up-btn", function () {
-            $(this).addClass("unvis");
-
-            let postidex = $(this).parents(".a-c-rp-w").data("index");
-            let reindex = $(this).data("reindex");
-            let con = $(this).parents(".rp-r-w-container").eq(0).find(".rp-r-w-con").html();
-
-            // 댓글 내용 가리기
-            $(this).parents(".rp-r-w-container").eq(0).find(".rp-r-w-con").css("display", "none");
-
-            $(this).parent().parent().children("div").eq(0).append(`
-                <span id="spn\reindex}">
-                    <form action="<%=request.getContextPath() %>/reply/replyreplyUpdate.do" method="post">
-                        <input type="text" id="txtindex\${reindex}" name="replyindex" value="\${reindex}" hidden/>
-                        <input type="text" id="txtCon\{reindex}" name="replycon" value="\${con}" />
-                        <button type="submit" class="rebtnConfirm" data-index="\${postidex}" data-con="\${con}" data-reindex="\${reindex}">확인</button>
-                        <button type="button" class="rebtnCancel" data-reindex="\${reindex}">취소</button>
-                    </form>
-                </span>
-            `);
-        });
-
-        // 답글 수정 확인 실행
-        $(document).on("click", ".rebtnConfirm", function () {
-            let reindex = $(this).data("reindex");
-            let postindex = $(this).parents(".a-c-rp-w").data("index");
-            let replycon = $(this).parents("form").find("input[name=replycon]").val();
-            let parentreindex = $(this).parents(".rp-r-w-container").eq(1).data("reindex");
-
-            // 대댓글(답글) 가져오기 수정후
-            $('form').submit(function (e) {
-                e.preventDefault();
-                $.ajax({
-                    type: 'POST',
-                    url: '/reply/replyreplyUpdate.do',
-                    data: {
-                        "postindex": postindex,
-                        "replyindex": reindex,
-                        "replycon": replycon,
-                        "parentreindex": parentreindex
-                    },
-                    contentType: "application/x-www-form-urlencoded",
-                    success: function (result) {
-                        let htmlcode = "";
-                        if (result.length > 0) {
-                            $.each(result, function (i, v) {
-                                if (v.mem_id == "<%=loginMember.getMem_id()%>") {
-                                    htmlcode += '<li>';
-                                    htmlcode += '    <div class="rp-r-wrap">';
-                                    htmlcode += '        <div class="rp-r-w-prf">';
-                                    if(v.profileVo == undefined || v.profileVo.profile_photo != null){
-                                        htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
-                                    }else{
-                                        htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
-                                    }
-                                    htmlcode += '        </div>';
-                                    htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
-                                    htmlcode += '            <div class="rp-r-w-con-warp">';
-                                    htmlcode += '                <span class="rp-r-w-nick">' + v.mem_nickname + '</span>';
-                                    htmlcode += '                <span class="rp-r-w-con">' + v.reply_con + '</span>';
-                                    htmlcode += '            </div>';
-                                    htmlcode += '            <div class="rp-r-w-btn-warp">';
-                                    htmlcode += '                <a class="btn s-btn re-re-up-btn" data-reindex=' + v.reply_index + '>수정</a>';
-                                    htmlcode += '                <a class="btn s-btn re-del-btn" data-reindex=' + v.reply_index + ' href="<%=request.getContextPath() %>/reply/replyDelete.do?replyindex=' + v.reply_index + '">삭제</a>';
-                                    htmlcode += '            </div>';
-                                    htmlcode += '        </div>';
-                                    htmlcode += '    </div>';
-                                    htmlcode += '</li>';
-                                } else {
-                                    htmlcode += '<li>';
-                                    htmlcode += '    <div class="rp-r-wrap">';
-                                    htmlcode += '        <div class="rp-r-w-prf">';
-                                    if(v.profileVo == undefined || v.profileVo.profile_photo != null){
-                                        htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
-                                    }else{
-                                        htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
-                                    }
-                                    htmlcode += '        </div>';
-                                    htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
-                                    htmlcode += '            <div class="rp-r-w-con-warp">';
-                                    htmlcode += '                <span class="rp-r-w-nick">' + v.mem_nickname + '</span>';
-                                    htmlcode += '                <span class="rp-r-w-con">' + v.reply_con + '</span>';
-                                    htmlcode += '            </div>';
-                                    htmlcode += '            <div class="rp-r-w-btn-warp">';
-                                    htmlcode += '                <a class="btn s-btn re-report-btn" href="/report.do?nickname=' + v.mem_nickname + '" data-reindex=' + v.reply_index + '>신고</a>';
-                                    htmlcode += '            </div>';
-                                    htmlcode += '        </div>';
-                                    htmlcode += '    </div>';
-                                    htmlcode += '</li>';
-                                }
-                            });
-                        }
-                        $('.a-c-rp[data-index=' + postindex + '] .a-c-rp-r ul .rp-r-w-container[data-reindex=' + reindex + ']').parents(".rp-r-w-container").find(".rp-r-w-reply-warp").html(htmlcode);
-                    },
-                    error: function (error) {
-                        console.error('댓글 수정 실패:', error);
-                    },
-                    dataType: "json"
-                });
-            });
-        });
-
-        // 답글 취소
-        $(document).on("click", ".rebtnCancel", function () {
-            let reindex = $(this).data("reindex");
-            $(this).parents(".rp-r-w-con-warp").eq(0).find(".rp-r-w-con").css("display", "inline");
-
-            $("#spn" + reindex).remove();
-            $(".rp-r-w-btn-warp .re-re-up-btn[data-reindex=" + reindex + "]").removeClass("unvis");
-        });
-
         // 무한 스크롤 관련 변수
         let page = 1; // 현재 페이지 번호
         let loading = false; // 로딩 상태
@@ -1579,7 +1211,26 @@
                             htmlcode += '                <span>' + pl.memVo.mem_nickname + '</span>';
                             htmlcode += '            </a>';
                             htmlcode += '        </div>';
-                            htmlcode += '        <div class="t-stemp">' + pl.post_date + '</div>';
+                            htmlcode += '        <div class="header-actions">';
+                            htmlcode += '            <div class="t-stemp">' + pl.post_date + '</div>';
+                            // 로그인한 회원과 작성자의 아이디가 같을때
+                            if (pl.mem_id == "<%=loginMember.getMem_id()%>") {
+                                htmlcode += '            <div class="action-buttons">';
+                                htmlcode += '                <div class="update-btn action-btn pointer" data-index=' + pl.post_index + '>';
+                                htmlcode += '                    <i class="fas fa-edit"></i>';
+                                htmlcode += '                </div>';
+                                htmlcode += '                <div class="delete-btn action-btn pointer" data-index=' + pl.post_index + '>';
+                                htmlcode += '                    <i class="fas fa-trash-alt"></i>';
+                                htmlcode += '                </div>';
+                                htmlcode += '            </div>';
+                            } else {
+                                htmlcode += '            <div class="action-buttons">';
+                                htmlcode += '                <a class="report-btn action-btn pointer" href="/report.do?nickname=' + pl.memVo.mem_nickname + '" data-index=' + pl.post_index + '>';
+                                htmlcode += '                    <i class="fas fa-flag"></i>';
+                                htmlcode += '                </a>';
+                                htmlcode += '            </div>';
+                            }
+                            htmlcode += '        </div>';
                             htmlcode += '    </div>';
                             htmlcode += '    <div class="a-bd">';
                             htmlcode += '        <div class="a-bd-img">';
@@ -1607,8 +1258,6 @@
                             }else{
                                 htmlcode += '                <svg aria-label="좋아요" class="heart" role="img" viewBox="0 0 24 24" height="24" width="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
                             }
-
-
                             htmlcode += '                    <title>좋아요</title>';
                             htmlcode += '                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>';
                             htmlcode += '                </svg>';
@@ -1620,19 +1269,6 @@
                             htmlcode += '                    <path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path>';
                             htmlcode += '                </svg>';
                             htmlcode += '            </div>';
-                            // 로그인한 회원과 작성자의 아이디가 같을때
-                            if (pl.mem_id == "<%=loginMember.getMem_id()%>") {
-                                htmlcode += '            <div class="btn-cover">';
-                                htmlcode += '                <div class="update-btn pointer" data-index=' + pl.post_index + '>수정</div>';
-                                htmlcode += '            </div>';
-                                htmlcode += '            <div class="btn-cover">';
-                                htmlcode += '                <div class="delete-btn pointer" data-index=' + pl.post_index + '>삭제</div>';
-                                htmlcode += '            </div>';
-                            } else {
-                                htmlcode += '            <div class="btn-cover">';
-                                htmlcode += '                <a class="report-btn pointer" href="/report.do?nickname=' + pl.memVo.mem_nickname + '" data-index=' + pl.post_index + '>신고</a>';
-                                htmlcode += '            </div>';
-                            }
                             htmlcode += '        </div>';
                             htmlcode += '    </div>';
                             htmlcode += '    <div class="a-con">';
@@ -1642,7 +1278,7 @@
                                 if(v == "#"){}else {htmlcode += '<div>'+v+'</div>';}
                             });
                             htmlcode += '        </div>';
-                            htmlcode += '        <div class="a-c-bd">' + pl.post_con.replace("\r\n", "<br>").replace("\r", "<br>").replace("\n", "<br>") + '<button class="read-more">더보기</button></div>';
+                            htmlcode += '        <div class="a-c-bd">' + pl.post_con.replace(/\r\n/g, "<br>").replace(/\r/g, "<br>").replace(/\n/g, "<br>") + '<button class="read-more">더보기</button></div>';
                             htmlcode += '        <div class="a-c-rp a-c-rp-w" data-index=' + pl.post_index + '>';
                             htmlcode += '            <form action="/reply/replyInsert.do" method="post">';
                             htmlcode += '                <input type="hidden" name="post_index" value="' + pl.post_index + '"/>';
@@ -1751,3 +1387,4 @@
 </script>
 </body>
 </html>
+
