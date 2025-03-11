@@ -78,6 +78,12 @@
             font-style: italic;
             color: #888;
         }
+        .friendBtn{
+            text-align: center;
+            vertical-align: middle;
+        }
+        .friendBtn img{    cursor: pointer;}
+        .table>tbody>tr>td{    vertical-align: middle;}
     </style>
 
     <script>

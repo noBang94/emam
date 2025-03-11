@@ -546,13 +546,13 @@
                                 <span class="toggleButton"></span>
                             </label>
                         </div>
-                        <div class="noti-set">
-                            <span>채팅 허용</span>
-                            <input type="checkbox" name="chatnoti" id="chattoggles" value="1" class="toggles" hidden="hidden"/>
-                            <label for="chattoggles" class="toggleSwitch">
-                                <span class="toggleButton"></span>
-                            </label>
-                        </div>
+<%--                        <div class="noti-set">--%>
+<%--                            <span>채팅 허용</span>--%>
+<%--                            <input type="checkbox" name="chatnoti" id="chattoggles" value="1" class="toggles" hidden="hidden"/>--%>
+<%--                            <label for="chattoggles" class="toggleSwitch">--%>
+<%--                                <span class="toggleButton"></span>--%>
+<%--                            </label>--%>
+<%--                        </div>--%>
                     </form>
                 </li>
                 <div class="dropdown-divider"></div>

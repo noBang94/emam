@@ -176,7 +176,7 @@
         update post set
             MEM_ID = #{mem_id},
             POST_CON = #{post_con},
---             POST_DATE = sysdate,
+            POST_DATE = sysdate,
             POST_VISIBLE = #{post_visible}
         where POST_INDEX = #{post_index}
     </update>
