@@ -387,12 +387,14 @@
         // 프로필 이미지에 사용자 이니셜 표시
         const userName = "<%= loginMemberVo.getMem_name() %>";
         const initial = userName.charAt(0);
+
         let getprofileimg = "<%= loginMemberVo.getPfVo().getProfile_photo() %>";
-        if(getprofileimg != null) {
+
+        if(getprofileimg != "upload/demo_logo.png" && getprofileimg != null ) {
             let htmlcode = '<img class="gnbprofilephoto" src="<%=request.getContextPath()%>/'+getprofileimg+'">';
             $(".profile-img").append(htmlcode)
         }else {
-            $(".profile-img").text(initial);
+            $(".profile-img").html("").text(initial);
         }
 
 

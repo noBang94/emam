@@ -30,7 +30,7 @@
         }
 
         .header {
-            background-color: #4f46e5;
+            background-color: #2196F3;
             color: white;
             padding: 1.5rem 2rem;
             position: relative;
@@ -177,7 +177,7 @@
         }
 
         .btn-primary {
-            background-color: #4f46e5;
+            background-color: #2196F3;
             color: white;
             box-shadow: 0 2px 5px rgba(79, 70, 229, 0.3);
         }

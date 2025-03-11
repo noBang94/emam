@@ -13,7 +13,8 @@
   List<PostVO> postList = (List<PostVO>) request.getAttribute("postList");
   boolean isMyProfile = (Boolean) request.getAttribute("isMyProfile");
   List<MemberVO> friendList = (List<MemberVO>) request.getAttribute("friendList");
-  String friendStatus = (String) request.getAttribute("friendStatus"); //친구 상태(null:상호작용 없음 / 0:신청중 / 1:친구)
+  boolean isFriend = (Boolean) request.getAttribute("isFriend"); // ⭐ 친구 여부 정보 추가됨 ⭐
+  String friendStatus = (String) request.getAttribute("friendStatus");
 %>
 
 <!DOCTYPE html>
@@ -23,7 +24,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SNS 프로필</title>
   <link rel="stylesheet" href="<%=request.getContextPath() %>/css/swiper-11.2.5.css" />
-  <%--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">--%>
   <style>
     * {
       margin: 0;
@@ -33,7 +33,7 @@
     }
 
     body {
-      background-color: #f9fafb;
+      background: linear-gradient(to bottom, #e0f2fe, #ffffff);
       color: #333;
     }
 
@@ -62,29 +62,10 @@
       letter-spacing: -0.5px;
     }
 
-    .header-actions {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .icon-button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0.5rem;
-      border-radius: 0.375rem;
-      transition: all 0.2s ease;
-    }
-
-    .icon-button:hover {
-      background-color: #f3f4f6;
-      transform: scale(1.05);
-    }
-
     /* 프로필 섹션 개선 */
     .profile-header {
       position: relative;
-      height: 400px;
+      height: 600px; /* 200px에서 600px로 늘림 */
       border-radius: 12px;
       overflow: hidden;
       margin-bottom: 80px;
@@ -155,7 +136,7 @@
     .edit-profile-btn {
       width: 100%;
       padding: 0.75rem 1.25rem;
-      background-color: #4f46e5;
+      background-color: #2196F3;
       color: white;
       border: none;
       border-radius: 8px;
@@ -171,7 +152,7 @@
     }
 
     .edit-profile-btn:hover {
-      background-color: #4338ca;
+      background-color: #2196F3;
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(79, 70, 229, 0.4);
     }
@@ -223,7 +204,8 @@
     .stat-value {
       font-size: 1.5rem;
       font-weight: 700;
-      color: #4f46e5;
+      color: #2196F3;
+
     }
 
     .stat-label {
@@ -252,14 +234,14 @@
     }
 
     .profile-link a {
-      color: #4f46e5;
+      color: #2196F3;
       text-decoration: none;
       font-weight: 500;
       transition: color 0.2s ease;
     }
 
     .profile-link a:hover {
-      color: #4338ca;
+      color: #2196F3;
       text-decoration: underline;
     }
 
@@ -286,7 +268,7 @@
       left: 0;
       width: 40px;
       height: 3px;
-      background-color: #4f46e5;
+      background-color: #2196F3;
       border-radius: 3px;
     }
 
@@ -296,7 +278,7 @@
       align-items: center;
       gap: 0.5rem;
       padding: 0.6rem 1.2rem;
-      background-color: #4f46e5;
+      background-color: #2196F3;
       color: white;
       border: none;
       border-radius: 8px;
@@ -308,7 +290,7 @@
     }
 
     .add-button:hover {
-      background-color: #4338ca;
+      background-color: #2196F3;
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(79, 70, 229, 0.4);
     }
@@ -514,71 +496,30 @@
       to { opacity: 1; }
     }
 
-
-    /* 친구 프로필 버튼 개선 */
-    .friend-profile-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 1.5rem;
-      margin-bottom: 2rem;
+    .modal-i-warp {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      width: 90%;
+      max-width: 1000px;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
     }
 
-    .friend-profile-buttons button {
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.2s ease;
-      border: none;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    .modal.view {
+      display: block;
     }
-
-    .friend-profile-buttons button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
-    }
-
-    .friend-profile-buttons button:active {
-      transform: translateY(-1px);
-    }
-
-    .friend-profile-buttons .btn-primary {
-      background-color: #4f46e5;
-      color: white;
-    }
-
-    .friend-profile-buttons .btn-primary:hover {
-      background-color: #4338ca;
-    }
-
-    .friend-profile-buttons .btn-secondary {
-      background-color: #4b5563;
-      color: white;
-    }
-
-    .friend-profile-buttons .btn-secondary:hover {
-      background-color: #374151;
-    }
-
-    .friend-profile-buttons .btn-danger {
-      background-color: #ef4444;
-      color: white;
-    }
-
-    .friend-profile-buttons .btn-danger:hover {
-      background-color: #dc2626;
-    }
-
 
     .btn_2th {
       display: flex;
       gap: 1rem;
     }
+
+
 
     .btn {
       padding: 0.6rem 1.2rem;
@@ -602,13 +543,9 @@
     }
 
     input[type="submit"].btn {
-      background-color: #4f46e5;
+      background-color: #2196F3;
       color: white;
       border: none;
-    }
-
-    input[type="submit"].btn:hover {
-      background-color: #4338ca;
     }
 
     textarea {
@@ -624,7 +561,7 @@
 
     textarea:focus {
       outline: none;
-      border-color: #4f46e5;
+      border-color: #2196F3;
       box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
     }
 
@@ -638,6 +575,7 @@
       width: 100%;
       height: 100%;
     }
+
 
     /* 토글 스위치 스타일 */
     .toggleSwitch-warp {
@@ -654,9 +592,31 @@
       background-color: #e5e7eb;
       border-radius: 30px;
       cursor: pointer;
+      margin: 0 10px;
+    }
+    .modal .toggleSwitch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 30px;
+      background-color: #e5e7eb;
+      border-radius: 30px;
+      cursor: pointer;
+      margin: 0 10px;
     }
 
     .toggleButton {
+       position: absolute;
+       top: 4px;
+       left: 4px;
+       width: 22px;
+       height: 22px;
+       border-radius: 50%;
+       background-color: white;
+       transition: all 0.3s ease;
+     }
+
+    .modal .toggleButton {
       position: absolute;
       top: 4px;
       left: 4px;
@@ -666,9 +626,16 @@
       background-color: white;
       transition: all 0.3s ease;
     }
+    .modal #updatetoggles:checked ~ .toggleSwitch .toggleButton{
+      left: calc(100% - 27px);
+    }
+
+    .modal #inserttoggles:checked ~ .toggleSwitch .toggleButton{
+      left: calc(100% - 27px);
+    }
 
     input[type="checkbox"]:checked + .toggleSwitch {
-      background-color: #4f46e5;
+      background-color: #2196F3;
     }
 
     input[type="checkbox"]:checked + .toggleSwitch .toggleButton {
@@ -707,6 +674,81 @@
     .post-card, .friend-item {
       animation: slideUp 0.5s ease-out;
     }
+
+    /* 통일된 친구 버튼 스타일 */
+    .friend-action-container {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+      width: 100%;
+    }
+
+    .friend-action-btn {
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      flex: 1;
+      text-decoration: none;
+      text-align: center;
+      color: white;
+    }
+
+    .friend-action-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .friend-action-btn:active {
+      transform: translateY(-1px);
+    }
+
+    .friend-request {
+      background-color: #2196F3;
+      color: white;
+    }
+
+    .friend-request:hover {
+      background-color: #2196F3;
+    }
+
+    .friend-cancel {
+      background-color: #f59e0b;
+      color: white;
+    }
+
+    .friend-cancel:hover {
+      background-color: #d97706;
+    }
+
+    .friend-delete {
+      background-color: #ef4444;
+      color: white;
+    }
+
+    .friend-delete:hover {
+      background-color: #dc2626;
+    }
+
+    .report-btn {
+      background-color: #6b7280;
+      color: white;
+    }
+
+    .report-btn:hover {
+      background-color: #4b5563;
+    }
+
     /* 모달 스타일 */
     .modal {display: none;position: fixed;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0,0,0,0.5);z-index: 1000}
     .modal.view {display: block;}
@@ -787,42 +829,39 @@
   <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.js"></script>
   <script>
     $(function () {
+
       //친구 신청 버튼 클릭 시
-      $(document).on("click", ".friendRequestBtn", function () {
+      $(document).on("click", ".friend-request", function () {
         //신청 데이터 전송하기
         $.ajax({
           url: "<%=request.getContextPath() %>/friend/friendRequest.do",
           type: "get",
           data: "toFriend="+'<%=pv.getMem_id()%>',
         });
-        $(this).attr("class", "friendReadyBtn");
-        $(this).attr("value", "친구 신청 취소");
-      });
-      //친구 삭제 버튼 클릭 시
-      $(document).on("click", ".friendDeleteBtn", function () {
-        $.ajax({
-          url: "<%=request.getContextPath() %>/friend/friendDelete.do",
-          type: "get",
-          data: "toFriend="+'<%=pv.getMem_id()%>',
-        });
-        $(this).attr("class", "friendRequestBtn");
-        $(this).attr("value", "친구 신청");
-      });
-      //친구 신청중 버튼 클릭 시 (신청 취소)
-      $(document).on("click", ".friendReadyBtn", function () {
-        $.ajax({
-          url: "<%=request.getContextPath() %>/friend/friendDelete.do",
-          type: "get",
-          data: "toFriend="+'<%=pv.getMem_id()%>',
-        });
-        $(this).attr("class", "friendRequestBtn");
-        $(this).attr("value", "친구 신청");
+        $(this).removeClass("friend-request").addClass("friend-cancel");
+        $(this).html('<i class="fas fa-user-clock"></i> 친구 신청 취소');
       });
 
-      $(".modal").on('click', function (e) {
-        if (!$(e.target).closest('.modal-i-warp').length) {
-          $(this).removeClass("view");
-        }
+      //친구 삭제 버튼 클릭 시
+      $(document).on("click", ".friend-delete", function () {
+        $.ajax({
+          url: "<%=request.getContextPath() %>/friend/friendDelete.do",
+          type: "get",
+          data: "toFriend="+'<%=pv.getMem_id()%>',
+        });
+        $(this).removeClass("friend-delete").addClass("friend-request");
+        $(this).html('<i class="fas fa-user-plus"></i> 친구 신청');
+      });
+
+      //친구 신청중 버튼 클릭 시 (신청 취소)
+      $(document).on("click", ".friend-cancel", function () {
+        $.ajax({
+          url: "<%=request.getContextPath() %>/friend/friendDelete.do",
+          type: "get",
+          data: "toFriend="+'<%=pv.getMem_id()%>',
+        });
+        $(this).removeClass("friend-cancel").addClass("friend-request");
+        $(this).html('<i class="fas fa-user-plus"></i> 친구 신청');
       });
 
     })
@@ -831,6 +870,9 @@
 <body>
 <jsp:include page="/WEB-INF/view/common/gnb.jsp" />
 <div class="container">
+  <header>
+    <!-- 설정 버튼과 ... 버튼 제거 -->
+  </header>
 
   <!-- 배경 이미지 개선 -->
   <div class="profile-header" style="background-image: url('<%=request.getContextPath()%>/<%=pv.getProfile_headerphoto()%>')">
@@ -853,7 +895,7 @@
 
     <div class="profile-info">
       <h2 class="profile-name"><%=mv.getMem_nickname()%></h2>
-      <p class="profile-username"><%=mv.getMem_id()%></p>
+      <p class="profile-username">@<%=mv.getMem_id()%></p>
 
       <div class="profile-stats">
         <div class="stat-item">
@@ -873,54 +915,45 @@
         </p>
       </div>
 
-      <%@ page import="java.net.URLEncoder" %>
-
       <div class="profile-link">
         <h3><i class="fas fa-link"></i> 링크</h3>
         <p>
-          <%
-            String profileUrl = pv.getProfile_url();
-            if (profileUrl == null || profileUrl.trim().isEmpty()) {
-          %>
+          <%if(pv.getProfile_url()==null){%>
           <span>링크가 없습니다</span>
-          <%
-          } else {
-            if (!profileUrl.startsWith("http://") && !profileUrl.startsWith("https://")) {
-              profileUrl = "http://" + profileUrl; // 프로토콜 추가
-            }
-            String encodedUrl = URLEncoder.encode(profileUrl, "UTF-8"); // URL 인코딩
-          %>
-          <a href="<%=profileUrl%>" target="_blank"><%=profileUrl%></a>
-          <%
-            }
-          %>
+          <%}else {%>
+          <a href="<%=pv.getProfile_url()%>" target="_blank"><%=pv.getProfile_url()%></a>
+          <%}%>
         </p>
       </div>
 
-      <% if (!isMyProfile) { %> <%-- [⭐ 조건부 렌더링: 타인의 프로필일 때만 표시 ⭐] --%>
-      <div class="friendBtn">
-        <%-- 🚩 [조건부 렌더링]: 친구 여부에 따라 다른 버튼 표시 --%>
-            <%
-            if(friendStatus.equals("null")) { //상호작용 없는 상태
-            %>
-            <input type="button" class="friendRequestBtn" value="친구 신청">
-            <%
-            }else if(friendStatus.equals("0")) { //친구 신청중
-            %>
-            <input type="button" class="friendReadyBtn" value="친구 신청 취소">
-            <%
-            }else { //친구 삭제
-            %>
-            <input type="button" class="friendDeleteBtn" value="친구 삭제">
-            <%
-            }
-            %>
-        <%--        <a class="btn btn-danger" href="/report.do?nickname=<%=pv.getMem_nickname()%>">--%>
-        <a class="btn btn-danger" href="/report.do?nickname=<%=pv.getMem_nickname()%>">
+      <% if (!isMyProfile) { %>
+      <div class="friend-action-container">
+        <%
+          if(friendStatus.equals("null")) { //상호작용 없는 상태
+        %>
+        <button type="button" class="friend-action-btn friend-request">
+          <i class="fas fa-user-plus"></i> 친구 신청
+        </button>
+        <%
+        }else if(friendStatus.equals("0")) { //친구 신청중
+        %>
+        <button type="button" class="friend-action-btn friend-cancel">
+          <i class="fas fa-user-clock"></i> 친구 신청 취소
+        </button>
+        <%
+        }else { //친구 삭제
+        %>
+        <button type="button" class="friend-action-btn friend-delete">
+          <i class="fas fa-user-minus"></i> 친구 삭제
+        </button>
+        <%
+          }
+        %>
+        <a href="/report.do?nickname=<%=pv.getMem_nickname()%>" class="friend-action-btn report-btn">
           <i class="fas fa-flag"></i> 계정 신고
         </a>
       </div>
-      <% } %> <%-- [⭐ 조건부 렌더링 종료: 친구 프로필일 때만 표시 ⭐] --%>
+      <% } %>
 
     </div>
   </div>
@@ -954,16 +987,16 @@
         </div>
         <div class="post-content">
           <h3 class="post-title">${post.post_con}</h3>
-          <p class="post-date"><i class="far fa-calendar-alt"></i> ${post.post_date}</p>
+          <p class="post-date"><i class="far fa-calendar-alt"></i><%=post.getPost_date()%></p>
           <% if (isMyProfile) { %>
           <div class="post-actions">
             <form action="<%=request.getContextPath()%>/post/updatePostForm.do" class="post_modi_btn" method="get" style="display:inline;">
               <input type="hidden" name="post_index" value="${post.getPost_index()}">
-              <button type="button" class="edit-button update-btn" data-index="<%=post.getPost_index()%>"><i class="fas fa-edit"></i> 수정</button>
+            <button type="button" class="edit-button update-btn" data-index="<%=post.getPost_index()%>"><i class="fas fa-edit"></i> 수정</button>
             </form>
             <form action="<%=request.getContextPath()%>/post/deletePost.do" method="post" style="display:inline;">
               <input type="hidden" name="post_index" value="${post.getPost_index()}">
-              <button type="button" class="delete-button delete-btn" data-index="<%=post.getPost_index()%>"><i class="fas fa-trash-alt"></i> 삭제</button>
+            <button type="button" class="delete-button delete-btn" data-index="<%=post.getPost_index()%>"><i class="fas fa-trash-alt"></i> 삭제</button>
             </form>
           </div>
           <% } %>
@@ -986,10 +1019,12 @@
   <div class="friends-section">
     <div class="section-header">
       <h2 class="section-title">친구</h2>
+      <% if (isMyProfile) { %>
       <p>
         <%=mv.getMem_nickname()%> 님의 친구 목록
       </p>
-
+      <% } %>
+      <!-- 친구 추가/삭제 버튼 제거 -->
     </div>
 
     <div class="friends-grid">
@@ -1019,7 +1054,6 @@
     </div>
   </div>
 </div>
-
 <!-- 게시글 수정 모달 -->
 <div class="post-update-modal modal">
   <div class="modal-i-warp">
@@ -1030,9 +1064,7 @@
           <div>
             <input type="text" name="postindex" hidden="hidden"/>
             <input type="text" name="postwriter" value="<%=loginMember.getMem_id()%>" hidden="hidden"/>
-            <div>
               <textarea name="postcon" placeholder="내용을 입력하세요"></textarea>
-            </div>
           </div>
           <div class="toggleSwitch-warp">
             <input type="checkbox" name="postvis" id="updatetoggles" value="Y" />
@@ -1041,8 +1073,11 @@
             </label>
             <span>공개 여부</span>
           </div>
+
         </div>
+
       </div>
+
       <div class="modal-footer">
         <div class="btn_2th">
           <a href="javascript:void(0);" class="btn close-btn">닫기</a>
@@ -1052,8 +1087,7 @@
     </form>
   </div>
 </div>
-
-<!-- 게시글 작성 모달 -->
+<<!-- 게시글 작성 모달 -->
 <div class="post-insert-modal modal">
   <div class="modal-i-warp">
     <form action="<%=request.getContextPath() %>/post/insertpost.do" method="post" enctype="multipart/form-data">
@@ -1076,18 +1110,18 @@
             <div>
               <textarea name="postcon" placeholder="내용을 입력하세요"></textarea>
             </div>
+            <div class="toggleSwitch-warp">
+              <input type="checkbox" name="postvis" id="inserttoggles" value="Y" hidden="hidden"/>
+              <span>공개 여부</span>
+              <label for="inserttoggles" class="toggleSwitch">
+                <span class="toggleButton"></span>
+              </label>
+            </div>
           </div>
-          <div class="toggleSwitch-warp">
-            <input type="checkbox" name="postvis" id="inserttoggles" value="Y" hidden="hidden"/>
 
-            <span>공개 여부</span>
-            <label for="inserttoggles" class="toggleSwitch">
-              <span class="toggleButton"></span>
-            </label>
-
-          </div>
         </div>
       </div>
+
       <div class="modal-footer">
         <div class="btn_2th">
           <a href="javascript:void(0);" class="btn close-btn">닫기</a>
@@ -1114,7 +1148,6 @@
     </form>
   </div>
 </div>
-
 </body>
 <script src="<%=request.getContextPath() %>/js/swiper-11.2.5.js"></script>
 <script>
@@ -1252,5 +1285,6 @@
     }
   });
 </script>
+
 </html>
 
