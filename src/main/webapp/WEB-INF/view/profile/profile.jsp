@@ -585,65 +585,61 @@
     }
 
     .toggleSwitch {
-      width: 36px;
-      height: 18px;
-      display: block;
       position: relative;
-      border-radius: 18px;
-      background-color: #e0e0e0;
+      display: inline-block;
+      width: 60px;
+      height: 30px;
+      background-color: #e5e7eb;
+      border-radius: 30px;
       cursor: pointer;
-      margin: 8px;
-      transition: all 0.2s ease;
+      margin: 0 10px;
     }
     .modal .toggleSwitch {
-      width: 36px;
-      height: 18px;
-      display: block;
       position: relative;
-      border-radius: 18px;
-      background-color: #e0e0e0;
+      display: inline-block;
+      width: 60px;
+      height: 30px;
+      background-color: #e5e7eb;
+      border-radius: 30px;
       cursor: pointer;
-      margin: 8px;
-      transition: all 0.2s ease;
+      margin: 0 10px;
     }
 
     .toggleButton {
+       position: absolute;
+       top: 4px;
+       left: 4px;
+       width: 22px;
+       height: 22px;
+       border-radius: 50%;
+       background-color: white;
+       transition: all 0.3s ease;
+     }
+
+    .modal .toggleButton {
       position: absolute;
       top: 4px;
       left: 4px;
-      width: 16px;
-      height: 16px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
       background-color: white;
       transition: all 0.3s ease;
     }
-
-    .modal .toggleButton {
-      width: 14px;
-      height: 14px;
-      position: absolute;
-      top: 50%;
-      left: 4px;
-      transform: translateY(-50%);
-      border-radius: 50%;
-      background: #64B5F6;
-    }
     .modal #updatetoggles:checked ~ .toggleSwitch .toggleButton{
-      left: calc(100% - 16px);
-      background: #fff;
+      left: calc(100% - 27px);
     }
 
     .modal #inserttoggles:checked ~ .toggleSwitch .toggleButton{
-      left: calc(100% - 16px);
-      background: #fff;
+      left: calc(100% - 27px);
     }
 
     input[type="checkbox"]:checked + .toggleSwitch {
-      background-color: #64B5F6 !important;
+      background-color: #2196F3;
     }
 
     input[type="checkbox"]:checked + .toggleSwitch .toggleButton {
-      left: calc(100% - 16px);
+      left: calc(100% - 26px);
     }
 
     input[type="checkbox"] {
@@ -996,11 +992,11 @@
           <div class="post-actions">
             <form action="<%=request.getContextPath()%>/post/updatePostForm.do" class="post_modi_btn" method="get" style="display:inline;">
               <input type="hidden" name="post_index" value="${post.getPost_index()}">
-              <button type="button" class="edit-button update-btn" data-index="<%=post.getPost_index()%>"><i class="fas fa-edit"></i> 수정</button>
+            <button type="button" class="edit-button update-btn" data-index="<%=post.getPost_index()%>"><i class="fas fa-edit"></i> 수정</button>
             </form>
             <form action="<%=request.getContextPath()%>/post/deletePost.do" method="post" style="display:inline;">
               <input type="hidden" name="post_index" value="${post.getPost_index()}">
-              <button type="button" class="delete-button delete-btn" data-index="<%=post.getPost_index()%>"><i class="fas fa-trash-alt"></i> 삭제</button>
+            <button type="button" class="delete-button delete-btn" data-index="<%=post.getPost_index()%>"><i class="fas fa-trash-alt"></i> 삭제</button>
             </form>
           </div>
           <% } %>
@@ -1068,7 +1064,7 @@
           <div>
             <input type="text" name="postindex" hidden="hidden"/>
             <input type="text" name="postwriter" value="<%=loginMember.getMem_id()%>" hidden="hidden"/>
-            <textarea name="postcon" placeholder="내용을 입력하세요"></textarea>
+              <textarea name="postcon" placeholder="내용을 입력하세요"></textarea>
           </div>
           <div class="toggleSwitch-warp">
             <input type="checkbox" name="postvis" id="updatetoggles" value="Y" />
