@@ -245,6 +245,10 @@
 
       // 회원가입 버튼 클릭 이벤트
       $('#send').on('click', () => {
+        if(!nicknameChecked) {
+          alert("닉네임 중복 확인을 해주세요.")
+          return;
+        }
         const formData = {
           mem_id: $('#mem_id').val(),
           mem_name: $('#mem_name').val(),
@@ -375,6 +379,14 @@
                 .catch(err => console.log(err));
       });
 
+      let nicknameChecked = false; // 닉네임 중복 확인 상태 변수 추가
+
+      // 닉네임 변경 이벤트 감지 및 상태 초기화
+      $('#mem_nickname').on('input', function() {
+        nicknameChecked = false;
+        $('#nicknameCheckMsg').empty(); // 메시지 초기화
+      });
+
       // 닉네임 중복 확인 버튼 클릭 이벤트
       $('#nicknameCheckBtn').on('click', function() {
         const nickname = $('#mem_nickname').val();
@@ -391,6 +403,7 @@
                 })
                 .then(result => {
                   $('#nicknameCheckMsg').html(result.message).css('color', result.available ? 'green' : 'red');
+                  nicknameChecked = result.available; // 중복 확인 결과 업데이트
                 })
                 .catch(err => console.log(err));
       });

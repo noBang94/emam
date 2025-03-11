@@ -51,7 +51,7 @@
 
     <!--닉네임 중복검사-->
     <select id="getMemberNicknameCount" resultType="boolean" parameterType="String">
-        select case when count(*) > 0 then true else false end
+        select case when count(*) > 0 then 1 else 0 end
         from member
         where MEM_NICKNAME=#{mem_nickname}
     </select>
