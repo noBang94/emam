@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
 <%@ page import="kr.or.ddit.emam.vo.NoticeVO" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.sql.Timestamp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -522,13 +524,21 @@
             String errorMessage = (String) request.getAttribute("errorMessage");
             List<NoticeVO> noticeList = (List<NoticeVO>) request.getAttribute("noticeList");
             if (errorMessage == null && noticeList != null && !(noticeList.isEmpty())) {
+              SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
               for (NoticeVO notice : noticeList) {
+                // Timestamp를 직접 포맷팅
+                Timestamp timestamp = notice.getNotice_date();
+                String formattedDate = "";
+                if (timestamp != null) {
+                  formattedDate = outputFormat.format(timestamp);
+                }
           %>
           <tr onclick="showNoticeDetail('<%= notice.getNotice_index() %>')" style="cursor: pointer;">
             <td><%= notice.getNotice_index() %></td>
             <td><%= notice.getNotice_title() %></td>
             <td><%= notice.getNotice_con() %></td>
-            <td><%= notice.getNotice_date() %></td>
+            <td><%= formattedDate %></td>
           </tr>
           <%
             }
