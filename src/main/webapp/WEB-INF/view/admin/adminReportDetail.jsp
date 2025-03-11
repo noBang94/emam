@@ -340,6 +340,10 @@
           success: function(response) {
             if (response === "success") {
               alert("접수가 완료되었습니다.");
+              // Hide the process button after successful processing
+              $("#processButton").hide();
+              // Update the status display without page refresh
+              $("#statusDisplay").text("처리 완료");
               window.location.href = "<%=request.getContextPath()%>/admin/reportList.do";
             } else {
               alert("접수에 실패했습니다.");
@@ -419,15 +423,17 @@
       </tr>
       <tr>
         <td>처리 상태</td>
-        <td><%= reportVO.getReportStatus().equals("Y") ? "처리 완료" : "미처리" %></td>
+        <td id="statusDisplay"><%= reportVO.getReportStatus().equals("Y") ? "처리 완료" : "미처리" %></td>
       </tr>
       </tbody>
     </table>
 
     <div class="button-container">
-      <button type="button" class="btn btn-success" onclick="processReport('<%= reportVO.getReportId() %>')">
+      <% if (!reportVO.getReportStatus().equals("Y")) { %>
+      <button id="processButton" type="button" class="btn btn-success" onclick="processReport('<%= reportVO.getReportId() %>')">
         <i class="fas fa-check-circle"></i> 접수
       </button>
+      <% } %>
       <button type="button" class="btn btn-secondary" onclick="location.href='<%=request.getContextPath()%>/admin/reportList.do'">
         <i class="fas fa-times-circle"></i> 취소
       </button>
