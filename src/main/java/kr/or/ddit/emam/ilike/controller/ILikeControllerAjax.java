@@ -14,6 +14,8 @@ import kr.or.ddit.emam.notification.service.INotificationService;
 import kr.or.ddit.emam.notification.service.NotificationServiceImpl;
 import kr.or.ddit.emam.post.service.IPostService;
 import kr.or.ddit.emam.post.service.PostServiceImpl;
+import kr.or.ddit.emam.usersettings.service.IUsersettingsService;
+import kr.or.ddit.emam.usersettings.service.UsersettingsServiceImpl;
 import kr.or.ddit.emam.vo.*;
 
 import java.io.IOException;
@@ -78,7 +80,15 @@ public class ILikeControllerAjax extends HttpServlet {
                     notificationContent = memberVo.getMem_nickname() + "님이 " + postVo.getPost_con() + " 게시글을 마음에 들어합니다.";
                 }
                 notificationVo.setNotification_con(notificationContent);
-                notificationVo.setNotification_isread(0);
+                //신청 받는 유저의 유저세팅 확인
+                IUsersettingsService usersettingsService = UsersettingsServiceImpl.getInstance();
+                UsersettingsVO usersettingsVo = new UsersettingsVO();
+                usersettingsVo = usersettingsService.checkUsersettings(postVo.getMem_id());
+                if(usersettingsVo.getSet_ilike() == 1){
+                    notificationVo.setNotification_isread(0);
+                }else{
+                    notificationVo.setNotification_isread(1);
+                }
                 notificationService.insertNotification(notificationVo);
             }
         }
