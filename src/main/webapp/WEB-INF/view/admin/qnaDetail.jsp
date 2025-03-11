@@ -372,13 +372,13 @@
       </div>
 
       <div class="comment-section">
-        <h3>댓글</h3>
+        <h3>문의 답변</h3>
         <form action="<%=request.getContextPath() %>/admin/qnaComment.do" method="post">
           <input type="hidden" name="inquiryIndex" value="<%= inquiry.getInquiry_index() %>">
           <div class="form-group">
-            <textarea class="form-control" name="commentContent" rows="3" placeholder="댓글을 입력하세요."></textarea>
+            <textarea class="form-control" name="commentContent" rows="3" placeholder="문의 답변을 입력하세요."></textarea>
           </div>
-          <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> 댓글 등록</button>
+          <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> 답변 등록</button>
         </form>
 
         <%
@@ -395,7 +395,7 @@
         <%
         } else {
         %>
-        <p class="text-muted">댓글이 없습니다.</p>
+        <p class="text-muted">답변이 없습니다.</p>
         <%
           }
         %>
