@@ -509,7 +509,7 @@
   const userListElement = document.getElementById('userList');
   const systemMessageDiv = document.getElementById("systemMessage");
 
-  const socket = new WebSocket('ws://localhost:8080/chat-ws');
+  const socket = new WebSocket('ws://192.168.35.42:8080/chat-ws');
 
   socket.onopen = () => {
     console.log("Connected to chat server.");

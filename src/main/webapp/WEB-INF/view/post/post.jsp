@@ -850,7 +850,7 @@
                         </div>
                     </div>
                     <div class="toggleSwitch-warp">
-                        <input type="checkbox" name="postvis" id="updatetoggles" value="Y" />
+                        <input type="checkbox" name="postvis" id="updatetoggles" value="Y" hidden="hidden"/>
                         <label for="updatetoggles" class="toggleSwitch">
                             <span class="toggleButton"></span>
                         </label>
