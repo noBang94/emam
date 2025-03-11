@@ -131,12 +131,12 @@
     .gnb-search {
         margin-left: 20px;
         flex: 1.2;
-        max-width: 350px;
+        max-width: 450px; /* 검색창 최대 너비 증가 */
     }
 
     .gnb .search-warp {
         display: flex;
-        width: 100%;
+        width: 80%;
         position: relative;
     }
 
@@ -150,6 +150,7 @@
         color: #333;
         background-color: rgba(255, 255, 255, 0.9);
         transition: all 0.2s ease;
+        width: 100%; /* 검색창 너비 100%로 설정 */
     }
 
     .gnb .search-warp input[type="text"]:focus {
@@ -195,7 +196,9 @@
         right: 0;
         top: 0;
         height: 36px;
+        width: 40px; /* 검색 버튼 너비 축소 */
         border-radius: 0 4px 4px 0;
+        padding: 0; /* 패딩 제거 */
     }
 
     .gnb-button:hover {
@@ -324,6 +327,11 @@
     .gnbprofilephoto{
         width: 40px;
         height: 40px;
+    }
+
+    /* 검색 버튼 아이콘 추가 */
+    .search-icon {
+        font-size: 14px;
     }
 
     /* 반응형 스타일 */
@@ -466,7 +474,9 @@
                 <form action="/search.do">
                     <div class="search-warp">
                         <input type="text" name="id" placeholder="검색어를 입력하세요"/>
-                        <input type="submit" class="btn" value="검색">
+                        <button type="submit" class="btn">
+                            <i class="fas fa-search search-icon"></i>
+                        </button>
                     </div>
                 </form>
             </div>
@@ -549,3 +559,4 @@
         </div>
     </div>
 </div>
+
