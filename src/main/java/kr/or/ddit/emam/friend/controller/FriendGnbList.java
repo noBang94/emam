@@ -79,7 +79,7 @@ public class FriendGnbList extends HttpServlet {
 
                 // 채팅 버튼
                 html.append("<div class='friend-actions'>");
-              
+
                 html.append("</div>");
 
                 html.append("</li>");
