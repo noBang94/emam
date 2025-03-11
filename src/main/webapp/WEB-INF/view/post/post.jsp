@@ -1178,6 +1178,372 @@
             });
         });
 
+        // 댓글 작성 후 가져오기
+        $(document).on('click', ".reply-insert-btn", function (e) {
+            e.preventDefault();
+            let postindex = $(this).data("index");
+            let memid = $(this).parent().find("input[name=mem_id]").val();
+            let replycon = $(this).parent().find("input[name=reply_con]").val();
+
+            if (replycon == "" || replycon == null) {
+                alert("댓글을 입력해주세요");
+                $(this).parent().find("input[name=reply_con]").focus();
+                return;
+            }
+
+            $.ajax({
+                url: "/reply/replyInsert.do",
+                type: "post",
+                data: {
+                    "postindex": postindex,
+                    "memid": memid,
+                    "replycon": replycon
+                },
+                contentType: "application/x-www-form-urlencoded",
+                dataType: "json",
+                success: function (result) {
+                    let htmlcode = "";
+                    if (result.length > 0) {
+                        $.each(result, function (i, v) {
+                            if (v.mem_id == "<%=loginMember.getMem_id()%>") {
+                                htmlcode += '<li>';
+                                htmlcode += '    <div class="rp-r-wrap">';
+                                htmlcode += '        <div class="rp-r-w-prf">';
+                                if(v.profileVo == undefined || v.profileVo.profile_photo != null){
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
+                                }else{
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                }
+                                htmlcode += '        </div>';
+                                htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
+                                htmlcode += '            <div class="rp-r-w-con-warp">';
+                                htmlcode += '                <span class="rp-r-w-nick">' + v.mem_nickname + '</span>';
+                                htmlcode += '                <span class="rp-r-w-con">' + v.reply_con + '</span>';
+                                htmlcode += '            </div>';
+                                htmlcode += '            <div class="rp-r-w-btn-warp">';
+                                htmlcode += '                <a class="btn s-btn re-re-btn" data-reindex=' + v.reply_index + '>답글</a>';
+                                htmlcode += '                <a class="btn s-btn re-up-btn" data-reindex=' + v.reply_index + '>수정</a>';
+                                htmlcode += '                <a class="btn s-btn re-del-btn" data-reindex=' + v.reply_index + ' href="<%=request.getContextPath() %>/reply/replyDelete.do?replyindex=' + v.reply_index + '">삭제</a>';
+                                htmlcode += '            </div>';
+                                htmlcode += '            <div class="rp-r-w-reply-warp"></div>';
+                                htmlcode += '        </div>';
+                                htmlcode += '    </div>';
+                                htmlcode += '</li>';
+                            } else {
+                                htmlcode += '<li>';
+                                htmlcode += '    <div class="rp-r-wrap">';
+                                htmlcode += '        <div class="rp-r-w-prf">';
+                                if(v.profileVo == undefined || v.profileVo.profile_photo != null){
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
+                                }else{
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                }
+                                htmlcode += '        </div>';
+                                htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
+                                htmlcode += '            <div class="rp-r-w-con-warp">';
+                                htmlcode += '                <span class="rp-r-w-nick">' + v.mem_nickname + '</span>';
+                                htmlcode += '                <span class="rp-r-w-con">' + v.reply_con + '</span>';
+                                htmlcode += '            </div>';
+                                htmlcode += '            <div class="rp-r-w-btn-warp">';
+                                htmlcode += '                <a class="btn s-btn re-re-btn" data-reindex=' + v.reply_index + '>답글</a>';
+                                htmlcode += '                <a class="btn s-btn re-report-btn" href="/report.do?nickname=' + v.mem_nickname + '" data-reindex=' + v.reply_index + '>신고</a>';
+                                htmlcode += '            </div>';
+                                htmlcode += '            <div class="rp-r-w-reply-warp"></div>';
+                                htmlcode += '        </div>';
+                                htmlcode += '    </div>';
+                                htmlcode += '</li>';
+                            }
+                        });
+                    } else {
+                        htmlcode += '<li>';
+                        htmlcode += '    <div class="rp-r-wrap">';
+                        htmlcode += '        <div class="rp-r-w-prf"><img src="<%=request.getContextPath() %>/upload/demo_logo.png"></div>';
+                        htmlcode += '        <div class="rp-r-w-con">댓글이 없습니다.</div>';
+                        htmlcode += '    </div>';
+                        htmlcode += '</li>';
+                    }
+                    $('.a-c-rp[data-index=' + postindex + '] .a-c-rp-r ul').html(htmlcode);
+                    $("input[name=reply_con]").val("");
+                }
+            });
+        });
+
+        // 댓글 수정 폼
+        $(document).on("click", ".re-up-btn", function () {
+            $(this).addClass("unvis");
+
+            let postidex = $(this).parents(".a-c-rp-w").data("index");
+            let reindex = $(this).data("reindex");
+            let con = $(this).parents(".rp-r-w-container").find(".rp-r-w-con").html();
+
+            // 댓글 내용 가리기
+            $(this).parents(".rp-r-w-container").find(".rp-r-w-con").css("display", "none");
+
+            $(this).parent().parent().children("div").eq(0).append(`
+                <span id="spn\${reindex}">
+                    <form action="<%=request.getContextPath() %>/reply/replyUpdate.do" method="post">
+                        <input type="text" id="txtindex\${reindex}" name="replyindex" value="\${reindex}" hidden/>
+                        <input type="text" id="txtCon\${reindex}" name="replycon" value="\${con}" />
+                        <button type="submit" class="btnConfirm btn" data-index="\${postidex}" data-con="\${con}" data-reindex="\${reindex}">수정</button>
+                        <button type="button" class="btnCancel btn" data-reindex="\${reindex}">취소</button>
+                    </form>
+                </span>
+            `);
+        });
+
+        // 댓글 수정 확인 실행
+        $(document).on("click", ".btnConfirm", function () {
+            let postindex = $(this).data("index");
+            let reindex = $(this).data("reindex");
+            let replycon = $(this).parents("form").find("input[name=replycon]").val();
+            let parentreindex = $(this).data("rereindex");
+
+            // 댓글 가져오기 수정후
+            $('form').submit(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: '/reply/replyUpdate.do',
+                    data: "postindex=" + postindex + "&replyindex=" + reindex + "&replycon=" + replycon,
+                    contentType: "application/x-www-form-urlencoded",
+                    success: function (result) {
+                        let htmlcode = "";
+                        if (result.length > 0) {
+                            $.each(result, function (i, v) {
+                                if (v.mem_id == "<%=loginMember.getMem_id()%>") {
+                                    htmlcode += '<li>';
+                                    htmlcode += '    <div class="rp-r-wrap">';
+                                    htmlcode += '        <div class="rp-r-w-prf">';
+                                    if(v.profileVo == undefined || v.profileVo.profile_photo != null){
+                                        htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
+                                    }else{
+                                        htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                    }
+                                    htmlcode += '        </div>';
+                                    htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
+                                    htmlcode += '            <div class="rp-r-w-con-warp">';
+                                    htmlcode += '                <span class="rp-r-w-nick">' + v.mem_nickname + '</span>';
+                                    htmlcode += '                <span class="rp-r-w-con">' + v.reply_con + '</span>';
+                                    htmlcode += '            </div>';
+                                    htmlcode += '            <div class="rp-r-w-btn-warp">';
+                                    if (parentreindex != 1) {
+                                        htmlcode += '<a class="btn s-btn re-re-btn" data-reindex=' + v.reply_index + '>답글</a>';
+                                    }
+                                    htmlcode += '                <a class="btn s-btn re-up-btn" data-reindex=' + v.reply_index + '>수정</a>';
+                                    htmlcode += '                <a class="btn s-btn re-del-btn" data-reindex=' + v.reply_index + ' href="<%=request.getContextPath() %>/reply/replyDelete.do?replyindex=' + v.reply_index + '">삭제</a>';
+                                    htmlcode += '            </div>';
+                                    htmlcode += '            <div class="rp-r-w-reply-warp"></div>';
+                                    htmlcode += '        </div>';
+                                    htmlcode += '    </div>';
+                                    htmlcode += '</li>';
+                                } else {
+                                    htmlcode += '<li>';
+                                    htmlcode += '    <div class="rp-r-wrap">';
+                                    htmlcode += '        <div class="rp-r-w-prf">';
+                                    if(v.profileVo == undefined || v.profileVo.profile_photo != null){
+                                        htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
+                                    }else{
+                                        htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                    }
+                                    htmlcode += '        </div>';
+                                    htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
+                                    htmlcode += '            <div class="rp-r-w-con-warp">';
+                                    htmlcode += '                <span class="rp-r-w-nick">' + v.mem_nickname + '</span>';
+                                    htmlcode += '                <span class="rp-r-w-con">' + v.reply_con + '</span>';
+                                    htmlcode += '            </div>';
+                                    htmlcode += '            <div class="rp-r-w-btn-warp">';
+                                    if (parentreindex != 1) {
+                                        htmlcode += '<a class="btn s-btn re-re-btn" data-reindex=' + v.reply_index + '>답글</a>';
+                                    }
+                                    htmlcode += '                <a class="btn s-btn re-report-btn" href="/report.do?nickname=' + v.mem_nickname + '" data-reindex=' + v.reply_index + '>신고</a>';
+                                    htmlcode += '            </div>';
+                                    htmlcode += '            <div class="rp-r-w-reply-warp"></div>';
+                                    htmlcode += '        </div>';
+                                    htmlcode += '    </div>';
+                                    htmlcode += '</li>';
+                                }
+                            });
+                        }
+                        if (parentreindex != 1) {
+                            $('.a-c-rp[data-index=' + postindex + '] .a-c-rp-r ul').html(htmlcode);
+                        } else {
+                            $('.a-c-rp[data-index=' + postindex + '] .a-c-rp-r ul .rp-r-w-container[data-reindex=' + reindex + ']').append(htmlcode);
+                        }
+                    },
+                    error: function (error) {
+                        console.error('댓글 수정 실패:', error);
+                    },
+                    dataType: "json"
+                });
+            });
+        });
+
+        // 댓글 수정 취소
+        $(document).on("click", ".btnCancel", function () {
+            let reindex = $(this).data("reindex");
+
+            // 댓글 내용 살리기
+            $(this).parents(".rp-r-w-con-warp").find(".rp-r-w-con").css("display", "inline");
+
+            $("#spn" + reindex).remove();
+            $(".rp-r-w-btn-warp .re-up-btn[data-reindex=" + reindex + "]").removeClass("unvis");
+        });
+
+        // 답글 쓰기 클릭시
+        $(document).on("click", ".re-re-btn", function () {
+            let reindex = $(this).data("reindex");
+            let postindex = $(this).parents(".a-c-rp-w").data("index");
+            $(this).parents(".rp-r-w-btn-warp").find(".btn").css("display", "none");
+
+            $(this).parents(".rp-r-w-btn-warp").append(`
+                <span id="spn\${reindex}">
+                    <form action="<%=request.getContextPath() %>/reply/replyInsert.do" method="post">
+                        <input type="text" id="pindex\${postindex}" name="post_index" value="\${postindex}" hidden/>
+                        <input type="text" id="rindex\${reindex}" name="Replyindex" value="\${reindex}" hidden/>
+                        <input type="text" name="mem_id" value="<%=loginMember.getMem_id()%>" hidden/>
+                        <input type="text" id="txtCon\${reindex}" name="reply_con" value="" placeholder="답글을 입력하세요"/>
+                        <button type="submit" class="rereply-insert-btn btn" data-reindex="\${reindex}">답글</button>
+                    </form>
+                </span>
+            `);
+
+            // 대댓글(답글) 가져오기
+            $.ajax({
+                url: "/reply/getreplyreply.do",
+                type: "post",
+                data: "postindex=" + postindex + "&Replyindex=" + reindex,
+                contentType: "application/x-www-form-urlencoded",
+                success: function (result) {
+                    let htmlcode = "";
+                    if (result.length > 0) {
+                        $.each(result, function (i, v) {
+                            if (v.mem_id == "<%=loginMember.getMem_id()%>") {
+                                htmlcode += '<li>';
+                                htmlcode += '    <div class="rp-r-wrap">';
+                                htmlcode += '        <div class="rp-r-w-prf">';
+                                if(v.profileVo == undefined || v.profileVo.profile_photo != null){
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
+                                }else{
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                }
+                                htmlcode += '        </div>';
+                                htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
+                                htmlcode += '            <div class="rp-r-w-con-warp">';
+                                htmlcode += '                <span class="rp-r-w-nick">' + v.mem_nickname + '</span>';
+                                htmlcode += '                <span class="rp-r-w-con">' + v.reply_con + '</span>';
+                                htmlcode += '            </div>';
+                                htmlcode += '            <div class="rp-r-w-btn-warp">';
+                                htmlcode += '                <a class="btn s-btn re-re-up-btn" data-reindex=' + v.reply_index + '>수정</a>';
+                                htmlcode += '                <a class="btn s-btn re-del-btn" data-reindex=' + v.reply_index + ' href="<%=request.getContextPath() %>/reply/replyDelete.do?replyindex=' + v.reply_index + '">삭제</a>';
+                                htmlcode += '            </div>';
+                                htmlcode += '        </div>';
+                                htmlcode += '    </div>';
+                                htmlcode += '</li>';
+                            } else {
+                                htmlcode += '<li>';
+                                htmlcode += '    <div class="rp-r-wrap">';
+                                htmlcode += '        <div class="rp-r-w-prf">';
+                                if(v.profileVo == undefined || v.profileVo.profile_photo != null){
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/'+v.profileVo.profile_photo+'">';
+                                }else{
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                }
+                                htmlcode += '        </div>';
+                                htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
+                                htmlcode += '            <div class="rp-r-w-con-warp">';
+                                htmlcode += '                <span class="rp-r-w-nick">' + v.mem_nickname + '</span>';
+                                htmlcode += '                <span class="rp-r-w-con">' + v.reply_con + '</span>';
+                                htmlcode += '            </div>';
+                                htmlcode += '            <div class="rp-r-w-btn-warp">';
+                                htmlcode += '                <a class="btn s-btn re-report-btn" href="/report.do?nickname=' + v.mem_nickname + '" data-reindex=' + v.reply_index + '>신고</a>';
+                                htmlcode += '            </div>';
+                                htmlcode += '        </div>';
+                                htmlcode += '    </div>';
+                                htmlcode += '</li>';
+                            }
+                        });
+                    }
+                    $('.a-c-rp[data-index=' + postindex + '] .a-c-rp-r ul .rp-r-w-container[data-reindex=' + reindex + '] .rp-r-w-reply-warp').append(htmlcode);
+                },
+                dataType: "json"
+            });
+        });
+
+        // 답글 작성 후 가져오기
+        $(document).on('click', ".rereply-insert-btn", function (e) {
+            e.preventDefault();
+            let postindex = $(this).parent().find("input[name=post_index]").val();
+            let memid = $(this).parent().find("input[name=mem_id]").val();
+            let replycon = $(this).parent().find("input[name=reply_con]").val();
+            let Replyindex = $(this).parents(".rp-r-w-container").data("reindex");
+
+            if (replycon == "" || replycon == null) {
+                alert("댓글을 입력해주세요");
+                $(this).parent().find("input[name=reply_con]").focus();
+                return;
+            }
+
+            // 답글 작성 후 가져오기
+            $.ajax({
+                url: "/reply/replyreplyInsert.do",
+                type: "post",
+                data: {
+                    "postindex": postindex,
+                    "memid": memid,
+                    "replycon": replycon,
+                    "Replyindex": Replyindex
+                },
+                contentType: "application/x-www-form-urlencoded",
+                success: function (result) {
+                    let htmlcode = "";
+                    if (result.length > 0) {
+                        $.each(result, function (i, v) {
+                            if (v.mem_id == "<%=loginMember.getMem_id()%>") {
+                                htmlcode += '<li>';
+                                htmlcode += '    <div class="rp-r-wrap">';
+                                htmlcode += '        <div class="rp-r-w-prf">';
+                                if (v.profileVo == undefined || v.profileVo.profile_photo != null) {
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/' + v.profileVo.profile_photo + '">';
+                                } else {
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                }
+                                htmlcode += '        </div>';
+                                htmlcode += '        <div class="rp-r-w-container" data-reindex=' + v.reply_index + '>';
+                                htmlcode += '            <div class="rp-r-w-con-warp">';
+                                htmlcode += '                <span class="rp-r-w-nick">' + v.mem_nickname + '</span>';
+                                htmlcode += '                <span class="rp-r-w-con">' + v.reply_con + '</span>';
+                                htmlcode += '            </div>';
+                                htmlcode += '            <div class="rp-r-w-btn-warp">';
+                                htmlcode += '                <a class="btn s-btn re-re-up-btn" data-reindex=' + v.reply_index + '>수정</a>';
+                                htmlcode += '                <a class="btn s-btn re-del-btn" data-reindex=' + v.reply_index + ' href="<%=request.getContextPath() %>/reply/replyDelete.do?replyindex=' + v.reply_index + '">삭제</a>';
+                                htmlcode += '            </div>';
+                                htmlcode += '        </div>';
+                                htmlcode += '    </div>';
+                                htmlcode += '</li>';
+                            } else {
+                                htmlcode += '<li>';
+                                htmlcode += '    <div class="rp-r-wrap">';
+                                htmlcode += '        <div class="rp-r-w-prf">';
+                                if (v.profileVo == undefined || v.profileVo.profile_photo != null) {
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/' + v.profileVo.profile_photo + '">';
+                                } else {
+                                    htmlcode += '            <img src="<%=request.getContextPath() %>/upload/demo_logo.png">';
+                                }
+                            }
+
+                        });
+                    }
+                                $('.a-c-rp[data-index=' + postindex + '] .a-c-rp-r ul .rp-r-w-container[data-reindex=' + Replyindex + '] .rp-r-w-reply-warp').html(htmlcode);
+                                $("input[name=reply_con]").val("");
+                            },
+                            dataType: "json"
+                        });
+                    });
+
+
+
+
+
         // 무한 스크롤 관련 변수
         let page = 1; // 현재 페이지 번호
         let loading = false; // 로딩 상태
@@ -1362,6 +1728,16 @@
             }
         });
     });
+
+
+
+
+
+
+
+
+
+
 
     // Swiper 초기화 함수
     function setseiper() {
