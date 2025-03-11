@@ -119,8 +119,8 @@
         }
 
         .toggleSwitch .toggleButton {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             position: absolute;
             top: 50%;
             left: 4px;
