@@ -475,7 +475,7 @@
             <div class="gnb-search">
                 <form action="/search.do">
                     <div class="search-warp">
-                        <input type="text" name="id" placeholder="검색어를 입력하세요"/>
+                        <input type="text" name="id" placeholder="검색할 계정을 입력하세요"/>
                         <button type="submit" class="btn">
                             <i class="fas fa-search search-icon"></i>
                         </button>
