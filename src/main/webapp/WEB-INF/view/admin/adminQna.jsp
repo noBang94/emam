@@ -449,7 +449,7 @@
       });
 
       $("#backBtn").on("click", function(){
-        window.history.back();
+        window.location.href = "<%=request.getContextPath() %>/admin/adminMain.do";
       });
 
       $(document).on('click', '.inquiry-row', function() {
@@ -539,35 +539,6 @@
           %>
           </tbody>
         </table>
-      </div>
-
-      <div class="pagination-container">
-        <ul class="pagination">
-          <%
-            int currentPage = (Integer) request.getAttribute("currentPage") != null ? (Integer) request.getAttribute("currentPage") : 1;
-            int totalPages = (Integer) request.getAttribute("totalPages") != null ? (Integer) request.getAttribute("totalPages") : 1;
-            int startPage = Math.max(1, currentPage - 5);
-            int endPage = Math.min(totalPages, currentPage + 5);
-
-            if (currentPage > 1) {
-          %>
-          <li><a href="<%=request.getContextPath() %>/admin/qnaList.do?page=<%= currentPage - 1 %>&searchTitle=<%= request.getParameter("searchTitle") != null ? request.getParameter("searchTitle") : "" %>">&laquo;</a></li>
-          <%
-            }
-
-            for (int i = startPage; i <= endPage; i++) {
-          %>
-          <li <%= currentPage == i ? "class='active'" : "" %>><a href="<%=request.getContextPath() %>/admin/qnaList.do?page=<%= i %>&searchTitle=<%= request.getParameter("searchTitle") != null ? request.getParameter("searchTitle") : "" %>"><%= i %></a></li>
-          <%
-            }
-
-            if (currentPage < totalPages) {
-          %>
-          <li><a href="<%=request.getContextPath() %>/admin/qnaList.do?page=<%= currentPage + 1 %>&searchTitle=<%= request.getParameter("searchTitle") != null ? request.getParameter("searchTitle") : "" %>">&raquo;</a></li>
-          <%
-            }
-          %>
-        </ul>
       </div>
     </div>
   </div>
