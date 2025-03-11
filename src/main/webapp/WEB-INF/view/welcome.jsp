@@ -283,6 +283,16 @@
         });
         location.reload();
       });
+
+      //별도 이벤트 발생 없는 알림내역 누르면
+      $(".notiCheck").on("click", function () {
+        $.ajax({
+          url: "<%=request.getContextPath() %>/notification/notificationCheck.do",
+          type: "get",
+          data: "notiIndex="+$(this).val(),
+        })
+        location.reload();
+      });
     });
   </script>
 </head>
@@ -344,8 +354,12 @@
                   <input type="button" value="거절" class="friendBtn friendNo" data-fromfriendid="<%=noti.getNotification_fromId() %>">
                 <% } %>
                 </li>
-              <% }else { %>
-                <li class="notiRow" onclick="viewInquiry('<%= noti.getNotification_target() %>')">
+              <% }else { //보낸사람이 null(관리자)라면 %>
+                <% if(noti.getNotification_type().equals("inquiry")) { //문의 알림이라면 %>
+                  <li class="notiRow" onclick="viewInquiry('<%= noti.getNotification_target() %>')">
+                <% } else { //신고 알림이라면 %>
+                  <li class="notiRow notiCheck" value="<%= noti.getNotification_index() %>">
+                <% } %>
                 <%=noti.getNotification_con() %>
                 </li>
               <% } %>

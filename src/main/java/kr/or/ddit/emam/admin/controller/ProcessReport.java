@@ -5,11 +5,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kr.or.ddit.emam.notification.service.INotificationService;
+import kr.or.ddit.emam.notification.service.NotificationServiceImpl;
 import kr.or.ddit.emam.report.service.IReportService;
 import kr.or.ddit.emam.report.service.ReportServiceImpl;
+import kr.or.ddit.emam.vo.NotificationVO;
 import kr.or.ddit.emam.vo.ReportVO;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/admin/processReport.do")
 public class ProcessReport extends HttpServlet {
@@ -43,6 +47,19 @@ public class ProcessReport extends HttpServlet {
         reportVO.setReportId(reportId);
 
         int result = reportService.updateReport(reportId);
+
+        //신고 접수 시 회원의 알림 추가
+        //신고-1. 알림vo에 넣기 위해 신고자ID를 구함
+        INotificationService notificationService = NotificationServiceImpl.getInstance();
+        NotificationVO notificationVo = new NotificationVO();
+        notificationVo.setNotification_toId(reportService.getReport(reportId).getFromId());
+        notificationVo.setNotification_fromId(null);
+        notificationVo.setNotification_target(reportId);
+        notificationVo.setNotification_type("report");
+        String notificationContent = reportService.getReport(reportId).getToId() + " 계정에 대한 신고가 접수되었습니다.";
+        notificationVo.setNotification_con(notificationContent);
+        notificationVo.setNotification_isread(0);
+        notificationService.insertNotification(notificationVo);
 
         if(result > 0) {
             response.getWriter().write("success");
